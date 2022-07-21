@@ -16,6 +16,8 @@ function App() {
           rel="noopener noreferrer"
         >
           anything
+          Welcome to Manifold
+
         </a>
       </header>
     </div>
