@@ -15,7 +15,9 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
+          anything
           Welcome to Manifold
+
         </a>
       </header>
     </div>
