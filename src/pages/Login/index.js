@@ -9,7 +9,7 @@ export const Login = () => {
         <div className="bg-center inset-0 w-7/12 lg:block">
 
 
-          <div class="ml-auto left-6 top-6 text-sm px-5 py-3">
+          <div className="ml-auto left-6 top-6 text-sm px-5 py-3">
             <img className="img" alt="manifold logo" src={logo} />
 
             {/* <Image src={logo} alt="manifold logo" width={100} height={40} /> */}
@@ -26,16 +26,16 @@ export const Login = () => {
                 linked to your account and your password.
               </h1>
             </div>
-            <form action="#" method="GET" classNameName='space-y-6 py-6'>
+            <form action="#" method="GET" className='space-y-6 py-6'>
               <div>
                 <label className="block text-gray-700">Email Address</label>
-                <input type="email" name="" id="" placeholder="Enter Email Address"
+                <input type="email" name="" id="email" placeholder="Enter Email Address"
                   className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                   autoFocus required />
               </div>
               <div className="mt-4">
                 <label className="block text-gray-700">Password</label>
-                <input type="password" name="" id="" placeholder="Enter Password" class="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200
+                <input type="password" name="" id="password" placeholder="Enter Password" className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200
                     focus:bg-white focus:outline-none" required />
               </div>
               <div className="text-right mt-2">
