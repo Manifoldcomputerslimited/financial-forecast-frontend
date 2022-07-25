@@ -2,8 +2,8 @@ import { Login } from "../pages/Login";
 
 export const appRoutes = [
   {
-    path: "/",
-    key: "/",
+    path: "/login",
+    key: "/login",
     component: Login,
   },
 ];

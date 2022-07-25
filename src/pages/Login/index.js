@@ -1,10 +1,9 @@
-import React from 'react';
+import React from "react";
 
 export const Login = () => {
-    console.log('here')
-    return (
-        <div>
-            <p>Login Page Goes Here</p>
-        </div>
-    )
-}
+  return (
+    <div>
+      <p className="text-3xl font-bold underline">Login Page with tailwind css</p>
+    </div>
+  );
+};
