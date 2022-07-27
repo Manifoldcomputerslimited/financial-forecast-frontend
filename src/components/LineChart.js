@@ -31,14 +31,14 @@ const LineChart = () => {
         ],
         datasets: [
           {
-            label: new Date().getFullYear(),
+            label: 'Outflow',
             backgroundColor: "#4c51bf",
             borderColor: "#4c51bf",
             data: [65, 78, 66, 44, 56, 67, 75],
             fill: false,
           },
           {
-            label: new Date().getFullYear() - 1,
+            label: 'Inflow',
             fill: false,
             backgroundColor: "#ed64a6",
             borderColor: "#ed64a6",
@@ -127,11 +127,11 @@ const LineChart = () => {
           <div className="rounded-t mb-0 px-4 py-3 bg-transparent">
             <div className="flex flex-wrap items-center">
               <div className="relative w-full px-4 max-w-full flex-grow flex-1">
-                <h6 className="uppercase text-black mb-1 text-xs font-semibold">
-                  Overview
+                <h6 className="text-black mb-1 text-xs font-semibold">
+                  Forecast Overview
                 </h6>
                 <h2 className="text-black text-xl font-semibold">
-                  Sales value
+                  Sales Report
                 </h2>
               </div>
             </div>
