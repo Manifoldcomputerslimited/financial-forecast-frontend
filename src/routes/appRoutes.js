@@ -1,6 +1,7 @@
 import { Login } from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
 import User from "../pages/User";
+import Setting from "../pages/Setting";
 
 export const appRoutes = [
   {
@@ -17,5 +18,10 @@ export const appRoutes = [
     path: "/user",
     key: "/user",
     component: User,
+  },
+  {
+    path: "/setting",
+    key: "/setting",
+    component: Setting,
   }
 ];
