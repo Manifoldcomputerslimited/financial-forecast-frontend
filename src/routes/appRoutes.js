@@ -1,8 +1,8 @@
-import { Login } from "../pages/Login";
+import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
 import User from "../pages/User";
 import Setting from "../pages/Setting";
-import { ForgotPassword } from "../pages/ForgotPassword"
+import ForgotPassword  from "../pages/ForgotPassword"
 
 export const appRoutes = [
   {

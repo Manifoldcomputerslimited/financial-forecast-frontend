@@ -1,20 +1,14 @@
 import React from "react";
-import './index.css';
-import logo from "../../image/logo.png";
+import logo from "../assets/logo.png";
 
-export const Login = () => {
+const Login = () => {
   return (
     <div className="main">
       <div className="h-screen m-auto">
         <div className="bg-center inset-0 w-7/12 lg:block">
-
-
           <div className="ml-auto left-6 top-6 text-sm px-5 py-3">
-            <img className="img" alt="manifold logo" src={logo} />
-
-            {/* <Image src={logo} alt="manifold logo" width={100} height={40} /> */}
+            <img className="img" alt="manifold logo" src={logo} width="100px" height="40px" />
           </div>
-
         </div>
         <div hidden role="hidden" className="fixed inset-0 w-6/12 ml-auto bg-white bg-opacity-70 backdrop-blur-xl lg:block">
         </div>
@@ -48,10 +42,8 @@ export const Login = () => {
           </div>
         </div>
       </div>
-
     </div>
-
-
-
   );
 };
+
+export default Login;
