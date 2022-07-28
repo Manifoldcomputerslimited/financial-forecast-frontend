@@ -1,7 +1,17 @@
-import React from "react";
+import { useState } from "react";
 import logo from "../assets/logo.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faEye,
+  faEyeSlash
+} from "@fortawesome/free-solid-svg-icons";
 
 const Login = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePasswordVisibility = (e) => {
+    e.preventDefault();
+    setShowPassword(!showPassword);
+  }
   return (
     <div className="main">
       <div className="h-screen m-auto">
@@ -27,9 +37,18 @@ const Login = () => {
                   className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                   autoFocus required />
               </div>
-              <div className="mt-4">
+              <div className="relative mb-5 mt-2">
                 <label className="block text-gray-700">Password</label>
-                <input type="password" name="" id="password" placeholder="Enter Password" className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200
+                <div class="absolute right-0 text-gray-600 flex items-center pr-5 pb-4 h-full cursor-pointer">
+                  <button onClick={togglePasswordVisibility}>
+                    <FontAwesomeIcon
+                      icon={showPassword ? faEye : faEyeSlash}
+                      style={{ fontSize: 20, color: "grey" }}
+                    />
+                  </button>
+
+                </div>
+                <input type={showPassword ? 'text' : 'password'} name="" id="password" placeholder="Enter Password" className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200
                     focus:bg-white focus:outline-none" required />
               </div>
               <div className="text-right mt-2">
