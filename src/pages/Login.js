@@ -1,14 +1,41 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from 'react-redux';
 import logo from "../assets/logo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEye,
   faEyeSlash
 } from "@fortawesome/free-solid-svg-icons";
+import { login } from '../redux/slices/auth'
+import { Navigate } from "react-router-dom";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const loading = useSelector(state => state.auth.isLoading);
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+  // const [error, setError] = useState("");
+
+  const changeEmailHandler = (e) => setEmail(e.target.value);
+  const changePasswordHandler = (e) => setPassword(e.target.value);
+
+
+
+  const loginHandler = (e) => {
+    e.preventDefault();
+    console.log('click')
+    // setIsLoading(!isLoading);
+
+    dispatch(login({ email, password }));
+    //setIsLoading(!isLoading);
+  }
+
+
+
   const togglePasswordVisibility = (e) => {
+    console.log(loading)
     e.preventDefault();
     setShowPassword(!showPassword);
   }
@@ -30,16 +57,24 @@ const Login = () => {
                 linked to your account and your password.
               </h1>
             </div>
-            <form action="#" method="GET" className='space-y-6 py-6'>
+            {isAuthenticated && (
+              <Navigate to="/" replace={true} />
+            )}
+            <form className='space-y-6 py-6' onSubmit={loginHandler}>
               <div>
                 <label className="block text-gray-700">Email Address</label>
-                <input type="email" name="" id="email" placeholder="Enter Email Address"
+                <input
+                  type="email"
+                  id="email"
+                  placeholder="Enter Email Address"
                   className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
-                  autoFocus required />
+                  value={email}
+                  onChange={changeEmailHandler}
+                  required />
               </div>
               <div className="relative mb-5 mt-2">
                 <label className="block text-gray-700">Password</label>
-                <div class="absolute right-0 text-gray-600 flex items-center pr-5 pb-4 h-full cursor-pointer">
+                <div className="absolute right-0 text-gray-600 flex items-center pr-5 pb-4 h-full cursor-pointer">
                   <button onClick={togglePasswordVisibility}>
                     <FontAwesomeIcon
                       icon={showPassword ? faEye : faEyeSlash}
@@ -48,15 +83,25 @@ const Login = () => {
                   </button>
 
                 </div>
-                <input type={showPassword ? 'text' : 'password'} name="" id="password" placeholder="Enter Password" className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200
-                    focus:bg-white focus:outline-none" required />
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  id="password"
+                  placeholder="Enter Password"
+                  className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200
+                    focus:bg-white focus:outline-none"
+                  value={password}
+                  onChange={changePasswordHandler}
+                  required />
               </div>
               <div className="text-right mt-2">
                 <a className="text-sm font-semibold text-red-700 hover:text-red-500 focus:text-red-500">Forgot
                   Password?</a>
               </div>
-              <button type="submit" className="w-full block bg-red-400 hover:bg-red-300 focus:bg-red-300 text-white font-semibold rounded-lg
-                px-4 py-3 mt-6">Login</button>
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full block bg-red-400 hover:bg-red-300 focus:bg-red-300 text-white font-semibold rounded-lg
+                px-4 py-3 mt-6" >Login</button>
             </form>
           </div>
         </div>

@@ -24,12 +24,12 @@ const DurationDropdown = () => {
       >
         <option defaultValue="day">1 Day</option>
         <option defaultValue="week">1 Week</option>
-        <option value="month">1 Month</option>
-        <option value="quarterly" selected>
+        <option defaultValue="month">1 Month</option>
+        <option defaultValue="quarterly">
           3 Months
         </option>
-        <option value="halfayear">6 Months</option>
-        <option value="yearly">12 Months</option>
+        <option defaultValue="halfayear">6 Months</option>
+        <option defaultValue="yearly">12 Months</option>
       </select>
     </>
   );
