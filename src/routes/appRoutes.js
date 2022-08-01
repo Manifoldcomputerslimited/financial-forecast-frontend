@@ -10,11 +10,11 @@ export const appRoutes = [
     key: "/login",
     component: Login,
   },
-  // {
-  //   path: "/forgot-password",
-  //   key: "/forgot-password",
-  //   component: ForgotPassword,
-  // },
+  {
+    path: "/forgot-password",
+    key: "/forgot-password",
+    component: ForgotPassword,
+  },
   {
     path: "/",
     key: "/",

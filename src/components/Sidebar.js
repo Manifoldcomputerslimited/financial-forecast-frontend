@@ -77,11 +77,11 @@ const Sidebar = () => {
 								</div>
 							</div>
 						</div>
-					
+
 						{/* Navigation */}
 						<ul className="md:flex-col md:min-w-full flex flex-col list-none">
 							<li className="items-center">
-							
+
 								<NavLink className="text-blueGray-700 hover:text-red-600 text-sm  py-3 font-bold block"
 									to="/"
 									style={({ isActive }) =>
@@ -97,7 +97,6 @@ const Sidebar = () => {
 							</li>
 
 							<li className="items-center">
-								
 								<NavLink className="text-blueGray-700 hover:text-red-600 text-sm   py-3 font-bold block"
 									to="/user"
 									style={({ isActive }) =>
@@ -113,20 +112,25 @@ const Sidebar = () => {
 							</li>
 
 							<li className="items-center">
-								<a className="text-blueGray-700 hover:text-red-600 text-sm  py-3 font-bold block">
+								<NavLink className="text-blueGray-700 hover:text-red-600 text-sm   py-3 font-bold block"
+									to="/setting"
+									style={({ isActive }) =>
+										isActive ? activeStyle : undefined
+									}
+								>
 									<FontAwesomeIcon
 										icon={faCog}
 										style={{ fontSize: 13, color: "text-blueGray-700", paddingRight: 13 }}
 									/>
 									Setting
-								</a>
+								</NavLink>
 							</li>
 							<li className="items-center">
 								<NavLink className="text-blueGray-700 hover:text-red-600 text-sm   py-3 font-bold block"
-								to="/login"
-								style={({ isActive }) =>
-									isActive ? activeStyle : undefined
-								}>
+									to="/login"
+									style={({ isActive }) =>
+										isActive ? activeStyle : undefined
+									}>
 									<FontAwesomeIcon
 										icon={faSignOut}
 										style={{ fontSize: 13, color: "text-blueGray-700", paddingRight: 13 }}

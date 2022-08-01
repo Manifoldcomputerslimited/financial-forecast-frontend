@@ -7,7 +7,7 @@ import {
   faEyeSlash
 } from "@fortawesome/free-solid-svg-icons";
 import { login } from '../redux/slices/auth'
-import { Navigate, useSearchParams } from "react-router-dom";
+import { NavLink, Navigate, useSearchParams } from "react-router-dom";
 
 const Login = (props) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -34,7 +34,7 @@ const Login = (props) => {
     e.preventDefault();
     setShowPassword(!showPassword);
   }
-  
+
   return (
     <div className="main">
       <div className="h-screen m-auto">
@@ -91,8 +91,11 @@ const Login = (props) => {
                   required />
               </div>
               <div className="text-right mt-2">
-                <a className="text-sm font-semibold text-red-700 hover:text-red-500 focus:text-red-500">Forgot
-                  Password?</a>
+                <NavLink className="text-sm font-semibold text-red-700 hover:text-red-500 focus:text-red-500"
+                  to="/forgot-password"
+                >
+                  Forgot Password?
+                </NavLink>
               </div>
               <button
                 type="submit"
