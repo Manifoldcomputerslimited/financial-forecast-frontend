@@ -11,6 +11,8 @@ import {
 import DurationDropdown from "./DurationDropdown.js";
 import { NavLink } from "react-router-dom";
 
+import logo from "../assets/logo.png";
+
 const Sidebar = () => {
 	let activeStyle = {
 		color: "red",
@@ -35,10 +37,10 @@ const Sidebar = () => {
 							style={{ fontSize: 15, color: "red", paddingRight: 5 }}
 						/>
 					</button>
-					{/* Brand */}
-					<a className="text-red-500 hover:text-red-600 text-md   py-3 font-bold block">
-						Manifold Computers
-					</a>
+					{/* Brand Logo */}
+					<div className="top-6 text-sm  py-3">
+						<img className="img" alt="manifold logo" src={logo} width="100px" height="40px" />
+					</div>
 					{/* Duration */}
 					<ul className="md:hidden items-center flex flex-wrap list-none">
 						<li className="inline-block relative">
