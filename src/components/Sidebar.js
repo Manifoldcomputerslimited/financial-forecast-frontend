@@ -11,6 +11,8 @@ import {
 import DurationDropdown from "./DurationDropdown.js";
 import { NavLink } from "react-router-dom";
 
+import logo from "../assets/logo.png";
+
 const Sidebar = () => {
 	let activeStyle = {
 		color: "red",
@@ -35,10 +37,10 @@ const Sidebar = () => {
 							style={{ fontSize: 15, color: "red", paddingRight: 5 }}
 						/>
 					</button>
-					{/* Brand */}
-					<a className="text-red-500 hover:text-red-600 text-md   py-3 font-bold block">
-						Manifold Computers
-					</a>
+					{/* Brand Logo */}
+					<div className="top-6 text-sm  py-3">
+						<img className="img" alt="manifold logo" src={logo} width="100px" height="40px" />
+					</div>
 					{/* Duration */}
 					<ul className="md:hidden items-center flex flex-wrap list-none">
 						<li className="inline-block relative">
@@ -77,11 +79,11 @@ const Sidebar = () => {
 								</div>
 							</div>
 						</div>
-					
+
 						{/* Navigation */}
 						<ul className="md:flex-col md:min-w-full flex flex-col list-none">
 							<li className="items-center">
-							
+
 								<NavLink className="text-blueGray-700 hover:text-red-600 text-sm  py-3 font-bold block"
 									to="/"
 									style={({ isActive }) =>
@@ -97,7 +99,6 @@ const Sidebar = () => {
 							</li>
 
 							<li className="items-center">
-								
 								<NavLink className="text-blueGray-700 hover:text-red-600 text-sm   py-3 font-bold block"
 									to="/user"
 									style={({ isActive }) =>
@@ -113,20 +114,25 @@ const Sidebar = () => {
 							</li>
 
 							<li className="items-center">
-								<a className="text-blueGray-700 hover:text-red-600 text-sm  py-3 font-bold block">
+								<NavLink className="text-blueGray-700 hover:text-red-600 text-sm   py-3 font-bold block"
+									to="/setting"
+									style={({ isActive }) =>
+										isActive ? activeStyle : undefined
+									}
+								>
 									<FontAwesomeIcon
 										icon={faCog}
 										style={{ fontSize: 13, color: "text-blueGray-700", paddingRight: 13 }}
 									/>
 									Setting
-								</a>
+								</NavLink>
 							</li>
 							<li className="items-center">
 								<NavLink className="text-blueGray-700 hover:text-red-600 text-sm   py-3 font-bold block"
-								to="/login"
-								style={({ isActive }) =>
-									isActive ? activeStyle : undefined
-								}>
+									to="/login"
+									style={({ isActive }) =>
+										isActive ? activeStyle : undefined
+									}>
 									<FontAwesomeIcon
 										icon={faSignOut}
 										style={{ fontSize: 13, color: "text-blueGray-700", paddingRight: 13 }}

@@ -1,5 +1,6 @@
 import React from "react";
 import logo from "../assets/logo.png";
+import { NavLink } from "react-router-dom";
 
 const ForgotPassword = () => {
     return (
@@ -27,11 +28,16 @@ const ForgotPassword = () => {
                         <form className='space-y-6 py-6'>
                             <div>
                                 <label className="block text-gray-700">Email Address</label>
-                                <input type="email" name="" id="" placeholder="Enter Email Address" className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none" autoFocus required />
+                                <input type="email" name="" id="" placeholder="Enter Email Address" className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none" required />
                             </div>
                             <div className="text-right mt-2">
                                 <span className="text-sm font-semibold text-black-700">Remember password? </span>
-                                <a className="text-sm font-semibold text-red-700 hover:text-red-500 focus:text-red-500">Back to Sign-in</a>
+                                {/* <a className="text-sm font-semibold text-red-700 hover:text-red-500 focus:text-red-500">Back to Sign-in</a> */}
+                                <NavLink className="text-sm font-semibold text-red-700 hover:text-red-500 focus:text-red-500"
+                                    to="/login"
+                                >
+                                    Back to Sign-in
+                                </NavLink>
                             </div>
                             <button type="submit" className="w-full block bg-red-400 hover:bg-red-300 focus:bg-red-300 text-white font-semibold rounded-lg
                      px-4 py-3 mt-6">Reset</button>
