@@ -1,36 +1,18 @@
 import React from "react";
-import './index.css';
-import logo from "../../image/logo.png";
-import { NavLink } from "react-router-dom";
+import logo from "../assets/logo.png";
 
-export const Forgotpassword = () => {
-    let activeStyle = {
-        color: "red",
-        fontSize: "17px"
-    };
-
-    let activeClassName = "red";
+const ForgotPassword = () => {
     return (
         <div className="h-screen m-auto">
             <div className="bg-center inset-0 w-7/12 lg:block">
-
-
                 <div className="ml-auto left-6 top-6 text-sm px-5 py-3">
-                    <img alt="manifold logo" className="logo" src={logo} />
-
+                    <img alt="manifold logo" className="logo" src={logo} width="100px" height="40px" />
                 </div>
-
             </div>
-
             <div className="h-screen m-auto">
                 <div className="bg-center inset-0 w-7/12 lg:block">
-
-
                     <div className="ml-auto left-6 top-6 text-sm px-5 py-3">
-
-
                     </div>
-
                 </div>
                 <div hidden role="hidden" className="fixed inset-0 w-6/12 ml-auto bg-white bg-opacity-70 backdrop-blur-xl lg:block"></div>
 
@@ -49,25 +31,16 @@ export const Forgotpassword = () => {
                             </div>
                             <div className="text-right mt-2">
                                 <span className="text-sm font-semibold text-black-700">Remember password? </span>
-
-                                <NavLink className="text-sm font-semibold text-red-700 hover:text-red-500 focus:text-red-500"
-                                    to="/login"
-                                    style={({ isActive }) =>
-                                        isActive ? activeStyle : undefined
-                                    }>
-                                    Back to Sign-in
-                                </NavLink>
+                                <a className="text-sm font-semibold text-red-700 hover:text-red-500 focus:text-red-500">Back to Sign-in</a>
                             </div>
                             <button type="submit" className="w-full block bg-red-400 hover:bg-red-300 focus:bg-red-300 text-white font-semibold rounded-lg
                      px-4 py-3 mt-6">Reset</button>
                         </form>
-
                     </div>
-
                 </div>
-
             </div>
         </div>
     )
 }
 
+export default ForgotPassword;

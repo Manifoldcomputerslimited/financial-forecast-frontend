@@ -1,18 +1,36 @@
-import React from "react";
+import React, { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import "./index.css";
+import { Provider } from 'react-redux'
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
+
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
+import { store } from './redux/store'
+import { Axios } from './api/instances'
+
+import "./index.css";
+
+Axios.interceptors.request.use(null
+  , (error) => {
+    console.log(error)
+  })
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
+const queryClient = new QueryClient()
+
 root.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </React.StrictMode>
+  <StrictMode>
+    <Provider store={store}>
+      <BrowserRouter>
+        <QueryClientProvider client={queryClient}>
+          <App />
+        </QueryClientProvider>
+      </BrowserRouter>
+    </Provider>
+  </StrictMode>
 );
 
 reportWebVitals();
