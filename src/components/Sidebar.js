@@ -9,8 +9,16 @@ import {
 	faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 import DurationDropdown from "./DurationDropdown.js";
+import { NavLink } from "react-router-dom";
 
 const Sidebar = () => {
+	let activeStyle = {
+		color: "red",
+		fontSize: "17px"
+	};
+
+	let activeClassName = "red";
+
 	const [collapseShow, setCollapseShow] = React.useState("hidden");
 	return (
 		<>
@@ -69,55 +77,62 @@ const Sidebar = () => {
 								</div>
 							</div>
 						</div>
-						{/* Form */}
-						{/* <form className="mt-6 mb-4 md:hidden">
-              <div className="mb-3 pt-0">
-                <input
-                  type="text"
-                  placeholder="Search"
-                  className="border-0 px-3 py-2 h-12 border border-solid  border-blueGray-500 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-base leading-snug shadow-none outline-none focus:outline-none w-full font-normal"
-                />
-              </div>
-            </form> */}
+					
 						{/* Navigation */}
 						<ul className="md:flex-col md:min-w-full flex flex-col list-none">
 							<li className="items-center">
-								<a className="text-red-600 hover:text-red-600 text-sm  py-3 font-bold block">
+							
+								<NavLink className="text-blueGray-700 hover:text-red-600 text-sm  py-3 font-bold block"
+									to="/"
+									style={({ isActive }) =>
+										isActive ? activeStyle : undefined
+									}
+								>
 									<FontAwesomeIcon
 										icon={faFile}
-										style={{ fontSize: 13, color: "red", paddingRight: 15 }}
+										style={{ fontSize: 13, color: "text-blueGray-700", paddingRight: 15 }}
 									/>
 									Dashboard
-								</a>
+								</NavLink>
 							</li>
 
 							<li className="items-center">
-								<a className="text-blueGray-700 hover:text-red-600 text-sm   py-3 font-bold block">
+								
+								<NavLink className="text-blueGray-700 hover:text-red-600 text-sm   py-3 font-bold block"
+									to="/user"
+									style={({ isActive }) =>
+										isActive ? activeStyle : undefined
+									}
+								>
 									<FontAwesomeIcon
 										icon={faUserPlus}
-										style={{ fontSize: 13, color: "black", paddingRight: 10 }}
+										style={{ fontSize: 13, color: "text-blueGray-700", paddingRight: 10 }}
 									/>
 									User Management
-								</a>
+								</NavLink>
 							</li>
 
 							<li className="items-center">
 								<a className="text-blueGray-700 hover:text-red-600 text-sm  py-3 font-bold block">
 									<FontAwesomeIcon
 										icon={faCog}
-										style={{ fontSize: 13, color: "black", paddingRight: 13 }}
+										style={{ fontSize: 13, color: "text-blueGray-700", paddingRight: 13 }}
 									/>
 									Setting
 								</a>
 							</li>
 							<li className="items-center">
-								<a className="text-blueGray-700 hover:text-red-600 text-sm   py-3 font-bold block">
+								<NavLink className="text-blueGray-700 hover:text-red-600 text-sm   py-3 font-bold block"
+								to="/login"
+								style={({ isActive }) =>
+									isActive ? activeStyle : undefined
+								}>
 									<FontAwesomeIcon
 										icon={faSignOut}
-										style={{ fontSize: 13, color: "black", paddingRight: 13 }}
+										style={{ fontSize: 13, color: "text-blueGray-700", paddingRight: 13 }}
 									/>
 									Logout
-								</a>
+								</NavLink>
 							</li>
 						</ul>
 					</div>

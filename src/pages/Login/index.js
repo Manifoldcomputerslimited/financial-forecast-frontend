@@ -1,8 +1,30 @@
-import React from "react";
+import React, {useState} from "react";
 import './index.css';
-import logo from "../../image/logo.png";
+import logo from "../../image/logo.png"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {library } from "@fortawesome/fontawesome-svg-core";
+import { faUser, faEnvelope, faLock, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { Navigate } from "react-router-dom"
+
+library.add(faUser, faEnvelope, faLock, faEye, faEyeSlash);
+import { NavLink } from "react-router-dom";
+
 
 export const Login = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  let activeStyle = {
+		color: "red",
+		fontSize: "17px"
+	};
+
+	let activeClassName = "red";
+  const loginHandler = (e) => {
+    e.preventDefault();
+    setIsAuthenticated(true)
+  }
+
+
+
   return (
     <div className="main">
       <div className="h-screen m-auto">
@@ -26,7 +48,10 @@ export const Login = () => {
                 linked to your account and your password.
               </h1>
             </div>
-            <form action="#" method="GET" className='space-y-6 py-6'>
+            {isAuthenticated && (
+              <Navigate to="/"/>
+            )}
+            <form  className='space-y-6 py-6' onSubmit={loginHandler}>
               <div>
                 <label className="block text-gray-700">Email Address</label>
                 <input type="email" name="" id="email" placeholder="Enter Email Address"
@@ -36,14 +61,29 @@ export const Login = () => {
               <div className="mt-4">
                 <label className="block text-gray-700">Password</label>
                 <input type="password" name="" id="password" placeholder="Enter Password" className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200
-                    focus:bg-white focus:outline-none" required />
+                    focus:bg-white focus:outline-none" required   /> 
+                    
               </div>
               <div className="text-right mt-2">
-                <a className="text-sm font-semibold text-red-700 hover:text-red-500 focus:text-red-500">Forgot
-                  Password?</a>
+                <NavLink className="text-sm font-semibold text-red-700 hover:text-red-500 focus:text-red-500"
+                to="/forgot-password"
+                style={({ isActive }) =>
+                  isActive ? activeStyle : undefined
+                }>
+                  Forgot
+                  Password?
+                  </NavLink>
               </div>
               <button type="submit" className="w-full block bg-red-400 hover:bg-red-300 focus:bg-red-300 text-white font-semibold rounded-lg
-                px-4 py-3 mt-6">Login</button>
+                px-4 py-3 mt-6">
+                  <NavLink
+                  to="/"
+                  style={({ isActive }) =>
+                    isActive ? activeStyle : undefined
+                  }>
+                    Login
+                    </NavLink>
+                    </button>
             </form>
           </div>
         </div>

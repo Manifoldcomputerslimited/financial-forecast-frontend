@@ -1,8 +1,15 @@
 import React from "react";
 import './index.css';
 import logo from "../../image/logo.png";
+import { NavLink } from "react-router-dom";
 
 export const  Forgotpassword = () => {
+    let activeStyle = {
+		color: "red",
+		fontSize: "17px"
+	};
+
+	let activeClassName = "red";
     return (
         <div className="h-screen m-auto">
         <div className="bg-center inset-0 w-7/12 lg:block">
@@ -45,7 +52,14 @@ export const  Forgotpassword = () => {
                         <div className="text-right mt-2">
                             <span className="text-sm font-semibold text-black-700">Remember password? </span>
                             
-                                <a className="text-sm font-semibold text-red-700 hover:text-red-500 focus:text-red-500">Back to Sign-in</a>
+                                <NavLink className="text-sm font-semibold text-red-700 hover:text-red-500 focus:text-red-500"
+                                to="/login"
+                                style={({ isActive }) =>
+                                  isActive ? activeStyle : undefined
+                                }>
+                                    Back to Sign-in
+
+                                    </NavLink>
                             
 
                         </div>
