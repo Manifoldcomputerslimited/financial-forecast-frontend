@@ -7,16 +7,16 @@ import {
   faEyeSlash
 } from "@fortawesome/free-solid-svg-icons";
 import { login } from '../redux/slices/auth'
-import { Navigate } from "react-router-dom";
+import { Navigate, useSearchParams } from "react-router-dom";
 
-const Login = () => {
+const Login = (props) => {
   const [showPassword, setShowPassword] = useState(false);
   const loading = useSelector(state => state.auth.isLoading);
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
-  // const [error, setError] = useState("");
+  let [searchParams, setSearchParams] = useSearchParams(props);
 
   const changeEmailHandler = (e) => setEmail(e.target.value);
   const changePasswordHandler = (e) => setPassword(e.target.value);
@@ -25,20 +25,16 @@ const Login = () => {
 
   const loginHandler = (e) => {
     e.preventDefault();
-    console.log('click')
-    // setIsLoading(!isLoading);
 
     dispatch(login({ email, password }));
-    //setIsLoading(!isLoading);
   }
-
-
 
   const togglePasswordVisibility = (e) => {
     console.log(loading)
     e.preventDefault();
     setShowPassword(!showPassword);
   }
+  
   return (
     <div className="main">
       <div className="h-screen m-auto">
@@ -58,7 +54,8 @@ const Login = () => {
               </h1>
             </div>
             {isAuthenticated && (
-              <Navigate to="/" replace={true} />
+              window.location.replace('https://accounts.zoho.com/oauth/v2/auth?scope=ZohoBooks.invoices.CREATE,ZohoBooks.invoices.READ,ZohoBooks.invoices.UPDATE,ZohoBooks.invoices.DELETE&client_id=1000.TJGNSOYFT192B23XTR4P5889QPF6RC&state=testing&response_type=code&redirect_uri=http://localhost:3000&access_type=offline&prompt=Consent')
+              // <Navigate to="/" replace={true} />
             )}
             <form className='space-y-6 py-6' onSubmit={loginHandler}>
               <div>

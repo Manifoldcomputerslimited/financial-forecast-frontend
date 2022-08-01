@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { Axios } from '../../api/instances';
+import { Axios, ZohoAxios } from '../../api/instances';
 import { navigate } from '../../utils/utils'
 
 const initialState = {
@@ -10,18 +10,16 @@ const initialState = {
 
 const login = createAsyncThunk('login', async ({ email, password }) => {
     try {
-
+        localStorage.clear();
         const response = await Axios.post('v1/login', {
             email,
             password
         });
 
-
         localStorage.setItem('token', JSON.stringify(response.data.data))
 
 
     } catch (error) {
-        console.log(error)
         throw error.response.data || error.message;
     }
 });
@@ -43,7 +41,6 @@ const loginSlice = createSlice({
             .addCase(login.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.isAuthenticated = true;
-                
             })
             .addCase(login.rejected, (state, action) => {
                 state.isLoading = false;

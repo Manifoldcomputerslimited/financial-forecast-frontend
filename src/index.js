@@ -13,9 +13,9 @@ import { Axios } from './api/instances'
 import "./index.css";
 
 Axios.interceptors.request.use(null
-, (error) => {
-  console.log(error)
-})
+  , (error) => {
+    console.log(error)
+  })
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
