@@ -9,7 +9,7 @@ import Navbar from "../components/Navbar";
 import LineChart from "../components/LineChart";
 import BarChart from "../components/BarChart";
 
-import { zoho } from '../redux/slices/zoho'
+import { zoho, zohoRefresh } from '../redux/slices/zoho'
 
 import {
 	faWallet,
@@ -27,24 +27,37 @@ const Dashboard = (props) => {
 	let [code, setCode] = useState("");
 	const dispatch = useDispatch();
 	const zohoLoading = useSelector(state => state.zoho.isLoading);
+	const isZohoAuthenticated = useSelector(state => state.auth.isZohoAuthenticated);
 	let zohoAuthenticated = localStorage.getItem('zohoAuthenticated') ? localStorage.getItem('zohoAuthenticated') : false
 
 	useEffect(() => {
-
+		console.log('is zoho auth', zohoAuthenticated)
 		if (searchParams.get('error') === 'access_denied') {
+			localStorage.removeItem('accessToken')
+			localStorage.removeItem('refreshToken')
 			setZohoGrant(false);
 		}
 
+		if(isZohoAuthenticated){
+			console.log('use refresh token')
+			dispatch(zohoRefresh());
+		}
+
+		console.log('accept')
 		if (!zohoAuthenticated && searchParams.get('code')) {
+			console.log('search param')
 			setCode(searchParams.get('code'));
 			dispatch(zoho({ code: searchParams.get('code') }));
 		}
+		// else{
 
-		console.log(localStorage.getItem('zohoToken'));
+		// 	dispatch(zoho({ code: null }));
+		// }
+
 		// check if zoho is authenticated using the access token
-		if (localStorage.getItem('zohoToken')) {
-			zohoAuthenticated = true;
-		}
+		// if (localStorage.getItem('zohoToken')) {
+		// 	zohoAuthenticated = true;
+		// }
 		setIsLoading(false);
 
 	}, [searchParams]);
