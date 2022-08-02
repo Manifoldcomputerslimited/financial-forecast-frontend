@@ -11,26 +11,23 @@ import { store } from './redux/store'
 import { Axios } from './api/instances'
 
 import "./index.css";
+import { config } from "@fortawesome/fontawesome-svg-core";
 
-Axios.interceptors.request.use(null
-  , (error) => {
-    console.log(error)
-  })
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 const queryClient = new QueryClient()
 
 root.render(
-  <StrictMode>
-    <Provider store={store}>
-      <BrowserRouter>
-        <QueryClientProvider client={queryClient}>
-          <App />
-        </QueryClientProvider>
-      </BrowserRouter>
-    </Provider>
-  </StrictMode>
+  // <StrictMode>
+  <Provider store={store}>
+    <BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <App />
+      </QueryClientProvider>
+    </BrowserRouter>
+  </Provider>
+  // </StrictMode>
 );
 
 reportWebVitals();

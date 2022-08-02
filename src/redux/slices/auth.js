@@ -4,20 +4,24 @@ import { navigate } from '../../utils/utils'
 
 const initialState = {
     isAuthenticated: false,
+    isZohoAuthenticated: false,
     isLoading: false,
     error: null,
 }
 
 const login = createAsyncThunk('login', async ({ email, password }) => {
     try {
-        localStorage.clear();
+        localStorage.removeItem('accessToken')
+        localStorage.removeItem('refreshToken')
+        localStorage.removeItem('zohoAuthenticated') 
+
         const response = await Axios.post('v1/login', {
             email,
             password
+        }, {
+            'Content-Type': 'application/json'
         });
-
-        localStorage.setItem('token', JSON.stringify(response.data.data))
-
+        return response
 
     } catch (error) {
         throw error.response.data || error.message;
@@ -39,8 +43,13 @@ const loginSlice = createSlice({
                 state.isLoading = true;
             })
             .addCase(login.fulfilled, (state, action) => {
+                
+                localStorage.setItem('accessToken', JSON.stringify(action.payload.data.data.accessToken))
+                localStorage.setItem('refreshToken', JSON.stringify(action.payload.data.data.refreshToken))
                 state.isLoading = false;
                 state.isAuthenticated = true;
+                console.log(action.payload)
+                state.isZohoAuthenticated = action.payload.data.data.isZohoAuthenticated;
             })
             .addCase(login.rejected, (state, action) => {
                 state.isLoading = false;
