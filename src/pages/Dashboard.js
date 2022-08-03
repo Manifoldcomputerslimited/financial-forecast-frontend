@@ -14,10 +14,10 @@ import { zoho, zohoRefresh } from '../redux/slices/zoho'
 import {
 	faWallet,
 	faGem,
-	faAnchor,
 	faReceipt,
 	faFileInvoice,
 } from "@fortawesome/free-solid-svg-icons";
+import { withAuth } from "../hoc/withAuth";
 
 const Dashboard = (props) => {
 	let [searchParams, setSearchParams] = useSearchParams(props);
@@ -27,6 +27,7 @@ const Dashboard = (props) => {
 	let [code, setCode] = useState("");
 	const dispatch = useDispatch();
 	const zohoLoading = useSelector(state => state.zoho.isLoading);
+	const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
 	const isZohoAuthenticated = useSelector(state => state.auth.isZohoAuthenticated);
 	let zohoAuthenticated = localStorage.getItem('zohoAuthenticated') ? localStorage.getItem('zohoAuthenticated') : false
 
@@ -38,7 +39,7 @@ const Dashboard = (props) => {
 			setZohoGrant(false);
 		}
 
-		if(isZohoAuthenticated){
+		if (isZohoAuthenticated) {
 			console.log('use refresh token')
 			dispatch(zohoRefresh());
 		}
@@ -61,6 +62,8 @@ const Dashboard = (props) => {
 		setIsLoading(false);
 
 	}, [searchParams]);
+
+	console.log('still auth', isAuthenticated)
 	return (
 
 		<>
@@ -499,4 +502,4 @@ const Dashboard = (props) => {
 	);
 };
 
-export default Dashboard;
+export default withAuth(true)(Dashboard);

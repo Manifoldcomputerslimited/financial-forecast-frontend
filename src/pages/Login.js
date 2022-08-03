@@ -37,6 +37,8 @@ const Login = (props) => {
   }
 
   console.log('is zohoauth', isZohoAuthenticated)
+
+  console.log('am i auth', isAuthenticated)
   
   return (
     <div className="main">
@@ -56,10 +58,10 @@ const Login = (props) => {
                 linked to your account and your password.
               </h1>
             </div>
-            {((isAuthenticated && !isZohoAuthenticated)) && (
+            {/* {((isAuthenticated && !isZohoAuthenticated)) && (
               window.location.replace('https://accounts.zoho.com/oauth/v2/auth?scope=ZohoBooks.invoices.CREATE,ZohoBooks.invoices.READ,ZohoBooks.invoices.UPDATE,ZohoBooks.invoices.DELETE&client_id=1000.TJGNSOYFT192B23XTR4P5889QPF6RC&state=testing&response_type=code&redirect_uri=http://localhost:3000&access_type=offline&prompt=Consent')
               // <Navigate to="/" replace={true} />
-            )}
+            )} */}
             {(isAuthenticated && isZohoAuthenticated) && (
               <Navigate to="/" replace={true} />
             )}

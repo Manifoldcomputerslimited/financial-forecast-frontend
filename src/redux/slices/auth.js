@@ -3,7 +3,7 @@ import { Axios, ZohoAxios } from '../../api/instances';
 import { navigate } from '../../utils/utils'
 
 const initialState = {
-    isAuthenticated: false,
+    isAuthenticated: true,
     isZohoAuthenticated: false,
     isLoading: false,
     error: null,
@@ -53,6 +53,7 @@ const loginSlice = createSlice({
             })
             .addCase(login.rejected, (state, action) => {
                 state.isLoading = false;
+                state.isAuthenticated = false;
                 state.error = action.error;
             })
 
