@@ -1,19 +1,19 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { Axios, ZohoAxios } from '../../api/instances';
-import { navigate } from '../../utils/utils'
+import { Axios } from '../../api/instances';
 
 const initialState = {
     isAuthenticated: false,
     isZohoAuthenticated: true,
     isAuthLoading: false,
     error: null,
+    isChangePasswordLoading: false
 }
 
 const login = createAsyncThunk('login', async ({ email, password }) => {
     try {
         localStorage.removeItem('accessToken')
         localStorage.removeItem('refreshToken')
-        localStorage.removeItem('zohoAuthenticated') 
+        localStorage.removeItem('zohoAuthenticated')
 
         const response = await Axios.post('v1/login', {
             email,
@@ -27,6 +27,23 @@ const login = createAsyncThunk('login', async ({ email, password }) => {
         throw error.response.data || error.message;
     }
 });
+
+const changePassword = createAsyncThunk("/changePassword", async ({ currentPassword, newPassword }) => {
+    try {
+        const res = await Axios.post('v1/password/reset', {
+            currentPassword, newPassword
+        }, {
+            'Content-Type': 'application/json'
+        });
+
+        console.log('response change password', res)
+        return res;
+
+    } catch (error) {
+        throw error.response.data || error.message;
+    }
+});
+
 
 const loginSlice = createSlice({
     name: "login",
@@ -43,12 +60,11 @@ const loginSlice = createSlice({
                 state.isAuthLoading = true;
             })
             .addCase(login.fulfilled, (state, action) => {
-                
                 localStorage.setItem('accessToken', JSON.stringify(action.payload.data.data.accessToken))
                 localStorage.setItem('refreshToken', JSON.stringify(action.payload.data.data.refreshToken))
                 state.isAuthLoading = false;
                 state.isAuthenticated = true;
-                console.log(action.payload)
+                console.log("payload", action.payload)
                 state.isZohoAuthenticated = action.payload.data.data.isZohoAuthenticated;
             })
             .addCase(login.rejected, (state, action) => {
@@ -56,11 +72,21 @@ const loginSlice = createSlice({
                 state.isAuthenticated = false;
                 state.error = action.error;
             })
+            .addCase(changePassword.pending, (state, action) => {
+                state.isChangePasswordLoading = true;
+            })
+            .addCase(changePassword.fulfilled, (state, action) => {
+                state.isChangePasswordLoading = false;
+            })
+            .addCase(changePassword.rejected, (state, action) => {
+                state.isChangePasswordLoading = false;
+                state.error = action.error;
+            })
 
     }
 })
 
-export { login }
+export { login, changePassword }
 
 export const { logout } = loginSlice.actions;
 
