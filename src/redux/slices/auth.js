@@ -3,9 +3,9 @@ import { Axios, ZohoAxios } from '../../api/instances';
 import { navigate } from '../../utils/utils'
 
 const initialState = {
-    isAuthenticated: true,
-    isZohoAuthenticated: false,
-    isLoading: false,
+    isAuthenticated: false,
+    isZohoAuthenticated: true,
+    isAuthLoading: false,
     error: null,
 }
 
@@ -40,19 +40,19 @@ const loginSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(login.pending, (state, action) => {
-                state.isLoading = true;
+                state.isAuthLoading = true;
             })
             .addCase(login.fulfilled, (state, action) => {
                 
                 localStorage.setItem('accessToken', JSON.stringify(action.payload.data.data.accessToken))
                 localStorage.setItem('refreshToken', JSON.stringify(action.payload.data.data.refreshToken))
-                state.isLoading = false;
+                state.isAuthLoading = false;
                 state.isAuthenticated = true;
                 console.log(action.payload)
                 state.isZohoAuthenticated = action.payload.data.data.isZohoAuthenticated;
             })
             .addCase(login.rejected, (state, action) => {
-                state.isLoading = false;
+                state.isAuthLoading = false;
                 state.isAuthenticated = false;
                 state.error = action.error;
             })
