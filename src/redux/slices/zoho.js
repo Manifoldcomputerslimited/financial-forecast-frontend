@@ -28,7 +28,17 @@ const zoho = createAsyncThunk('zoho', async ({ code }) => {
 });
 
 const zohoRefresh = createAsyncThunk('zoho/refresh', async () => {
-    const res = await Axios.get('v1/zoho/token/refresh')
+    let accessToken = localStorage.getItem('accessToken') ? JSON.parse(localStorage.getItem('accessToken')) : null
+
+
+    const options = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`
+        }
+    }
+
+    const res = await Axios.get('v1/zoho/token/refresh', options)
    
     return res.data.data
 })
