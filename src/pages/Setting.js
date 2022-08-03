@@ -61,7 +61,7 @@ const Setting = () => {
 
                 <div>
                     <div className="w-full px-4 pt-12">
-                        <form action="#" method="POST">
+                        <form className='space-y-6 py-6'>
                             <div className=" flex  w-full bg-white  m-auto  mb-6  justify-center items-center">
                                 <div className="w-full px-4">
 
@@ -71,18 +71,21 @@ const Setting = () => {
                                             <h1 className="text-md font-normal text-gray-600 mb-7">Input naira equivalent to dollar
                                             </h1>
                                         </div>
+                                        <div className="relative w-4/12">
                                         <label
-                                            className="block w-1/3 text-left text-gray-700 text-xs font-bold mb-4"
-                                            htmlFor="grid-password"
+                                            className="block text-gray-700"
+                                         
                                         >
                                             Exchange Rate
                                         </label>
                                         <input
                                             type="text"
-                                            className="border-0 px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow w-4/12 focus:outline-none focus:ring"
+                                            className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200
+                                            focus:bg-white focus:outline-none"
                                             placeholder="Update exchange rate"
                                             style={{ transition: "all .15s ease" }}
                                         />
+                                        </div>
                                         <div className='pt-6'>
                                             <button type="submit" className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300">Update</button>
                                         </div>
