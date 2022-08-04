@@ -1,13 +1,29 @@
 import React from "react";
+import { useDispatch } from 'react-redux';
+import { useForm } from "react-hook-form";
 import logo from "../assets/logo.png";
 import { NavLink } from "react-router-dom";
+import { forgotPassword } from '../redux/slices/auth'
 
 const ForgotPassword = () => {
+    const dispatch = useDispatch();
+    const { register, handleSubmit, formState: { errors } } = useForm();
+
+    const onSubmit = (data) => {
+        dispatch(forgotPassword({ email: data.email }))
+
+        // if loading is false then close modal
+        setShowModal(false)
+    }
+
+
     return (
         <div className="h-screen m-auto">
             <div className="bg-center inset-0 w-7/12 lg:block">
                 <div className="ml-auto left-6 top-6 text-sm px-5 py-3">
-                    <img alt="manifold logo" className="logo" src={logo} width="100px" height="40px" />
+                    <a href="/login">
+                        <img className="img" alt="manifold logo" src={logo} width="100px" height="40px" />
+                    </a>
                 </div>
             </div>
             <div className="h-screen m-auto">
@@ -25,10 +41,22 @@ const ForgotPassword = () => {
                             </h1>
                         </div>
 
-                        <form className='space-y-6 py-6'>
+                        <form className='space-y-6 py-6' onSubmit={handleSubmit(onSubmit)}>
                             <div>
                                 <label className="block text-gray-700">Email Address</label>
-                                <input type="email" name="" id="" placeholder="Enter Email Address" className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none" required />
+                                <input
+                                    type='text'
+                                    name='email'
+                                    placeholder="Enter email"
+                                    style={{ transition: "all .15s ease" }}
+                                    className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
+                                    {...register("email", { required: 'email address is required*', pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/ })}
+
+                                />
+                                {(errors.email && errors.email.type) === "pattern" && (
+                                    <p className="text-xs mt-1 text-red-700">enter valid email</p>
+                                )}
+                                {errors.email && <p className="text-xs mt-1 text-red-700">{errors.email.message}</p>}
                             </div>
                             <div className="text-right mt-2">
                                 <span className="text-sm font-semibold text-black-700">Remember password? </span>

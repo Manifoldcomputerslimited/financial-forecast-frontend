@@ -38,7 +38,10 @@ const Sidebar = () => {
 					</button>
 					{/* Brand Logo */}
 					<div className="top-6 text-sm  py-3">
-						<img className="img" alt="manifold logo" src={logo} width="100px" height="40px" />
+						<a href="/">
+							<img className="img" alt="manifold logo" src={logo} width="100px" height="40px" />
+						</a>
+
 					</div>
 					{/* Duration */}
 					<ul className="md:hidden items-center flex flex-wrap list-none">

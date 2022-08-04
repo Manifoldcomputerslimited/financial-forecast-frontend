@@ -3,6 +3,7 @@ import Dashboard from "../pages/Dashboard";
 import User from "../pages/User";
 import Setting from "../pages/Setting";
 import ForgotPassword  from "../pages/ForgotPassword"
+import ResetPassword  from "../pages/ResetPassword"
 import Register from "../pages/Register";
 
 export const appRoutes = [
@@ -20,6 +21,11 @@ export const appRoutes = [
     path: "/forgot-password",
     key: "/forgot-password",
     component: ForgotPassword,
+  },
+  {
+    path: "/reset-password/:id",
+    key: "/reset-password/:id",
+    component: ResetPassword,
   },
   {
     path: "/",
