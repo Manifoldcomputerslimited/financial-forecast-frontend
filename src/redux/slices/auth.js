@@ -30,7 +30,7 @@ const login = createAsyncThunk('login', async ({ email, password }) => {
 
 const changePassword = createAsyncThunk("/changePassword", async ({ currentPassword, newPassword }) => {
     try {
-        const res = await Axios.post('v1/password/reset', {
+        const res = await Axios.post('v1/password/update', {
             currentPassword, newPassword
         }, {
             'Content-Type': 'application/json'
@@ -73,6 +73,40 @@ const signup = createAsyncThunk("/register", async ({ data,
         });
 
         console.log('response register user', res)
+        return res;
+
+    } catch (error) {
+        throw error.response.data || error.message;
+    }
+});
+
+const forgotPassword = createAsyncThunk("/forgotPassword", async ({ email }) => {
+
+    try {
+        const res = await Axios.post('v1/forgot-password', {
+           email
+        }, {
+            'Content-Type': 'application/json'
+        });
+
+        console.log('response forgot password user', res)
+        return res;
+
+    } catch (error) {
+        throw error.response.data || error.message;
+    }
+});
+
+const reset = createAsyncThunk("/reset", async ({ email }) => {
+
+    try {
+        const res = await Axios.post('v1/reset/password', {
+           email
+        }, {
+            'Content-Type': 'application/json'
+        });
+
+        console.log('response forgot password user', res)
         return res;
 
     } catch (error) {
@@ -127,6 +161,16 @@ const loginSlice = createSlice({
                 state.isChangePasswordLoading = false;
                 state.error = action.error;
             })
+            .addCase(forgotPassword.pending, (state, action) => {
+                //state.isChangePasswordLoading = true;
+            })
+            .addCase(forgotPassword.fulfilled, (state, action) => {
+                //state.isChangePasswordLoading = false;
+            })
+            .addCase(forgotPassword.rejected, (state, action) => {
+                //state.isChangePasswordLoading = false;
+                //state.error = action.error;
+            })
             .addCase(inviteUser.pending, (state, action) => {
                 // state.isChangePasswordLoading = true;
             })
@@ -141,7 +185,7 @@ const loginSlice = createSlice({
     }
 })
 
-export { login, signup, changePassword, inviteUser }
+export { login, signup, forgotPassword, changePassword, reset, inviteUser }
 
 export const { logout } = loginSlice.actions;
 
