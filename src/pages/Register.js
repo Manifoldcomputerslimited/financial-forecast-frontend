@@ -44,7 +44,9 @@ const Register = () => {
             <div className="h-screen m-auto">
                 <div className="bg-center inset-0 w-7/12 lg:block">
                     <div className="ml-auto left-6 top-6 text-sm px-5 py-3">
-                        <img className="img" alt="manifold logo" src={logo} width="100px" height="40px" />
+                        <a href="/login">
+                            <img className="img" alt="manifold logo" src={logo} width="100px" height="40px" />
+                        </a>
                     </div>
                 </div>
                 <div hidden role="hidden" className="fixed inset-0 w-6/12 ml-auto bg-white bg-opacity-70 backdrop-blur-xl lg:block">

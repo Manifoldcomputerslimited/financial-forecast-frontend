@@ -97,7 +97,7 @@ const Dashboard = (props) => {
 													<div className="flex flex-wrap">
 														<div className="relative w-full pr-4 max-w-full flex-grow flex-1">
 															<h5 className="text-red-700 font-bold text-xs">
-																Capital
+																Opening Balance
 															</h5>
 															<span className="font-semibold text-md text-blueGray-700">
 																<span className="font-semibold text-sm text-red-700">
@@ -199,7 +199,7 @@ const Dashboard = (props) => {
 													<div className="flex flex-wrap">
 														<div className="relative w-full pr-4 max-w-full flex-grow flex-1">
 															<h5 className="text-red-700 font-bold text-xs">
-																Total Bills
+																Capital
 															</h5>
 															<span className="font-semibold text-md text-blueGray-700">
 																<span className="font-semibold text-sm text-red-700">
