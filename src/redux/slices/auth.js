@@ -44,6 +44,23 @@ const changePassword = createAsyncThunk("/changePassword", async ({ currentPassw
     }
 });
 
+const inviteUser = createAsyncThunk("/invite", async ({ email }) => {
+   
+    try {
+        const res = await Axios.post('v1/invite', {
+            email
+        }, {
+            'Content-Type': 'application/json'
+        });
+
+        console.log('response change password', res)
+        return res;
+
+    } catch (error) {
+        throw error.response.data || error.message;
+    }
+});
+
 
 const loginSlice = createSlice({
     name: "login",
@@ -82,11 +99,21 @@ const loginSlice = createSlice({
                 state.isChangePasswordLoading = false;
                 state.error = action.error;
             })
+            .addCase(inviteUser.pending, (state, action) => {
+                // state.isChangePasswordLoading = true;
+            })
+            .addCase(inviteUser.fulfilled, (state, action) => {
+                //state.isChangePasswordLoading = false;
+            })
+            .addCase(inviteUser.rejected, (state, action) => {
+                // state.isChangePasswordLoading = false;
+                // state.error = action.error;
+            })
 
     }
 })
 
-export { login, changePassword }
+export { login, changePassword, inviteUser }
 
 export const { logout } = loginSlice.actions;
 
