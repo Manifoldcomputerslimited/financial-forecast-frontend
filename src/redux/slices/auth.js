@@ -45,7 +45,7 @@ const changePassword = createAsyncThunk("/changePassword", async ({ currentPassw
 });
 
 const inviteUser = createAsyncThunk("/invite", async ({ email }) => {
-   
+
     try {
         const res = await Axios.post('v1/invite', {
             email
@@ -61,6 +61,24 @@ const inviteUser = createAsyncThunk("/invite", async ({ email }) => {
     }
 });
 
+const signup = createAsyncThunk("/register", async ({ data,
+    inviteToken }) => {
+
+    try {
+        const res = await Axios.post('v1/register', {
+           ...data,
+            inviteToken
+        }, {
+            'Content-Type': 'application/json'
+        });
+
+        console.log('response register user', res)
+        return res;
+
+    } catch (error) {
+        throw error.response.data || error.message;
+    }
+});
 
 const loginSlice = createSlice({
     name: "login",
@@ -89,6 +107,16 @@ const loginSlice = createSlice({
                 state.isAuthenticated = false;
                 state.error = action.error;
             })
+            .addCase(signup.pending, (state, action) => {
+                // state.isChangePasswordLoading = true;
+            })
+            .addCase(signup.fulfilled, (state, action) => {
+                //state.isChangePasswordLoading = false;
+            })
+            .addCase(signup.rejected, (state, action) => {
+                // state.isChangePasswordLoading = false;
+                // state.error = action.error;
+            })
             .addCase(changePassword.pending, (state, action) => {
                 state.isChangePasswordLoading = true;
             })
@@ -113,7 +141,7 @@ const loginSlice = createSlice({
     }
 })
 
-export { login, changePassword, inviteUser }
+export { login, signup, changePassword, inviteUser }
 
 export const { logout } = loginSlice.actions;
 

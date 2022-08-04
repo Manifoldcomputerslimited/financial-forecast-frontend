@@ -11,15 +11,9 @@ const User = () => {
     const { register, handleSubmit, setValue, formState: { errors } } = useForm();
 
     const onSubmit = (data) => {
-        console.log(data, errors)
+        dispatch(inviteUser({ email: data.email }))
 
-
-        dispatch(inviteUser({ email : data.email }))
-
-
-    }
-    const inviteUserHandler = (e) => {
-        e.preventDefault()
+        // if loading is false then close modal
         setShowModal(false)
     }
 
