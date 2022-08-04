@@ -10,14 +10,15 @@ import LineChart from "../components/LineChart";
 import BarChart from "../components/BarChart";
 
 import { zoho, zohoRefresh } from '../redux/slices/zoho'
+import { logout } from '../redux/slices/auth'
 
 import {
 	faWallet,
 	faGem,
-	faAnchor,
 	faReceipt,
 	faFileInvoice,
 } from "@fortawesome/free-solid-svg-icons";
+import { withAuth } from "../hoc/withAuth";
 
 const Dashboard = (props) => {
 	let [searchParams, setSearchParams] = useSearchParams(props);
@@ -27,7 +28,8 @@ const Dashboard = (props) => {
 	let [code, setCode] = useState("");
 	const dispatch = useDispatch();
 	const zohoLoading = useSelector(state => state.zoho.isLoading);
-	const isZohoAuthenticated = useSelector(state => state.auth.isZohoAuthenticated);
+	const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+	let isZohoAuthenticated = useSelector(state => state.auth.isZohoAuthenticated);
 	let zohoAuthenticated = localStorage.getItem('zohoAuthenticated') ? localStorage.getItem('zohoAuthenticated') : false
 
 	useEffect(() => {
@@ -38,17 +40,19 @@ const Dashboard = (props) => {
 			setZohoGrant(false);
 		}
 
-		if(isZohoAuthenticated){
-			console.log('use refresh token')
-			dispatch(zohoRefresh());
-		}
-
 		console.log('accept')
 		if (!zohoAuthenticated && searchParams.get('code')) {
 			console.log('search param')
 			setCode(searchParams.get('code'));
 			dispatch(zoho({ code: searchParams.get('code') }));
 		}
+
+		if (isZohoAuthenticated && isAuthenticated) {
+			console.log('use refresh token')
+			dispatch(zohoRefresh());
+		}
+
+		
 		// else{
 
 		// 	dispatch(zoho({ code: null }));
@@ -61,10 +65,13 @@ const Dashboard = (props) => {
 		setIsLoading(false);
 
 	}, [searchParams]);
+
+	console.log('zoho authenticated dashboard', zohoAuthenticated)
 	return (
 
 		<>
-			{(zohoGrant && isLoading) && (
+			{(isZohoAuthenticated && isLoading) && (
+				// <p>isZohoAuthenticated {{isZohoAuthenticated}}, isLoading {{isLoading}}</p>
 				<Navigate to="/" replace={true} />
 			)}
 
@@ -499,4 +506,4 @@ const Dashboard = (props) => {
 	);
 };
 
-export default Dashboard;
+export default withAuth(true)(Dashboard);

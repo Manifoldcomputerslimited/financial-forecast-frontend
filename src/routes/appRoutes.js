@@ -3,12 +3,18 @@ import Dashboard from "../pages/Dashboard";
 import User from "../pages/User";
 import Setting from "../pages/Setting";
 import ForgotPassword  from "../pages/ForgotPassword"
+import Register from "../pages/Register";
 
 export const appRoutes = [
   {
     path: "/login",
     key: "/login",
     component: Login,
+  },
+  {
+    path: "/register/:id",
+    key: "/register/:id",
+    component: Register,
   },
   {
     path: "/forgot-password",

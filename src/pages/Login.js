@@ -11,7 +11,7 @@ import { NavLink, Navigate, useSearchParams } from "react-router-dom";
 
 const Login = (props) => {
   const [showPassword, setShowPassword] = useState(false);
-  const loading = useSelector(state => state.auth.isLoading);
+  const authLoading = useSelector(state => state.auth.isAuthLoading);
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
   const isZohoAuthenticated = useSelector(state => state.auth.isZohoAuthenticated);
   const [email, setEmail] = useState("");
@@ -31,12 +31,14 @@ const Login = (props) => {
   }
 
   const togglePasswordVisibility = (e) => {
-    console.log(loading)
+    console.log(authLoading)
     e.preventDefault();
     setShowPassword(!showPassword);
   }
 
   console.log('is zohoauth', isZohoAuthenticated)
+
+  console.log('am i auth', isAuthenticated)
   
   return (
     <div className="main">
@@ -56,7 +58,7 @@ const Login = (props) => {
                 linked to your account and your password.
               </h1>
             </div>
-            {((isAuthenticated && !isZohoAuthenticated)) && (
+            {(isAuthenticated) && (!isZohoAuthenticated && !authLoading) && (
               window.location.replace('https://accounts.zoho.com/oauth/v2/auth?scope=ZohoBooks.invoices.CREATE,ZohoBooks.invoices.READ,ZohoBooks.invoices.UPDATE,ZohoBooks.invoices.DELETE&client_id=1000.TJGNSOYFT192B23XTR4P5889QPF6RC&state=testing&response_type=code&redirect_uri=http://localhost:3000&access_type=offline&prompt=Consent')
               // <Navigate to="/" replace={true} />
             )}
@@ -105,7 +107,7 @@ const Login = (props) => {
               </div>
               <button
                 type="submit"
-                disabled={loading}
+                disabled={authLoading}
                 className="w-full block bg-red-400 hover:bg-red-300 focus:bg-red-300 text-white font-semibold rounded-lg
                 px-4 py-3 mt-6" >Login</button>
             </form>

@@ -1,4 +1,5 @@
 import React from "react";
+import { useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 	faFile,
@@ -10,7 +11,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import DurationDropdown from "./DurationDropdown.js";
 import { NavLink } from "react-router-dom";
-
+import { logout } from '../redux/slices/auth'
 import logo from "../assets/logo.png";
 
 const Sidebar = () => {
@@ -18,9 +19,7 @@ const Sidebar = () => {
 		color: "red",
 		fontSize: "17px"
 	};
-
-	let activeClassName = "red";
-
+	const dispatch = useDispatch()
 	const [collapseShow, setCollapseShow] = React.useState("hidden");
 	return (
 		<>
@@ -127,6 +126,7 @@ const Sidebar = () => {
 							<li className="items-center">
 								<NavLink className="text-blueGray-700 hover:text-red-600 text-sm   py-3 font-bold block"
 									to="/login"
+									onClick={() => dispatch(logout())}
 									style={({ isActive }) =>
 										isActive ? activeStyle : undefined
 									}>
