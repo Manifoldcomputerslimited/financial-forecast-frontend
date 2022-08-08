@@ -13,7 +13,7 @@ const ForgotPassword = () => {
         dispatch(forgotPassword({ email: data.email }))
 
         // if loading is false then close modal
-        setShowModal(false)
+        //setShowModal(false)
     }
 
 

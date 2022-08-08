@@ -19,7 +19,7 @@ const Setting = () => {
     const [newPassword, setNewPassword] = useState("");
 
     const changeCurrentPasswordHandler = (e) => setCurrentPassword(e.target.value)
-  
+
     const changeNewPasswordHandler = (e) => setNewPassword(e.target.value)
 
 
@@ -72,19 +72,19 @@ const Setting = () => {
                                             </h1>
                                         </div>
                                         <div className="relative w-4/12">
-                                        <label
-                                            className="block text-gray-700"
-                                         
-                                        >
-                                            Exchange Rate
-                                        </label>
-                                        <input
-                                            type="text"
-                                            className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200
+                                            <label
+                                                className="block text-gray-700"
+
+                                            >
+                                                Exchange Rate
+                                            </label>
+                                            <input
+                                                type="text"
+                                                className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200
                                             focus:bg-white focus:outline-none"
-                                            placeholder="Update exchange rate"
-                                            style={{ transition: "all .15s ease" }}
-                                        />
+                                                placeholder="Update exchange rate"
+                                                style={{ transition: "all .15s ease" }}
+                                            />
                                         </div>
                                         <div className='pt-6'>
                                             <button type="submit" className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300">Update</button>

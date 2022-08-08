@@ -83,7 +83,7 @@ instance.interceptors.request.use(async req => {
         console.log('ddoings')
         await deleteToken();
 
-        const response = await axios.post(`http://127.0.0.1:4000/v1/token/refresh`, {
+        const response = await axios.post(`http://127.0.0.1:4000/api/v1/token/refresh`, {
             refreshToken: refreshToken
         });
 
@@ -104,7 +104,7 @@ instance.interceptors.request.use(async req => {
         }
         console.log('silver')
 
-        const response = await axios.get(`http://127.0.0.1:4000/v1/zoho/token/refresh`, options);
+        const response = await axios.get(`http://127.0.0.1:4000/api/v1/zoho/token/refresh`, options);
 
         console.log(response);
 
