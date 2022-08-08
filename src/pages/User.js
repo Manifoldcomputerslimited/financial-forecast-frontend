@@ -10,6 +10,7 @@ import {
 import { inviteUser } from '../redux/slices/auth'
 
 import Sidebar from "../components/Sidebar.js";
+import { withAuth } from "../hoc/withAuth";
 
 
 const User = () => {
@@ -148,10 +149,22 @@ const User = () => {
                                 {/*content*/}
                                 <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                                     {/*header*/}
-                                    <div className="flex items-start justify-center mt-5 rounded-t">
-                                        <h3 className="text-red-700 font-medium text-lg mb-1 ">
-                                            Invite User
-                                        </h3>
+                                    <div className="flex items-start justify-around mt-5 rounded-t">
+                                        <div className="flex-initial w-64 justify-center">
+                                            <h3 className="text-red-700 font-medium text-lg mb-1 ">
+                                                Invite User
+                                            </h3>
+                                        </div>
+                                        <button
+                                            onClick={() => setShowModal(false)}
+                                            type="button"
+                                            className=" rounded-md p-1 inline-flex items-center justify-center text-red-400 hover:text-red-500 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-red-500">
+                                            <span className="sr-only">Close menu</span>
+
+                                            <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                            </svg>
+                                        </button>
 
                                     </div>
                                     {/*body*/}
@@ -180,14 +193,8 @@ const User = () => {
                                             </div>
                                         </div>
                                         {/*footer*/}
-                                        <div className="flex items-center justify-end p-6 mt-5 rounded-b">
-                                            <button
-                                                className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                                                type="button"
-                                                onClick={() => setShowModal(false)}
-                                            >
-                                                Close
-                                            </button>
+                                        <div className="flex items-center justify-center p-6 mt-5 rounded-b">
+
                                             <button
                                                 className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 mb-1"
                                                 type="submit"
@@ -217,6 +224,7 @@ const User = () => {
 
                             </div>
                         </div>
+
                         <div className="block w-full max-h-screen overflow-x-auto ">
                             {/* Projects table */}
                             <table className="items-center w-full  border-separate border ">
@@ -269,19 +277,21 @@ const User = () => {
                                                 invited
                                             </td>
                                             <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                                12-Jul-2022
+                                                1-Jul-2022
                                             </td>
-                                            <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                            <td className=" border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                                                 <div className="flex justify-start space-x-5">
-                                                    <div>
+
+                                                    <div className="has-tooltip">
+                                                        <span className="tooltip rounded shadow-lg p-2 bg-gray-100 text-green-700 -mt-8">reinvite user</span>
                                                         <FontAwesomeIcon
                                                             icon={faRedo}
                                                             style={{ fontSize: 17, color: "green" }}
                                                         />
 
                                                     </div>
-                                                    <div>
-
+                                                    <div className="has-tooltip">
+                                                        <span className="tooltip rounded shadow-lg p-2 bg-gray-100 text-red-500 -mt-8">delete user</span>
                                                         <FontAwesomeIcon
                                                             icon={faTrashAlt}
                                                             style={{ fontSize: 17, color: "red" }}
@@ -327,4 +337,4 @@ const User = () => {
     );
 }
 
-export default User;
+export default withAuth(true)(User);

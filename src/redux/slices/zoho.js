@@ -13,7 +13,7 @@ const zoho = createAsyncThunk('zoho', async ({ code }) => {
     try {
 
         console.log('always calling', code);
-        const response = await Axios.post('v1/zoho/token/generate', {
+        const response = await Axios.post('api/v1/zoho/token/generate', {
             code
         });
 
@@ -38,7 +38,7 @@ const zohoRefresh = createAsyncThunk('zoho/refresh', async () => {
         }
     }
 
-    const res = await Axios.get('v1/zoho/token/refresh', options)
+    const res = await Axios.get('api/v1/zoho/token/refresh', options)
    
     return res.data.data
 })

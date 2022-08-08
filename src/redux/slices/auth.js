@@ -15,7 +15,7 @@ const login = createAsyncThunk('login', async ({ email, password }) => {
         localStorage.removeItem('refreshToken')
         localStorage.removeItem('zohoAuthenticated')
 
-        const response = await Axios.post('v1/login', {
+        const response = await Axios.post('api/v1/login', {
             email,
             password
         }, {
@@ -30,7 +30,7 @@ const login = createAsyncThunk('login', async ({ email, password }) => {
 
 const changePassword = createAsyncThunk("/changePassword", async ({ currentPassword, newPassword }) => {
     try {
-        const res = await Axios.post('v1/password/update', {
+        const res = await Axios.post('api/v1/password/update', {
             currentPassword, newPassword
         }, {
             'Content-Type': 'application/json'
@@ -47,7 +47,7 @@ const changePassword = createAsyncThunk("/changePassword", async ({ currentPassw
 const inviteUser = createAsyncThunk("/invite", async ({ email }) => {
 
     try {
-        const res = await Axios.post('v1/invite', {
+        const res = await Axios.post('api/v1/invite', {
             email
         }, {
             'Content-Type': 'application/json'
@@ -65,7 +65,7 @@ const signup = createAsyncThunk("/register", async ({ data,
     inviteToken }) => {
 
     try {
-        const res = await Axios.post('v1/register', {
+        const res = await Axios.post('api/v1/register', {
            ...data,
             inviteToken
         }, {
@@ -83,7 +83,7 @@ const signup = createAsyncThunk("/register", async ({ data,
 const forgotPassword = createAsyncThunk("/forgotPassword", async ({ email }) => {
 
     try {
-        const res = await Axios.post('v1/forgot-password', {
+        const res = await Axios.post('api/v1/forgot-password', {
            email
         }, {
             'Content-Type': 'application/json'
@@ -100,7 +100,7 @@ const forgotPassword = createAsyncThunk("/forgotPassword", async ({ email }) => 
 const reset = createAsyncThunk("/reset", async ({ email }) => {
 
     try {
-        const res = await Axios.post('v1/reset/password', {
+        const res = await Axios.post('api/v1/reset/password', {
            email
         }, {
             'Content-Type': 'application/json'
