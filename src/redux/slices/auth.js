@@ -66,7 +66,7 @@ const signup = createAsyncThunk("/register", async ({ data,
 
     try {
         const res = await Axios.post('api/v1/register', {
-           ...data,
+            ...data,
             inviteToken
         }, {
             'Content-Type': 'application/json'
@@ -83,8 +83,8 @@ const signup = createAsyncThunk("/register", async ({ data,
 const forgotPassword = createAsyncThunk("/forgotPassword", async ({ email }) => {
 
     try {
-        const res = await Axios.post('api/v1/forgot-password', {
-           email
+        const res = await Axios.post('api/v1/password/forgot', {
+            email
         }, {
             'Content-Type': 'application/json'
         });
@@ -97,11 +97,11 @@ const forgotPassword = createAsyncThunk("/forgotPassword", async ({ email }) => 
     }
 });
 
-const reset = createAsyncThunk("/reset", async ({ email }) => {
+const reset = createAsyncThunk("/reset", async ({ password, token }) => {
 
     try {
-        const res = await Axios.post('api/v1/reset/password', {
-           email
+        const res = await Axios.post('api/v1/password/reset', {
+            password, token
         }, {
             'Content-Type': 'application/json'
         });

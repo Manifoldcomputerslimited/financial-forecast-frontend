@@ -25,7 +25,7 @@ const ResetPassword = () => {
 
     const resetPassword = (data) => {
         dispatch(reset({
-            data,
+            password: data.newPassword,
             token: id
         }))
     }
