@@ -2,7 +2,6 @@ import React from "react";
 import axios from 'axios';
 import jwt_decode from "jwt-decode";
 import dayjs from 'dayjs'
-import { faFileZipper } from "@fortawesome/free-regular-svg-icons";
 
 let accessToken = localStorage.getItem('accessToken') ? JSON.parse(localStorage.getItem('accessToken')) : null
 let refreshToken = localStorage.getItem('refreshToken') ? JSON.parse(localStorage.getItem('refreshToken')) : null
@@ -24,10 +23,8 @@ let setToken = async (accessToken) => {
 }
 
 let setZohoToken = async (zohoAccessToken) => {
-    console.log('zoho token not working', zohoAccessToken)
     localStorage.setItem('zohoAccessToken', JSON.stringify(zohoAccessToken))
     zohoAccessToken = localStorage.getItem('zohoAccessToken') ? JSON.parse(localStorage.getItem('zohoAccessToken')) : null
-    console.log(zohoAccessToken)
 }
 
 
@@ -41,10 +38,10 @@ let setZohoToken = async (zohoAccessToken) => {
 
 const instance = axios.create({
     baseURL: 'http://127.0.0.1:4000/',
-    headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`
-    },
+    // headers: {
+    //     'Content-Type': 'application/json',
+    //     'Authorization': `Bearer ${accessToken}`
+    // },
 });
 
 const zohoAxios = axios.create({
@@ -54,8 +51,11 @@ const zohoAxios = axios.create({
 // Automatically refresh token if it is about to expire
 instance.interceptors.request.use(async req => {
     console.log('here')
-    console.log('access token', accessToken)
-    console.log('zoho access ', zohoAccessToken)
+
+    accessToken = localStorage.getItem('accessToken') ? JSON.parse(localStorage.getItem('accessToken')) : null
+    refreshToken = localStorage.getItem('refreshToken') ? JSON.parse(localStorage.getItem('refreshToken')) : null
+    zohoAccessToken = localStorage.getItem('zohoAccessToken') ? JSON.parse(localStorage.getItem('zohoAccessToken')) : null
+
     // returns true if user does not have acess token and zoho token
     if (accessToken && zohoAccessToken) {
         return req;

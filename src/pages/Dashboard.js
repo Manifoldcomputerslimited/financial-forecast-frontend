@@ -47,9 +47,10 @@ const Dashboard = (props) => {
 			dispatch(zoho({ code: searchParams.get('code') }));
 		}
 
-		if (isZohoAuthenticated && isAuthenticated) {
+
+		if (!zohoAuthenticated && isAuthenticated) {
 			console.log('use refresh token')
-			dispatch(zohoRefresh());
+			dispatch(zoho({ code: '' }));
 		}
 
 		

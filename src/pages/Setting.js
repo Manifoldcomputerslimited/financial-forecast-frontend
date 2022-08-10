@@ -6,7 +6,7 @@ import {
     faEyeSlash
 } from "@fortawesome/free-solid-svg-icons";
 import Sidebar from "../components/Sidebar";
-
+import { withAuth } from "../hoc/withAuth";
 import { changePassword } from '../redux/slices/auth'
 
 const Setting = () => {
@@ -25,7 +25,6 @@ const Setting = () => {
 
     const changePasswordHandler = (e) => {
         e.preventDefault();
-        console.log('changing password')
         dispatch(changePassword({ currentPassword, newPassword }));
     }
 
@@ -178,4 +177,4 @@ const Setting = () => {
     );
 }
 
-export default Setting;
+export default withAuth(true)(Setting);
