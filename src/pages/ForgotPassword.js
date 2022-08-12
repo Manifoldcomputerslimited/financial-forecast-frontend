@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch } from 'react-redux';
-import { useForm } from "react-hook-form";
 import { useNavigate } from 'react-router-dom';
+import { useForm } from "react-hook-form";
 import logo from "../assets/logo.png";
 import { NavLink } from "react-router-dom";
 import { forgotPassword } from '../redux/slices/auth'

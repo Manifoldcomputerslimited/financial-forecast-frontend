@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useDispatch } from 'react-redux';
+import React, {useEffect, useState } from "react";
+import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from "react-hook-form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -15,6 +15,7 @@ import { withAuth } from "../hoc/withAuth";
 
 const User = () => {
     const dispatch = useDispatch();
+    const isInviteUserLoading = useSelector((state) => state.auth.inviteUserLoading);
     const [showModal, setShowModal] = useState(false);
     const [showInviteModal, setShowInviteModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -107,17 +108,19 @@ const User = () => {
     const outterToggleClass = ' bg-red-600'
 
     const onSubmit = (data) => {
-        dispatch(inviteUser({ email: data.email })).then((res) => {
-            if (!res.payload) return
+        dispatch(inviteUser({ email: data.email }))
+    }
+
+    useEffect(() => {
+        if (!isInviteUserLoading) {
 
             reset({
                 email: ""
             })
-            console.log("out side")
-            setShowModal(false)
-        })
-    }
 
+            setShowModal(false)
+        }
+    }, [isInviteUserLoading]);
 
 
     return (
@@ -211,6 +214,7 @@ const User = () => {
                                             <button
                                                 className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 mb-1"
                                                 type="submit"
+                                                disabled={isInviteUserLoading}
                                             >
                                                 Invite
                                             </button>

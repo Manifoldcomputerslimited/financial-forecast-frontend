@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import logo from "../assets/logo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -27,7 +28,7 @@ const Login = (props) => {
   const loginHandler = (e) => {
     e.preventDefault();
     console.log('logging in')
-    dispatch(login({ email, password }));
+    dispatch(login({ email, password }))
   }
 
   const togglePasswordVisibility = (e) => {
@@ -36,9 +37,9 @@ const Login = (props) => {
     setShowPassword(!showPassword);
   }
 
-  // console.log('is zohoauth', isZohoAuthenticated)
+  console.log('is zohoauth', isZohoAuthenticated)
 
-  // console.log('am i auth', isAuthenticated)
+  console.log('am i auth', isAuthenticated)
 
   return (
     <div className="main">

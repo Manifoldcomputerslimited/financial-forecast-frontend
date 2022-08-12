@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -27,13 +27,7 @@ const Setting = () => {
 
     const changePasswordHandler = async (e) => {
         e.preventDefault();
-        dispatch(changePassword({ currentPassword, newPassword })).then((res) => {
-            if (!res.payload) return
-
-            setCurrentPassword("")
-            setNewPassword("")
-            navigate('/setting');
-        })
+        dispatch(changePassword({ currentPassword, newPassword }))
     }
 
     const toggleCurrentPasswordVisibility = (e) => {
@@ -45,6 +39,16 @@ const Setting = () => {
         e.preventDefault();
         setShowNewPassword(!showNewPassword);
     }
+
+    useEffect(() => {
+
+        if (!isChangePasswordLoading) {
+            setCurrentPassword("")
+            setNewPassword("")
+            navigate('/setting');
+        }
+
+    }, [isChangePasswordLoading]);
 
     return (
         <>

@@ -40,7 +40,6 @@ const instance = axios.create({
     baseURL: 'http://127.0.0.1:4000/',
     headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`
     },
 });
 
@@ -56,8 +55,13 @@ instance.interceptors.request.use(async req => {
     refreshToken = localStorage.getItem('refreshToken') ? JSON.parse(localStorage.getItem('refreshToken')) : null
     zohoAccessToken = localStorage.getItem('zohoAccessToken') ? JSON.parse(localStorage.getItem('zohoAccessToken')) : null
 
+    console.log('access', accessToken)
+    console.log('zoho', zohoAccessToken)
+    
     // returns true if user does not have acess token and zoho token
     if (accessToken && zohoAccessToken) {
+        console.log('have access token', accessToken)
+        req.headers['Authorization'] = `Bearer ${accessToken}`
         return req;
     }
 
