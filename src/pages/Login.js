@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import logo from "../assets/logo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -36,9 +36,9 @@ const Login = (props) => {
     setShowPassword(!showPassword);
   }
 
-  console.log('is zohoauth', isZohoAuthenticated)
+  // console.log('is zohoauth', isZohoAuthenticated)
 
-  console.log('am i auth', isAuthenticated)
+  // console.log('am i auth', isAuthenticated)
 
   return (
     <div className="main">

@@ -38,15 +38,15 @@ let setZohoToken = async (zohoAccessToken) => {
 
 const instance = axios.create({
     baseURL: 'http://127.0.0.1:4000/',
-    // headers: {
-    //     'Content-Type': 'application/json',
-    //     'Authorization': `Bearer ${accessToken}`
-    // },
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`
+    },
 });
 
-const zohoAxios = axios.create({
-    baseURL: 'https://accounts.zoho.com/oauth/v2/'
-});
+// const zohoAxios = axios.create({
+//     baseURL: 'https://accounts.zoho.com/oauth/v2/'
+// });
 
 // Automatically refresh token if it is about to expire
 instance.interceptors.request.use(async req => {
@@ -66,7 +66,10 @@ instance.interceptors.request.use(async req => {
     }
 
     const user = accessToken ? jwt_decode(accessToken, { header: true }) : null
-    console.log('user', user)
+    console.log('user instance', user)
+    if (!user) {
+        await deleteZohoToken();
+    }
     const zohoUser = zohoAccessToken ? jwt_decode(zohoAccessToken, { header: true }) : null
     console.log('zoho', zohoUser)
     const isUserExpired = accessToken ? (dayjs.unix(user.exp).diff(dayjs()) < 1) : null;
@@ -126,5 +129,5 @@ instance.interceptors.request.use(async req => {
 
 
 
-export { instance as Axios, zohoAxios as ZohoAxios };
+export { instance as Axios };
 

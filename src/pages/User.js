@@ -19,7 +19,11 @@ const User = () => {
     const [showInviteModal, setShowInviteModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [toggle, setToggle] = useState(true);
-    const { register, handleSubmit, setValue, formState: { errors } } = useForm();
+    const { register, handleSubmit, setValue, reset, formState: { errors } } = useForm({
+        defaultValues: {
+            email: ''
+        }
+    });
     let myArr = [
         {
             'id': 1,
@@ -103,11 +107,18 @@ const User = () => {
     const outterToggleClass = ' bg-red-600'
 
     const onSubmit = (data) => {
-        dispatch(inviteUser({ email: data.email }))
+        dispatch(inviteUser({ email: data.email })).then((res) => {
+            if (!res.payload) return
 
-        // if loading is false then close modal
-        setShowModal(false)
+            reset({
+                email: ""
+            })
+            console.log("out side")
+            setShowModal(false)
+        })
     }
+
+
 
     return (
         <>
