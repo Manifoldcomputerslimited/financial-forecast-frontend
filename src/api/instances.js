@@ -2,7 +2,6 @@ import React from "react";
 import axios from 'axios';
 import jwt_decode from "jwt-decode";
 import dayjs from 'dayjs'
-import { faFileZipper } from "@fortawesome/free-regular-svg-icons";
 
 let accessToken = localStorage.getItem('accessToken') ? JSON.parse(localStorage.getItem('accessToken')) : null
 let refreshToken = localStorage.getItem('refreshToken') ? JSON.parse(localStorage.getItem('refreshToken')) : null
@@ -24,10 +23,8 @@ let setToken = async (accessToken) => {
 }
 
 let setZohoToken = async (zohoAccessToken) => {
-    console.log('zoho token not working', zohoAccessToken)
     localStorage.setItem('zohoAccessToken', JSON.stringify(zohoAccessToken))
     zohoAccessToken = localStorage.getItem('zohoAccessToken') ? JSON.parse(localStorage.getItem('zohoAccessToken')) : null
-    console.log(zohoAccessToken)
 }
 
 
@@ -47,15 +44,18 @@ const instance = axios.create({
     },
 });
 
-const zohoAxios = axios.create({
-    baseURL: 'https://accounts.zoho.com/oauth/v2/'
-});
+// const zohoAxios = axios.create({
+//     baseURL: 'https://accounts.zoho.com/oauth/v2/'
+// });
 
 // Automatically refresh token if it is about to expire
 instance.interceptors.request.use(async req => {
     console.log('here')
-    console.log('access token', accessToken)
-    console.log('zoho access ', zohoAccessToken)
+
+    accessToken = localStorage.getItem('accessToken') ? JSON.parse(localStorage.getItem('accessToken')) : null
+    refreshToken = localStorage.getItem('refreshToken') ? JSON.parse(localStorage.getItem('refreshToken')) : null
+    zohoAccessToken = localStorage.getItem('zohoAccessToken') ? JSON.parse(localStorage.getItem('zohoAccessToken')) : null
+
     // returns true if user does not have acess token and zoho token
     if (accessToken && zohoAccessToken) {
         return req;
@@ -66,7 +66,10 @@ instance.interceptors.request.use(async req => {
     }
 
     const user = accessToken ? jwt_decode(accessToken, { header: true }) : null
-    console.log('user', user)
+    console.log('user instance', user)
+    if (!user) {
+        await deleteZohoToken();
+    }
     const zohoUser = zohoAccessToken ? jwt_decode(zohoAccessToken, { header: true }) : null
     console.log('zoho', zohoUser)
     const isUserExpired = accessToken ? (dayjs.unix(user.exp).diff(dayjs()) < 1) : null;
@@ -126,5 +129,5 @@ instance.interceptors.request.use(async req => {
 
 
 
-export { instance as Axios, zohoAxios as ZohoAxios };
+export { instance as Axios };
 

@@ -1,16 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faEye,
     faEyeSlash
 } from "@fortawesome/free-solid-svg-icons";
 import Sidebar from "../components/Sidebar";
-
+import { withAuth } from "../hoc/withAuth";
 import { changePassword } from '../redux/slices/auth'
 
 const Setting = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [showCurrentPassword, setShowCurrentPassword] = useState(false);
     const [showNewPassword, setShowNewPassword] = useState(false);
     const isChangePasswordLoading = useSelector(state => state.auth.isChangePasswordLoading)
@@ -23,10 +25,15 @@ const Setting = () => {
     const changeNewPasswordHandler = (e) => setNewPassword(e.target.value)
 
 
-    const changePasswordHandler = (e) => {
+    const changePasswordHandler = async (e) => {
         e.preventDefault();
-        console.log('changing password')
-        dispatch(changePassword({ currentPassword, newPassword }));
+        dispatch(changePassword({ currentPassword, newPassword })).then((res) => {
+            if (!res.payload) return
+
+            setCurrentPassword("")
+            setNewPassword("")
+            navigate('/setting');
+        })
     }
 
     const toggleCurrentPasswordVisibility = (e) => {
@@ -178,4 +185,4 @@ const Setting = () => {
     );
 }
 
-export default Setting;
+export default withAuth(true)(Setting);

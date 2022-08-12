@@ -1,16 +1,23 @@
 import React from "react";
 import { useDispatch } from 'react-redux';
 import { useForm } from "react-hook-form";
+import { useNavigate } from 'react-router-dom';
 import logo from "../assets/logo.png";
 import { NavLink } from "react-router-dom";
 import { forgotPassword } from '../redux/slices/auth'
 
 const ForgotPassword = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { register, handleSubmit, formState: { errors } } = useForm();
 
     const onSubmit = (data) => {
-        dispatch(forgotPassword({ email: data.email }))
+        dispatch(forgotPassword({ email: data.email })).then((res) => {
+            if (!res.payload) return
+
+            // TODO:: should redirect to login page
+            navigate('/login');
+        })
 
         // if loading is false then close modal
         //setShowModal(false)

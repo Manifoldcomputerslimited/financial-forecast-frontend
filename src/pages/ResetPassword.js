@@ -1,18 +1,19 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from 'react-redux';
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faEye,
     faEyeSlash
 } from "@fortawesome/free-solid-svg-icons";
-
+import { toast } from 'react-toastify';
 import { reset } from '../redux/slices/auth'
 
 const ResetPassword = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { id } = useParams()
     const [showPassword, setShowPassword] = useState(false);
     const [showNewPassword, setShowNewPassword] = useState(false);
@@ -24,10 +25,19 @@ const ResetPassword = () => {
     });
 
     const resetPassword = (data) => {
+        if(data.newPassword !== data.confirmNewPassword) {
+            toast.error("Password mismatch", { autoClose: 2000 })
+            return;
+        }
         dispatch(reset({
             password: data.newPassword,
             token: id
-        }))
+        })).then((res) => {
+            if (!res.payload) return
+
+            // TODO:: should redirect to login page
+            navigate('/login');
+        })
     }
 
     const togglePasswordVisibility = (e) => {

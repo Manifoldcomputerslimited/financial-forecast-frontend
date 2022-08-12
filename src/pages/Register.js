@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from 'react-redux';
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -13,9 +13,10 @@ import { signup } from '../redux/slices/auth'
 
 const Register = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { id } = useParams()
     const [showPassword, setShowPassword] = useState(false);
-    const { register, handleSubmit, formState: { errors } } = useForm({
+    const { register, handleSubmit, reset, formState: { errors } } = useForm({
         defaultValues: {
             firstName: '',
             lastName: '',
@@ -24,15 +25,17 @@ const Register = () => {
         }
     });
 
-
     const registerUser = (data) => {
         dispatch(signup({
             data,
             inviteToken: id
-        }))
+        })).then((res) => {
+            if (!res.payload) return
+
+            // TODO:: should redirect to login page
+            navigate('/login');
+        })
     }
-
-
 
     const togglePasswordVisibility = (e) => {
         e.preventDefault();
