@@ -4,11 +4,15 @@ import { Axios } from '../../api/instances';
 import { history } from '../../utils/utils'
 
 const initialState = {
-    isAuthenticated: false,
+    isAuthenticated: localStorage.getItem('accessToken') ? true : false,
     isZohoAuthenticated: true,
     isAuthLoading: false,
     error: null,
-    isChangePasswordLoading: false
+    isChangePasswordLoading: false,
+    inviteUserLoading: false,
+    isResetPasswordLoading: false,
+    isForgotPasswordLoading: false,
+    isForgotPasswordSuccess: false,
 }
 
 const login = createAsyncThunk('login', async ({ email, password }) => {
@@ -41,6 +45,7 @@ const changePassword = createAsyncThunk("/changePassword", async ({ currentPassw
         return res;
 
     } catch (error) {
+        console.log('my error', error)
         throw error.response.data || error.message;
     }
 });
@@ -142,6 +147,7 @@ const loginSlice = createSlice({
                 state.isAuthLoading = false;
                 state.isAuthenticated = false;
                 state.error = action.error;
+                toast.error(action.error.message, { autoClose: 2000 })
             })
             .addCase(signup.pending, (state, action) => {
                 // state.isChangePasswordLoading = true;
@@ -170,40 +176,41 @@ const loginSlice = createSlice({
                 toast.error(action.error.message, { autoClose: 2000 })
             })
             .addCase(forgotPassword.pending, (state, action) => {
-                //state.isChangePasswordLoading = true;
+                state.isForgotPasswordLoading = true;
+                state.isForgotPasswordSuccess = false;
             })
             .addCase(forgotPassword.fulfilled, (state, action) => {
-                //state.isChangePasswordLoading = false;
+                state.isForgotPasswordLoading = false;
+                state.isForgotPasswordSuccess = true;
+
                 toast.success('Check your email to reset your password', { autoClose: 5000 })
             })
             .addCase(forgotPassword.rejected, (state, action) => {
-                //state.isChangePasswordLoading = false;
-                //state.error = action.error;
+                state.isForgotPasswordLoading = false;
+                state.isForgotPasswordSuccess = false;
                 toast.error(action.error.message, { autoClose: 2000 })
             })
             .addCase(inviteUser.pending, (state, action) => {
-                // state.isChangePasswordLoading = true;
+                state.inviteUserLoading = true;
             })
             .addCase(inviteUser.fulfilled, (state, action) => {
                 toast.success('Invitation sent successfully')
-                //state.isChangePasswordLoading = false;
+                state.inviteUserLoading = false;
             })
             .addCase(inviteUser.rejected, (state, action) => {
                 toast.error(action.error.message)
-                // state.isChangePasswordLoading = false;
-                // state.error = action.error;
+                state.inviteUserLoading = false;
             })
             .addCase(reset.pending, (state, action) => {
-                // state.isChangePasswordLoading = true;
+                state.isResetPasswordLoading = true;
             })
             .addCase(reset.fulfilled, (state, action) => {
                 toast.success('Password reset successful', { autoClose: 2000 })
-                //state.isChangePasswordLoading = false;
+                state.isResetPasswordLoading = false;
             })
             .addCase(reset.rejected, (state, action) => {
                 toast.error(action.error.message)
-                // state.isChangePasswordLoading = false;
-                // state.error = action.error;
+                state.isResetPasswordLoading = false;
             })
     }
 })

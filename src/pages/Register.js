@@ -34,6 +34,8 @@ const Register = () => {
 
             // TODO:: should redirect to login page
             navigate('/login');
+        }).catch(e => {
+            console.log('register user', e)
         })
     }
 

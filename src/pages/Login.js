@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { InfinitySpin } from 'react-loader-spinner'
 import logo from "../assets/logo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -27,7 +29,7 @@ const Login = (props) => {
   const loginHandler = (e) => {
     e.preventDefault();
     console.log('logging in')
-    dispatch(login({ email, password }));
+    dispatch(login({ email, password }))
   }
 
   const togglePasswordVisibility = (e) => {
@@ -36,12 +38,22 @@ const Login = (props) => {
     setShowPassword(!showPassword);
   }
 
-  // console.log('is zohoauth', isZohoAuthenticated)
+  
 
-  // console.log('am i auth', isAuthenticated)
+  console.log('is zohoauth', isZohoAuthenticated)
+
+  console.log('am i auth', isAuthenticated)
 
   return (
     <div className="main">
+      {/* {authLoading ? (
+        <div className="grid h-screen place-items-center">
+          <InfinitySpin
+            width='200'
+            color="red"
+          />
+        </div>
+      ) : ( */}
       <div className="h-screen m-auto">
         <div className="bg-center inset-0 w-7/12 lg:block">
           <div className="ml-auto left-6 top-6 text-sm px-5 py-3">
@@ -108,11 +120,12 @@ const Login = (props) => {
                 type="submit"
                 disabled={authLoading}
                 className="w-full block bg-red-400 hover:bg-red-300 focus:bg-red-300 text-white font-semibold rounded-lg
-                px-4 py-3 mt-6" >Login</button>
+                px-4 py-3 mt-6" >{authLoading ? 'loading...' : 'Login'} </button>
             </form>
           </div>
         </div>
       </div>
+      {/* )} */}
     </div>
   );
 };

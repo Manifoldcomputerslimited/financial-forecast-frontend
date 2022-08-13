@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from 'react-redux';
 import { useParams, useNavigate } from "react-router-dom";
@@ -14,6 +14,7 @@ import { reset } from '../redux/slices/auth'
 const ResetPassword = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const isResetPasswordLoading = useSelector(state => state.auth.isResetPasswordLoading)
     const { id } = useParams()
     const [showPassword, setShowPassword] = useState(false);
     const [showNewPassword, setShowNewPassword] = useState(false);
@@ -24,8 +25,9 @@ const ResetPassword = () => {
         }
     });
 
+
     const resetPassword = (data) => {
-        if(data.newPassword !== data.confirmNewPassword) {
+        if (data.newPassword !== data.confirmNewPassword) {
             toast.error("Password mismatch", { autoClose: 2000 })
             return;
         }
@@ -49,6 +51,14 @@ const ResetPassword = () => {
         e.preventDefault();
         setShowNewPassword(!showNewPassword);
     }
+
+    // useEffect(() => {
+
+    //     if (!isResetPasswordLoading) {
+    //         navigate('/login');
+    //     }
+
+    // }, [isResetPasswordLoading]);
 
     return (
         <div className="main">
@@ -117,8 +127,10 @@ const ResetPassword = () => {
                             </div>
                             <button
                                 type="submit"
-                                className="w-full block bg-red-400 hover:bg-red-300 focus:bg-red-300 text-white font-semibold rounded-lg
-                px-4 py-3 mt-6" >Submit</button>
+                                className="w-full block bg-red-400 hover:bg-red-300 focus:bg-red-300 text-white font-semibold rounded-lg px-4 py-3 mt-6"
+                                disabled={isResetPasswordLoading} >
+                                {isResetPasswordLoading ? 'loading...' : 'Submit'}
+                            </button>
                         </form>
                     </div>
                 </div>
