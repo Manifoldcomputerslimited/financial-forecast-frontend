@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Navigate, useSearchParams } from "react-router-dom";
+import { InfinitySpin } from 'react-loader-spinner'
 
 
 import Sidebar from "../components/Sidebar";
@@ -53,7 +54,7 @@ const Dashboard = (props) => {
 			dispatch(zoho({ code: '' }));
 		}
 
-		
+
 		// else{
 
 		// 	dispatch(zoho({ code: null }));
@@ -71,9 +72,19 @@ const Dashboard = (props) => {
 	return (
 
 		<>
+
 			{(isZohoAuthenticated && isLoading) && (
 				// <p>isZohoAuthenticated {{isZohoAuthenticated}}, isLoading {{isLoading}}</p>
 				<Navigate to="/" replace={true} />
+			)}
+
+			{(isLoading) && (
+				<div className="grid h-screen place-items-center">
+					<InfinitySpin
+						width='200'
+						color="red"
+					/>
+				</div>
 			)}
 
 			{(!zohoGrant && !isLoading) && (

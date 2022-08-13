@@ -27,7 +27,13 @@ const Setting = () => {
 
     const changePasswordHandler = async (e) => {
         e.preventDefault();
-        dispatch(changePassword({ currentPassword, newPassword }))
+        dispatch(changePassword({ currentPassword, newPassword })).then((res) => {
+            if (!res.payload) return
+
+            setCurrentPassword("")
+            setNewPassword("")
+            navigate('/setting');
+        })
     }
 
     const toggleCurrentPasswordVisibility = (e) => {
@@ -40,15 +46,15 @@ const Setting = () => {
         setShowNewPassword(!showNewPassword);
     }
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        if (!isChangePasswordLoading) {
-            setCurrentPassword("")
-            setNewPassword("")
-            navigate('/setting');
-        }
+    //     if (!isChangePasswordLoading) {
+    //         setCurrentPassword("")
+    //         setNewPassword("")
+    //         navigate('/setting');
+    //     }
 
-    }, [isChangePasswordLoading]);
+    // }, [isChangePasswordLoading]);
 
     return (
         <>
@@ -175,7 +181,9 @@ const Setting = () => {
                                 <div className="px-4 py-6  text-center w-6/6 sm:px-6">
                                     <button type="submit"
                                         disabled={isChangePasswordLoading}
-                                        className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">Submit</button>
+                                        className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                       {isChangePasswordLoading ? 'loading...' : 'Submit'} 
+                                    </button>
                                 </div>
                             </div>
 

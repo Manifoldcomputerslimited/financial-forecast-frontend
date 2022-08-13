@@ -1,4 +1,4 @@
-import React, {useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from "react-hook-form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -108,19 +108,28 @@ const User = () => {
     const outterToggleClass = ' bg-red-600'
 
     const onSubmit = (data) => {
-        dispatch(inviteUser({ email: data.email }))
-    }
+        dispatch(inviteUser({ email: data.email })).then((res) => {
+            if (!res.payload) return
 
-    useEffect(() => {
-        if (!isInviteUserLoading) {
-
+            // TODO:: should redirect to login page
             reset({
                 email: ""
             })
 
             setShowModal(false)
-        }
-    }, [isInviteUserLoading]);
+        })
+    }
+
+    // useEffect(() => {
+    //     if (!isInviteUserLoading) {
+
+    //         reset({
+    //             email: ""
+    //         })
+
+    //         setShowModal(false)
+    //     }
+    // }, [isInviteUserLoading]);
 
 
     return (
@@ -216,7 +225,7 @@ const User = () => {
                                                 type="submit"
                                                 disabled={isInviteUserLoading}
                                             >
-                                                Invite
+                                                 {isInviteUserLoading ? 'loading...' : 'Invite'} 
                                             </button>
                                         </div>
                                     </form>

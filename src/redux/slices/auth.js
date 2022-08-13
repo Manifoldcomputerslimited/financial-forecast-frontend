@@ -4,7 +4,7 @@ import { Axios } from '../../api/instances';
 import { history } from '../../utils/utils'
 
 const initialState = {
-    isAuthenticated: false,
+    isAuthenticated: localStorage.getItem('accessToken') ? true : false,
     isZohoAuthenticated: true,
     isAuthLoading: false,
     error: null,

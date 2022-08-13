@@ -34,7 +34,12 @@ const ResetPassword = () => {
         dispatch(reset({
             password: data.newPassword,
             token: id
-        }))
+        })).then((res) => {
+            if (!res.payload) return
+
+            // TODO:: should redirect to login page
+            navigate('/login');
+        })
     }
 
     const togglePasswordVisibility = (e) => {
@@ -47,13 +52,13 @@ const ResetPassword = () => {
         setShowNewPassword(!showNewPassword);
     }
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        if (!isResetPasswordLoading) {
-            navigate('/login');
-        }
+    //     if (!isResetPasswordLoading) {
+    //         navigate('/login');
+    //     }
 
-    }, [isResetPasswordLoading]);
+    // }, [isResetPasswordLoading]);
 
     return (
         <div className="main">
@@ -122,8 +127,10 @@ const ResetPassword = () => {
                             </div>
                             <button
                                 type="submit"
-                                className="w-full block bg-red-400 hover:bg-red-300 focus:bg-red-300 text-white font-semibold rounded-lg
-                px-4 py-3 mt-6" >Submit</button>
+                                className="w-full block bg-red-400 hover:bg-red-300 focus:bg-red-300 text-white font-semibold rounded-lg px-4 py-3 mt-6"
+                                disabled={isResetPasswordLoading} >
+                                {isResetPasswordLoading ? 'loading...' : 'Submit'}
+                            </button>
                         </form>
                     </div>
                 </div>
