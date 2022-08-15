@@ -4,12 +4,14 @@ import { Axios } from '../../api/instances';
 import { history } from '../../utils/utils'
 
 const initialState = {
+    user: {},
     isAuthenticated: localStorage.getItem('accessToken') ? true : false,
     isZohoAuthenticated: true,
     isAuthLoading: false,
     error: null,
     isChangePasswordLoading: false,
     inviteUserLoading: false,
+    isUserLoading: false,
     isResetPasswordLoading: false,
     isForgotPasswordLoading: false,
     isForgotPasswordSuccess: false,
@@ -61,6 +63,25 @@ const inviteUser = createAsyncThunk("/invite", async ({ email }) => {
 
         console.log('response change password', res)
         return res;
+
+    } catch (error) {
+        throw error.response.data || error.message;
+    }
+});
+
+const getUser = createAsyncThunk("/me", async () => {
+    console.log('fantastic working ')
+    let accessToken = localStorage.getItem('accessToken') ? JSON.parse(localStorage.getItem('accessToken')) : null
+    try {
+        const res = await Axios.get('api/v1/me', {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            }
+        });
+
+        console.log('responseget user', res)
+        return res.data.data;
 
     } catch (error) {
         throw error.response.data || error.message;
@@ -150,17 +171,14 @@ const loginSlice = createSlice({
                 toast.error(action.error.message, { autoClose: 2000 })
             })
             .addCase(signup.pending, (state, action) => {
-                // state.isChangePasswordLoading = true;
+                state.isSignupLoading = true;
             })
             .addCase(signup.fulfilled, (state, action) => {
-
+                state.isSignupLoading = false;
                 toast.success('Registration successful', { autoClose: 2000 })
-
-                //state.isChangePasswordLoading = false;
             })
             .addCase(signup.rejected, (state, action) => {
-                // state.isChangePasswordLoading = false;
-                // state.error = action.error;
+                state.isSignupLoading = false;
                 toast.error(action.error.message, { autoClose: 2000 })
             })
             .addCase(changePassword.pending, (state, action) => {
@@ -174,6 +192,17 @@ const loginSlice = createSlice({
                 state.isChangePasswordLoading = false;
                 state.error = action.error;
                 toast.error(action.error.message, { autoClose: 2000 })
+            })
+            .addCase(getUser.pending, (state, action) => {
+                state.isUserLoading = true
+            })
+            .addCase(getUser.fulfilled, (state, action) => {
+                console.log(action.payload)
+                state.user = action.payload
+                state.isUserLoading = false
+            })
+            .addCase(getUser.rejected, (state, action) => {
+                state.isUserLoading = false
             })
             .addCase(forgotPassword.pending, (state, action) => {
                 state.isForgotPasswordLoading = true;
@@ -215,7 +244,7 @@ const loginSlice = createSlice({
     }
 })
 
-export { login, signup, forgotPassword, changePassword, reset, inviteUser }
+export { login, signup, getUser, forgotPassword, changePassword, reset, inviteUser }
 
 export const { logout } = loginSlice.actions;
 

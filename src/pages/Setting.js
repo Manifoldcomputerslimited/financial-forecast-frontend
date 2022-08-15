@@ -1,6 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import validator from 'validator'
+import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faEye,
@@ -27,6 +29,14 @@ const Setting = () => {
 
     const changePasswordHandler = async (e) => {
         e.preventDefault();
+
+        if (!validator.isStrongPassword(newPassword, {
+            minLength: 6, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1
+        })) {
+            toast.error("Password must be more than 5 characters including number, symbol, upper and lowercase", { autoClose: 5000 })
+            return;
+        }
+
         dispatch(changePassword({ currentPassword, newPassword })).then((res) => {
             if (!res.payload) return
 
@@ -182,7 +192,7 @@ const Setting = () => {
                                     <button type="submit"
                                         disabled={isChangePasswordLoading}
                                         className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                       {isChangePasswordLoading ? 'loading...' : 'Submit'} 
+                                        {isChangePasswordLoading ? 'loading...' : 'Submit'}
                                     </button>
                                 </div>
                             </div>

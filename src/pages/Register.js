@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,11 +9,12 @@ import {
     faEyeSlash
 } from "@fortawesome/free-solid-svg-icons";
 
-import { signup } from '../redux/slices/auth'
+import { logout, signup } from '../redux/slices/auth'
 
 const Register = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const isSignupLoading = useSelector(state => state.auth.isSignupLoading)
     const { id } = useParams()
     const [showPassword, setShowPassword] = useState(false);
     const { register, handleSubmit, reset, formState: { errors } } = useForm({
@@ -32,8 +33,12 @@ const Register = () => {
         })).then((res) => {
             if (!res.payload) return
 
-            // TODO:: should redirect to login page
-            navigate('/login');
+            localStorage.clear()
+            dispatch(logout())
+            navigate('/')
+
+            return;
+            
         }).catch(e => {
             console.log('register user', e)
         })
@@ -127,7 +132,9 @@ const Register = () => {
                             <button
                                 type="submit"
                                 className="w-full block bg-red-400 hover:bg-red-300 focus:bg-red-300 text-white font-semibold rounded-lg
-                px-4 py-3 mt-6" >Submit</button>
+                px-4 py-3 mt-6"
+                                disabled={isSignupLoading}
+                            >{isSignupLoading ? 'loading...' : 'Submit'}</button>
                         </form>
                     </div>
                 </div>

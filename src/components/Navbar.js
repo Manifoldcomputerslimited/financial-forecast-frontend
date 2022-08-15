@@ -2,7 +2,8 @@ import React from "react";
 
 import DurationDropdown from "./DurationDropdown.js";
 
-const Navbar = () => {
+const Navbar = (props) => {
+  let user = props.user
   return (
     <>
       {/* Navbar */}
@@ -19,6 +20,8 @@ const Navbar = () => {
 
           {/* Duration */}
           <ul className="flex-col md:flex-row list-none items-center hidden md:flex">
+            {/* TODO:: enhance or delete this */}
+            <p className="text-black bg-white text-xs">Welcome, {user.firstName}</p>
             <DurationDropdown />
           </ul>
         </div>
