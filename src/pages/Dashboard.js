@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Navigate, useSearchParams } from "react-router-dom";
+import { Navigate, useSearchParams, useNavigate } from "react-router-dom";
 import { InfinitySpin } from 'react-loader-spinner'
 
 
@@ -10,8 +10,8 @@ import Navbar from "../components/Navbar";
 import LineChart from "../components/LineChart";
 import BarChart from "../components/BarChart";
 
-import { zoho, zohoRefresh } from '../redux/slices/zoho'
-import { logout } from '../redux/slices/auth'
+import { zoho } from '../redux/slices/zoho'
+import { logout, getUser } from '../redux/slices/auth'
 
 import {
 	faWallet,
@@ -28,17 +28,21 @@ const Dashboard = (props) => {
 	let [isLoading, setIsLoading] = useState(true);
 	let [code, setCode] = useState("");
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const zohoLoading = useSelector(state => state.zoho.isLoading);
 	const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
 	let isZohoAuthenticated = useSelector(state => state.auth.isZohoAuthenticated);
+	let user = useSelector(state => state.auth.user);
 	let zohoAuthenticated = localStorage.getItem('zohoAuthenticated') ? localStorage.getItem('zohoAuthenticated') : false
 
 	useEffect(() => {
+		dispatch(getUser());
 		console.log('is zoho auth', zohoAuthenticated)
 		if (searchParams.get('error') === 'access_denied') {
-			localStorage.removeItem('accessToken')
-			localStorage.removeItem('refreshToken')
-			setZohoGrant(false);
+			// setZohoGrant(false);
+			// navigate('/login');
+			dispatch(logout())
+			return;
 		}
 
 		console.log('accept')
@@ -46,27 +50,25 @@ const Dashboard = (props) => {
 			console.log('search param')
 			setCode(searchParams.get('code'));
 			dispatch(zoho({ code: searchParams.get('code') }));
+			navigate('/')
+			return;
 		}
 
-
+		console.log('why getting here');
+		console.log('zoho authenticated', !zohoAuthenticated)
+		console.log('is Authenti', isAuthenticated)
 		if (!zohoAuthenticated && isAuthenticated) {
 			console.log('use refresh token')
 			dispatch(zoho({ code: '' }));
 		}
 
 
-		// else{
 
-		// 	dispatch(zoho({ code: null }));
-		// }
-
-		// check if zoho is authenticated using the access token
-		// if (localStorage.getItem('zohoToken')) {
-		// 	zohoAuthenticated = true;
-		// }
 		setIsLoading(false);
 
 	}, [searchParams]);
+
+	console.log('user data', user)
 
 	console.log('zoho authenticated dashboard', zohoAuthenticated)
 	return (
@@ -95,7 +97,7 @@ const Dashboard = (props) => {
 				<>
 					<Sidebar />
 					<div className="relative md:ml-64 bg-blueGray-100">
-						<Navbar />
+						<Navbar user={user} />
 
 						{/* Header */}
 						<div className="relative bg-pink-600 md:pt-32 pb-32 pt-12">

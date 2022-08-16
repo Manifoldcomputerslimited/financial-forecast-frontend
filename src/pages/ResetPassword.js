@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from "react-router-dom";
+import validator from 'validator'
 import logo from "../assets/logo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -31,6 +32,14 @@ const ResetPassword = () => {
             toast.error("Password mismatch", { autoClose: 2000 })
             return;
         }
+
+        if (!validator.isStrongPassword(data.newPassword, {
+            minLength: 6, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1
+        })) {
+            toast.error("Password must be more than 5 characters including number, symbol, upper and lowercase", { autoClose: 5000 })
+            return;
+        }
+        
         dispatch(reset({
             password: data.newPassword,
             token: id

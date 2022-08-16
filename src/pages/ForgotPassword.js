@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import logo from "../assets/logo.png";
@@ -9,6 +9,7 @@ import { forgotPassword } from '../redux/slices/auth'
 const ForgotPassword = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const isForgotPasswordLoading = useSelector(state => state.auth.isForgotPasswordLoading)
     const { register, handleSubmit, formState: { errors } } = useForm();
 
     const onSubmit = (data) => {
@@ -18,9 +19,6 @@ const ForgotPassword = () => {
             // TODO:: should redirect to login page
             navigate('/login');
         })
-
-        // if loading is false then close modal
-        //setShowModal(false)
     }
 
 
@@ -74,8 +72,12 @@ const ForgotPassword = () => {
                                     Back to Sign-in
                                 </NavLink>
                             </div>
-                            <button type="submit" className="w-full block bg-red-400 hover:bg-red-300 focus:bg-red-300 text-white font-semibold rounded-lg
-                     px-4 py-3 mt-6">Reset</button>
+                            <button
+                                type="submit"
+                                className="w-full block bg-red-400 hover:bg-red-300 focus:bg-red-300 text-white font-semibold rounded-lg
+                     px-4 py-3 mt-6"
+                                disabled={isForgotPasswordLoading}>
+                                {isForgotPasswordLoading ? 'loading...' : 'Reset'}</button>
                         </form>
                     </div>
                 </div>

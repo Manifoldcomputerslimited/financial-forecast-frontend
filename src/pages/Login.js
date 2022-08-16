@@ -39,21 +39,12 @@ const Login = (props) => {
   }
 
   
-
   console.log('is zohoauth', isZohoAuthenticated)
 
   console.log('am i auth', isAuthenticated)
 
   return (
     <div className="main">
-      {/* {authLoading ? (
-        <div className="grid h-screen place-items-center">
-          <InfinitySpin
-            width='200'
-            color="red"
-          />
-        </div>
-      ) : ( */}
       <div className="h-screen m-auto">
         <div className="bg-center inset-0 w-7/12 lg:block">
           <div className="ml-auto left-6 top-6 text-sm px-5 py-3">
