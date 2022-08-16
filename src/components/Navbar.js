@@ -19,9 +19,9 @@ const Navbar = (props) => {
           </a>
 
           {/* Duration */}
-          <ul className="flex-col md:flex-row list-none items-center hidden md:flex">
+          <ul className="flex-col md:flex-row list-none hidden md:flex">
             {/* TODO:: enhance or delete this */}
-            <p className="text-black bg-white text-xs">Welcome, {user.firstName}</p>
+            <p className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mr-2">Welcome, {user.firstName}</p>
             <DurationDropdown />
           </ul>
         </div>

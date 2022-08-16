@@ -36,6 +36,7 @@ const Dashboard = (props) => {
 	let zohoAuthenticated = localStorage.getItem('zohoAuthenticated') ? localStorage.getItem('zohoAuthenticated') : false
 
 	useEffect(() => {
+		dispatch(getUser());
 		console.log('is zoho auth', zohoAuthenticated)
 		if (searchParams.get('error') === 'access_denied') {
 			// setZohoGrant(false);
@@ -49,15 +50,19 @@ const Dashboard = (props) => {
 			console.log('search param')
 			setCode(searchParams.get('code'));
 			dispatch(zoho({ code: searchParams.get('code') }));
+			navigate('/')
+			return;
 		}
 
-
+		console.log('why getting here');
+		console.log('zoho authenticated', !zohoAuthenticated)
+		console.log('is Authenti', isAuthenticated)
 		if (!zohoAuthenticated && isAuthenticated) {
 			console.log('use refresh token')
 			dispatch(zoho({ code: '' }));
 		}
 
-		dispatch(getUser());
+
 
 		setIsLoading(false);
 

@@ -84,6 +84,7 @@ const getUser = createAsyncThunk("/me", async () => {
         return res.data.data;
 
     } catch (error) {
+        console.log('i got erro')
         throw error.response.data || error.message;
     }
 });
@@ -203,6 +204,8 @@ const loginSlice = createSlice({
             })
             .addCase(getUser.rejected, (state, action) => {
                 state.isUserLoading = false
+                localStorage.clear()
+                state.isAuthenticated = false
             })
             .addCase(forgotPassword.pending, (state, action) => {
                 state.isForgotPasswordLoading = true;

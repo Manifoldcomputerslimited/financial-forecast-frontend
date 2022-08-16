@@ -3,11 +3,13 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
+import validator from 'validator'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faEye,
     faEyeSlash
 } from "@fortawesome/free-solid-svg-icons";
+import { toast } from 'react-toastify';
 
 import { logout, signup } from '../redux/slices/auth'
 
@@ -27,6 +29,14 @@ const Register = () => {
     });
 
     const registerUser = (data) => {
+
+        if (!validator.isStrongPassword(data.password, {
+            minLength: 6, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1
+        })) {
+            toast.error("Password must be more than 5 characters including number, symbol, upper and lowercase", { autoClose: 5000 })
+            return;
+        }
+
         dispatch(signup({
             data,
             inviteToken: id
@@ -38,7 +48,7 @@ const Register = () => {
             navigate('/')
 
             return;
-            
+
         }).catch(e => {
             console.log('register user', e)
         })
