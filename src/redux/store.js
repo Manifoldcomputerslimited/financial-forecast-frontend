@@ -2,11 +2,13 @@ import { configureStore } from "@reduxjs/toolkit"
 
 import authReducer from "./slices/auth"
 import zohoReducer from "./slices/zoho"
+import userReducer from "./slices/user"
 
 const store = configureStore({
     reducer: {
         auth: authReducer,
-        zoho: zohoReducer
+        zoho: zohoReducer,
+        user: userReducer,
     },
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware({

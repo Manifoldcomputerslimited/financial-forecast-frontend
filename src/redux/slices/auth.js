@@ -6,7 +6,7 @@ import { history } from '../../utils/utils'
 const initialState = {
     user: {},
     isAuthenticated: localStorage.getItem('accessToken') ? true : false,
-    isZohoAuthenticated: true,
+    isZohoAuthenticated: false,
     isAuthLoading: false,
     error: null,
     isChangePasswordLoading: false,

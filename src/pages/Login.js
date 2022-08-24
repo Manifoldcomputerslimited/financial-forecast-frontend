@@ -38,11 +38,6 @@ const Login = (props) => {
     setShowPassword(!showPassword);
   }
 
-  
-  console.log('is zohoauth', isZohoAuthenticated)
-
-  console.log('am i auth', isAuthenticated)
-
   return (
     <div className="main">
       <div className="h-screen m-auto">
@@ -62,7 +57,7 @@ const Login = (props) => {
               </h1>
             </div>
             {(isAuthenticated) && (!isZohoAuthenticated && !authLoading) && (
-              window.location.replace('https://accounts.zoho.com/oauth/v2/auth?scope=ZohoBooks.invoices.CREATE,ZohoBooks.invoices.READ,ZohoBooks.invoices.UPDATE,ZohoBooks.invoices.DELETE&client_id=1000.TJGNSOYFT192B23XTR4P5889QPF6RC&state=testing&response_type=code&redirect_uri=http://localhost:3000&access_type=offline&prompt=Consent')
+              window.location.replace('https://accounts.zoho.com/oauth/v2/auth?scope=ZohoBooks.settings.READ,ZohoBooks.invoices.READ,ZohoBooks.salesorders.READ,ZohoBooks.purchaseorders.READ,ZohoBooks.bills.READ&client_id=1000.CQTBLDCOQ2UH51JCIA2L32O2V8J3EO&state=testing&response_type=code&redirect_uri=http://localhost:3000&access_type=offline&prompt=Consent')
             )}
             {(isAuthenticated && isZohoAuthenticated) && (
               <Navigate to="/" replace={true} />

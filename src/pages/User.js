@@ -6,109 +6,42 @@ import {
     faTrashAlt,
     faRedo
 } from "@fortawesome/free-solid-svg-icons";
-
-import { inviteUser } from '../redux/slices/auth'
+import dayjs from 'dayjs';
+import { toast } from 'react-toastify';
+import { inviteUser, deleteUser } from '../redux/slices/auth'
 
 import Sidebar from "../components/Sidebar.js";
 import { withAuth } from "../hoc/withAuth";
+import { getUsers, updateAdminStatus } from '../redux/slices/user'
 
 
 const User = () => {
     const dispatch = useDispatch();
     const isInviteUserLoading = useSelector((state) => state.auth.inviteUserLoading);
+    const isUserLoading = useSelector((state) => state.user.isUserLoading);
+    const users = useSelector((state) => state.user.users);
     const [showModal, setShowModal] = useState(false);
+    const [email, setEmail] = useState('')
     const [showInviteModal, setShowInviteModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
-    const [toggle, setToggle] = useState(true);
+    // const [toggle, setToggle] = useState(true);
     const { register, handleSubmit, setValue, reset, formState: { errors } } = useForm({
         defaultValues: {
             email: ''
         }
     });
-    let myArr = [
-        {
-            'id': 1,
-            'name': 'Jack',
-            'email': 'jack@gmail.com'
-        },
-        {
-            'id': '2',
-            'name': 'Mary',
-            'email': 'mary@gmail.com'
-        },
-        {
-            'id': '3',
-            'name': 'John',
-            'email': 'john@gmail.com'
-        },
-        {
-            'id': 1,
-            'name': 'Jack',
-            'email': 'jack@gmail.com'
-        },
-        {
-            'id': '2',
-            'name': 'Mary',
-            'email': 'mary@gmail.com'
-        },
-        {
-            'id': '3',
-            'name': 'John',
-            'email': 'john@gmail.com'
-        },
-        {
-            'id': 1,
-            'name': 'Jack',
-            'email': 'jack@gmail.com'
-        },
-        {
-            'id': '2',
-            'name': 'Mary',
-            'email': 'mary@gmail.com'
-        },
-        {
-            'id': '3',
-            'name': 'John',
-            'email': 'john@gmail.com'
-        },
-        {
-            'id': 1,
-            'name': 'Jack',
-            'email': 'jack@gmail.com'
-        },
-        {
-            'id': '2',
-            'name': 'Mary',
-            'email': 'mary@gmail.com'
-        },
-        {
-            'id': '3',
-            'name': 'John',
-            'email': 'john@gmail.com'
-        },
-        {
-            'id': 1,
-            'name': 'Jack',
-            'email': 'jack@gmail.com'
-        },
-        {
-            'id': '2',
-            'name': 'Mary',
-            'email': 'mary@gmail.com'
-        },
-        {
-            'id': '3',
-            'name': 'John',
-            'email': 'john@gmail.com'
-        },
-    ];
 
     const toggleClass = ' transform translate-x-5 bg-white';
 
     const outterToggleClass = ' bg-red-600'
 
+    // Allows admin to invite user to the applicaiton and also re-invite a user
+    // if the email fails
     const onSubmit = (data) => {
-        dispatch(inviteUser({ email: data.email })).then((res) => {
+
+        let email = (!data || !data.email) ? email : data.email
+
+        dispatch(inviteUser({ email: email })).then((res) => {
             if (!res.payload) return
 
             // TODO:: should redirect to login page
@@ -117,20 +50,41 @@ const User = () => {
             })
 
             setShowModal(false)
+            setShowInviteModal(false)
+
         })
     }
 
-    // useEffect(() => {
-    //     if (!isInviteUserLoading) {
+    const deleteUser = () => {
+        dispatch(deleteUser({ email: email }))
+        setShowDeleteModal(false)
 
-    //         reset({
-    //             email: ""
-    //         })
+    }
 
-    //         setShowModal(false)
-    //     }
-    // }, [isInviteUserLoading]);
+    const deleteModal = (user) => {
+        setShowDeleteModal(true)
+        setEmail(user.email)
+    }
 
+    const inviteModal = (user) => {
+
+        setShowInviteModal(true)
+        setEmail(user.email)
+        console.log('invite email', user.email)
+
+    }
+
+    const updateUserStaus = async (user) => {
+        await dispatch(updateAdminStatus({ user }))
+
+        await dispatch(getUsers());
+        //window.location.reload(true);
+
+    }
+
+    useEffect(() => {
+        dispatch(getUsers())
+    }, []);
 
     return (
         <>
@@ -225,7 +179,7 @@ const User = () => {
                                                 type="submit"
                                                 disabled={isInviteUserLoading}
                                             >
-                                                 {isInviteUserLoading ? 'loading...' : 'Invite'} 
+                                                {isInviteUserLoading ? 'loading...' : 'Invite'}
                                             </button>
                                         </div>
                                     </form>
@@ -267,7 +221,7 @@ const User = () => {
                                                 className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 mb-1"
                                                 type="submit"
                                             >
-                                                Yes
+                                                {isInviteUserLoading ? 're-inviting...' : 'Yes'}
                                             </button>
                                         </div>
                                     </form>
@@ -289,31 +243,32 @@ const User = () => {
                                 <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
 
                                     {/*body*/}
-                                    <form className='space-y-6 py-6' onSubmit={handleSubmit(onSubmit)}>
-                                        <div className="relative px-8 flex-auto">
-                                            <div className="relative w-12/12">
-                                                <p className="my-4 text-slate-500 text-lg leading-relaxed">
-                                                    Are you sure you want to delete user?
-                                                </p>
-                                            </div>
+                                    {/* <form className='space-y-6 py-6' onSubmit={handleSubmit(onSubmit)}> */}
+                                    <div className="relative px-8 flex-auto">
+                                        <div className="relative w-12/12">
+                                            <p className="my-4 text-slate-500 text-lg leading-relaxed">
+                                                Are you sure you want to delete user?
+                                            </p>
                                         </div>
-                                        {/*footer*/}
-                                        <div className="flex items-center justify-center p-6 mt-5 rounded-b">
-                                            <button
-                                                onClick={() => setShowDeleteModal(false)}
-                                                className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 mb-1 mr-2"
-                                                type="submit"
-                                            >
-                                                No
-                                            </button>
-                                            <button
-                                                className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 mb-1"
-                                                type="submit"
-                                            >
-                                                Yes
-                                            </button>
-                                        </div>
-                                    </form>
+                                    </div>
+                                    {/*footer*/}
+                                    <div className="flex items-center justify-center p-6 mt-5 rounded-b">
+                                        <button
+                                            onClick={() => setShowDeleteModal(false)}
+                                            className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 mb-1 mr-2"
+                                            type="submit"
+                                        >
+                                            No
+                                        </button>
+                                        <button
+                                            className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 mb-1"
+                                            type="submit"
+                                            onClick={deleteUser}
+                                        >
+                                            Yes
+                                        </button>
+                                    </div>
+                                    {/* </form> */}
                                 </div>
                             </div>
                         </div>
@@ -361,63 +316,64 @@ const User = () => {
                                         </th>
                                     </tr>
                                 </thead>
-                                <tbody className=''>
-                                    {myArr.map((q, i) => (
-                                        <tr id={i} data-index={i}>
-                                            <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-                                                Abiodun Manasseh
-                                            </th>
-                                            <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                                manassehl9@gmail.com
-                                            </td>
-                                            <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                                <div
-                                                    className={"md:w-10 md:h-5 w-10 h-5 flex items-center rounded-full p-1 cursor-pointer" + (toggle ? ' bg-white border-2 border-red-500' : outterToggleClass)}
-                                                    onClick={() => {
-                                                        setToggle(!toggle);
-                                                    }}
-                                                >
-                                                    {/* Switch */}
+                                {(!isUserLoading) && (
+                                    <tbody className=''>
+                                        {users.map((user) => (
+                                            <tr key={user.id}>
+                                                <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+                                                    {(user.firstName ? user.firstName : '') + ' ' + (user.lastName ? user.lastName : '')}
+                                                </th>
+                                                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                                    {user.email}
+                                                </td>
+                                                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                                                     <div
-                                                        className={"md:w-3 md:h-3 h-5 w-5 rounded-full" + (toggle ? ' bg-red-600 ' : toggleClass)}>
-                                                    </div>
-
-                                                </div>
-                                            </td>
-                                            <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                                invited
-                                            </td>
-                                            <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                                1-Jul-2022
-                                            </td>
-                                            <td className=" border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                                <div className="flex justify-start space-x-5">
-
-                                                    <div className="has-tooltip" onClick={() => setShowInviteModal(true)}>
-                                                        <span className="tooltip rounded shadow-lg p-2 bg-gray-100 text-green-700 -mt-8">reinvite user</span>
-                                                        <FontAwesomeIcon
-                                                            icon={faRedo}
-                                                            style={{ fontSize: 17, color: "green" }}
-                                                        />
+                                                        className={"md:w-10 md:h-5 w-10 h-5 flex items-center rounded-full p-1 cursor-pointer" + (!user.role ? ' bg-white border-2 border-red-500' : outterToggleClass)}
+                                                        onClick={() => updateUserStaus({ role: !user.role, email: user.email })}
+                                                    >
+                                                        {/* Switch */}
+                                                        <div
+                                                            className={"md:w-3 md:h-3 h-5 w-5 rounded-full" + (!user.role ? ' bg-red-600 ' : toggleClass)}>
+                                                        </div>
 
                                                     </div>
-                                                    <div className="has-tooltip" onClick={() => setShowDeleteModal(true)}>
-                                                        <span className="tooltip rounded shadow-lg p-2 bg-gray-100 text-red-500 -mt-8">delete user</span>
-                                                        <FontAwesomeIcon
-                                                            icon={faTrashAlt}
-                                                            style={{ fontSize: 17, color: "red" }}
-                                                        />
+                                                </td>
+                                                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                                    {user.status ? 'completed' : 'invited'}
+                                                </td>
+                                                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                                    {dayjs(user.createdAt).format('DD-MMM-YYYY')}
+                                                </td>
+                                                <td className=" border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                                    <div className="flex justify-start space-x-5">
+
+                                                        <div className="has-tooltip" onClick={() => inviteModal({ email: user.email })}>
+                                                            <span className="tooltip rounded shadow-lg p-2 bg-gray-100 text-green-700 -mt-8">reinvite user</span>
+                                                            <FontAwesomeIcon
+                                                                icon={faRedo}
+                                                                style={{ fontSize: 17, color: "green" }}
+                                                            />
+
+                                                        </div>
+                                                        <div className="has-tooltip" onClick={() => deleteModal({ email: user.email })}>
+                                                            <span className="tooltip rounded shadow-lg p-2 bg-gray-100 text-red-500 -mt-8">delete user</span>
+                                                            <FontAwesomeIcon
+                                                                icon={faTrashAlt}
+                                                                style={{ fontSize: 17, color: "red" }}
+                                                            />
+                                                        </div>
                                                     </div>
-                                                </div>
 
 
-                                            </td>
-                                        </tr>
-                                    ))}
+                                                </td>
+                                            </tr>
+                                        ))}
 
 
-                                </tbody>
+                                    </tbody>
+                                )}
                             </table>
+
                         </div>
                     </div>
                 </div>
