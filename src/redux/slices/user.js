@@ -45,9 +45,34 @@ const updateAdminStatus = createAsyncThunk('/updateAdminStatus', async ({ user }
     }
 });
 
+const deleteUser = createAsyncThunk('/deleteUser', async ({ email }) => {
+    try {
+        console.log('my email', email)
+        let accessToken = localStorage.getItem('accessToken') ? JSON.parse(localStorage.getItem('accessToken')) : null
+        let options = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            }
+        }
+        await Axios.delete(`api/v1/users/delete/${email}`, options);
+
+        // return res.data.data
+    } catch (error) {
+        throw error.response.data || error.message;
+    }
+});
+
+
+
 const userSlice = createSlice({
     name: "user",
     initialState,
+    // reducers: {
+    //     deleteUser: (state) => {
+    //         state.value += 1
+    //     },
+    // },
     extraReducers: (builder) => {
         builder
             .addCase(getUsers.pending, (state, action) => {
@@ -62,18 +87,36 @@ const userSlice = createSlice({
                 state.error = action.error;
             })
             // .addCase(updateAdminStatus.pending, (state, action) => {
-                
+
             // })
             .addCase(updateAdminStatus.fulfilled, (state, action) => {
-                 toast.success('Successfully', { autoClose: 2000 })
+                toast.success('Successful', { autoClose: 2000 })
             })
             .addCase(updateAdminStatus.rejected, (state, action) => {
+                toast.error(action.error.message, { autoClose: 2000 })
+            })
+            // .addCase(deleteUser.pending, (state, action) => {
+
+            // })
+            .addCase(deleteUser.fulfilled, (state, action) => {
+                toast.success('Successful', { autoClose: 2000 })
+            })
+            .addCase(deleteUser.rejected, (state, action) => {
                 toast.error(action.error.message, { autoClose: 2000 })
             })
     }
 })
 
-export { getUsers, updateAdminStatus }
+// export const deleteUserAsync = (data) =>  async (dispatch) => {
+//     try{
+//         const res = await Axios.delete();
+//         dispatch(getUser())
+//     }catch(e){
+//         throw new Error(e)
+//     }
+// }
+
+export { getUsers, updateAdminStatus, deleteUser }
 
 
 export default userSlice.reducer;

@@ -8,11 +8,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
-import { inviteUser, deleteUser } from '../redux/slices/auth'
+import { inviteUser } from '../redux/slices/auth'
 
 import Sidebar from "../components/Sidebar.js";
 import { withAuth } from "../hoc/withAuth";
-import { getUsers, updateAdminStatus } from '../redux/slices/user'
+import { getUsers, updateAdminStatus, deleteUser } from '../redux/slices/user'
 
 
 const User = () => {
@@ -37,11 +37,11 @@ const User = () => {
 
     // Allows admin to invite user to the applicaiton and also re-invite a user
     // if the email fails
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
 
         let email = (!data || !data.email) ? email : data.email
 
-        dispatch(inviteUser({ email: email })).then((res) => {
+        await dispatch(inviteUser({ email: email })).then((res) => {
             if (!res.payload) return
 
             // TODO:: should redirect to login page
@@ -53,11 +53,15 @@ const User = () => {
             setShowInviteModal(false)
 
         })
+
+        await dispatch(getUsers());
     }
 
-    const deleteUser = () => {
-        dispatch(deleteUser({ email: email }))
+    const onDeleteUser = async () => {
+        await dispatch(deleteUser({ email }))
         setShowDeleteModal(false)
+
+        await dispatch(getUsers());
 
     }
 
@@ -77,14 +81,12 @@ const User = () => {
     const updateUserStaus = async (user) => {
         await dispatch(updateAdminStatus({ user }))
 
-        await dispatch(getUsers());
-        //window.location.reload(true);
-
+        dispatch(getUsers());
     }
 
     useEffect(() => {
         dispatch(getUsers())
-    }, []);
+    }, [dispatch]);
 
     return (
         <>
@@ -263,7 +265,7 @@ const User = () => {
                                         <button
                                             className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 mb-1"
                                             type="submit"
-                                            onClick={deleteUser}
+                                            onClick={onDeleteUser}
                                         >
                                             Yes
                                         </button>
@@ -355,7 +357,7 @@ const User = () => {
                                                             />
 
                                                         </div>
-                                                        <div className="has-tooltip" onClick={() => deleteModal({ email: user.email })}>
+                                                        <div className="has-tooltip" onClick={() => deleteModal({ email: user.id })}>
                                                             <span className="tooltip rounded shadow-lg p-2 bg-gray-100 text-red-500 -mt-8">delete user</span>
                                                             <FontAwesomeIcon
                                                                 icon={faTrashAlt}
