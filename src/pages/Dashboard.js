@@ -12,6 +12,7 @@ import BarChart from "../components/BarChart";
 
 import { zoho } from '../redux/slices/zoho'
 import { logout, getUser } from '../redux/slices/auth'
+import { generateReport } from "../redux/slices/forecast"
 
 import {
 	faWallet,
@@ -32,11 +33,14 @@ const Dashboard = (props) => {
 	const zohoLoading = useSelector(state => state.zoho.isLoading);
 	const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
 	let isZohoAuthenticated = useSelector(state => state.auth.isZohoAuthenticated);
+	let { forecastNumber, forecastPeriod } = useSelector(state => state.forecast);
 	let user = useSelector(state => state.auth.user);
 	let zohoAuthenticated = localStorage.getItem('zohoAuthenticated') ? localStorage.getItem('zohoAuthenticated') : false
 
 	useEffect(() => {
 		dispatch(getUser());
+		console.log('forecastNumber', forecastNumber)
+		console.log('forecastPeriod', forecastPeriod)
 		console.log('is zoho auth', zohoAuthenticated)
 		if (searchParams.get('error') === 'access_denied') {
 			// setZohoGrant(false);
@@ -60,9 +64,12 @@ const Dashboard = (props) => {
 		if (!zohoAuthenticated && isAuthenticated) {
 			console.log('use refresh token')
 			dispatch(zoho({ code: '' }));
+			
+			//TODO::: openingBalanceHandler
+			//dispatch()
 		}
 
-
+		dispatch(generateReport({ forecastNumber, forecastPeriod }))
 
 		setIsLoading(false);
 

@@ -65,6 +65,7 @@ instance.interceptors.request.use(async req => {
         return req;
     }
 
+    console.log('got outside here', zohoAccessToken)
     if (!accessToken && !zohoAccessToken) {
         return req;
     }
@@ -78,6 +79,7 @@ instance.interceptors.request.use(async req => {
     console.log('zoho', zohoUser)
     const isUserExpired = accessToken ? (dayjs.unix(user.exp).diff(dayjs()) < 1) : null;
     const isZohoTokenExpired = zohoAccessToken ? (dayjs.unix(zohoUser.exp).diff(dayjs()) < 1) : null;
+    console.log('zoho token has expired', isZohoTokenExpired);
     console.log('ddoings')
     console.log(isZohoTokenExpired)
     if ((!isUserExpired && isUserExpired !== null) && (!isZohoTokenExpired && isZohoTokenExpired !== null)) {
