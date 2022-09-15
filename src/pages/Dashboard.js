@@ -33,9 +33,10 @@ const Dashboard = (props) => {
 	const zohoLoading = useSelector(state => state.zoho.isLoading);
 	const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
 	let isZohoAuthenticated = useSelector(state => state.auth.isZohoAuthenticated);
-	let { forecastNumber, forecastPeriod } = useSelector(state => state.forecast);
+	let { forecastNumber, forecastPeriod } = useSelector(state => state.forecast.forecastInfo);
 	let user = useSelector(state => state.auth.user);
 	let zohoAuthenticated = localStorage.getItem('zohoAuthenticated') ? localStorage.getItem('zohoAuthenticated') : false
+	let { selectedPeriod } = useSelector(state => state.forecast.forecastDropdown)
 
 	useEffect(() => {
 		dispatch(getUser());
@@ -64,16 +65,25 @@ const Dashboard = (props) => {
 		if (!zohoAuthenticated && isAuthenticated) {
 			console.log('use refresh token')
 			dispatch(zoho({ code: '' }));
-			
+
+
+
+		}
+		console.log('i am running', localStorage.getItem('zohoAccessToken'))
+		if (localStorage.getItem('zohoAccessToken')) {
 			//TODO::: openingBalanceHandler
-			//dispatch()
+			console.log('zoho access token generated?', localStorage.getItem('zohoAccessToken'));
+			if (zohoAuthenticated && isAuthenticated) {
+				console.log('i no won enter here', selectedPeriod)
+				dispatch(generateReport({ id: selectedPeriod, forecastNumber, forecastPeriod }))
+			}
+
 		}
 
-		dispatch(generateReport({ forecastNumber, forecastPeriod }))
 
 		setIsLoading(false);
 
-	}, [searchParams]);
+	}, [searchParams, localStorage.getItem('zohoAccessToken')]);
 
 	console.log('user data', user)
 

@@ -1,9 +1,22 @@
 import React from "react";
-
+import { useDispatch, useSelector } from 'react-redux';
+import { downloadReport } from "../redux/slices/forecast";
 import DurationDropdown from "./DurationDropdown.js";
+import Moment from 'react-moment';
+import moment from 'moment';
 
 const Navbar = (props) => {
+  const dispatch = useDispatch();
+  let { selectedPeriod } = useSelector(state => state.forecast.forecastDropdown)
+  let { forecastNumber, forecastPeriod } = useSelector(state => state.forecast.forecastInfo);
   let user = props.user
+
+  const downloadReportHandler = (e) => {
+    e.preventDefault();
+    let filename = `Forecast-${forecastNumber}-${forecastPeriod}` + moment().toISOString();
+    dispatch(downloadReport({ forecastNumber, forecastPeriod, filename }))
+  }
+
   return (
     <>
       {/* Navbar */}
@@ -20,9 +33,12 @@ const Navbar = (props) => {
 
           {/* Duration */}
           <ul className="flex-col md:flex-row list-none hidden md:flex">
+
+            <button onClick={downloadReportHandler} className="mr-2 inline-flex justify-center  py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-900 hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-900"> Download</button>
             {/* TODO:: enhance or delete this */}
-            <p className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mr-2">Welcome, {user.firstName}</p>
+
             <DurationDropdown />
+            <p className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mr-2">Welcome, {user.firstName}</p>
           </ul>
         </div>
       </nav>

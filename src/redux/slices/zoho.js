@@ -27,7 +27,7 @@ const zoho = createAsyncThunk('zoho', async ({ code }) => {
         return res.data.data
 
     } catch (error) {
-        console.log('zoho main error', error)
+        console.log('I got this zoho error', error)
         throw error.response.data || error.message;
     }
 });
