@@ -160,6 +160,8 @@ const loginSlice = createSlice({
             .addCase(login.fulfilled, (state, action) => {
                 localStorage.setItem('accessToken', JSON.stringify(action.payload.data.data.accessToken))
                 localStorage.setItem('refreshToken', JSON.stringify(action.payload.data.data.refreshToken))
+                // localStorage.setItem('forecastNumber', 3);
+                // localStorage.setItem('forecastPeriod', 'month');
                 state.isAuthLoading = false;
                 state.isAuthenticated = true;
                 console.log("payload", action.payload)
