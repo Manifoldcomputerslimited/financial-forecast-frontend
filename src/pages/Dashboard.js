@@ -36,6 +36,7 @@ const Dashboard = (props) => {
 	let { forecastNumber, forecastPeriod } = useSelector(state => state.forecast.forecastInfo);
 	let user = useSelector(state => state.auth.user);
 	let zohoAuthenticated = localStorage.getItem('zohoAuthenticated') ? localStorage.getItem('zohoAuthenticated') : false
+	let { selectedPeriod } = useSelector(state => state.forecast.forecastDropdown)
 
 	useEffect(() => {
 		dispatch(getUser());
@@ -72,9 +73,9 @@ const Dashboard = (props) => {
 		if (localStorage.getItem('zohoAccessToken')) {
 			//TODO::: openingBalanceHandler
 			console.log('zoho access token generated?', localStorage.getItem('zohoAccessToken'));
-			if (!localStorage.getItem('zohoAccessToken')) {
-				console.log('i no won enter here')
-				dispatch(generateReport({ forecastNumber, forecastPeriod }))
+			if (zohoAuthenticated && isAuthenticated) {
+				console.log('i no won enter here', selectedPeriod)
+				dispatch(generateReport({ id: selectedPeriod, forecastNumber, forecastPeriod }))
 			}
 
 		}

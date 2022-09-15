@@ -11,7 +11,7 @@ import {
 import Sidebar from "../components/Sidebar";
 import { withAuth } from "../hoc/withAuth";
 import { changePassword } from '../redux/slices/auth'
-import { exchangeRate, updateExchangeRate } from "../redux/slices/forecast";
+import { exchangeRate, updateExchangeRate, generateReport } from "../redux/slices/forecast";
 
 const Setting = () => {
     const dispatch = useDispatch();
@@ -23,6 +23,7 @@ const Setting = () => {
     const [latestRate, setLatestRate] = useState(latest);
     let { forecastNumber, forecastPeriod } = useSelector(state => state.forecast.forecastInfo);
     const isUpdateExchangeRateLoading = useSelector(state => state.forecast.isUpdateExchangeRateLoading)
+    let { selectedPeriod } = useSelector(state => state.forecast.forecastDropdown)
 
 
 
@@ -38,9 +39,9 @@ const Setting = () => {
 
     const updateExchangeRateHandler = async (e) => {
         e.preventDefault();
-
-        console.log('rate ID', id);
-        console.log('latest rate', latestRate);
+        console.log('latest rate', latestRate)
+        console.log('forecast number', forecastNumber);
+        console.log('forecast period ', forecastPeriod);
         dispatch(updateExchangeRate({ id, latestRate, forecastNumber, forecastPeriod }))
 
     }
@@ -78,10 +79,15 @@ const Setting = () => {
         // Get exchange rate from backend
         // if local storage is empty then call the backend to fetch exchange rate
         console.log('rate is', latestRate);
-        if (!latestRate) {
-            dispatch(exchangeRate());
-            setLatestRate(latest)
+        console.log('new', latest);
+        // if (!latestRate) {
+        dispatch(exchangeRate({ forecastNumber, forecastPeriod }));
+        if (latestRate != latest) {
+            dispatch(generateReport({ id: selectedPeriod, forecastNumber, forecastPeriod }))
         }
+        setLatestRate(latest)
+
+        // }
 
     }, [latest]);
 

@@ -148,6 +148,7 @@ const loginSlice = createSlice({
     initialState,
     reducers: {
         logout(state) {
+            state = state.initialState
             localStorage.clear()
             state.isAuthenticated = false
         }
@@ -162,7 +163,7 @@ const loginSlice = createSlice({
                 localStorage.setItem('refreshToken', JSON.stringify(action.payload.data.data.refreshToken))
                 // localStorage.setItem('forecastNumber', 3);
                 // localStorage.setItem('forecastPeriod', 'month');
-                
+
                 state.isAuthLoading = false;
                 state.isAuthenticated = true;
                 state.isZohoAuthenticated = action.payload.data.data.isZohoAuthenticated;

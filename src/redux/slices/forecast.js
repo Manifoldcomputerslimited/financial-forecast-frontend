@@ -16,15 +16,42 @@ const initialState = {
     forecastInfo: {
         forecastNumber: 3,
         forecastPeriod: 'month'
+    },
+    forecastDropdown: {
+        durations: [
+            {
+                id: 1,
+                forecastPeriod: "month",
+                forecastNumber: 1,
+                label: "Current Month"
+            }, {
+                id: 2,
+                forecastPeriod: "month",
+                forecastNumber: 2,
+                label: "Next Month"
+            },
+            {
+                id: 3,
+                forecastPeriod: "month",
+                forecastNumber: 3,
+                label: "3 Months"
+            }, {
+                id: 4,
+                forecastPeriod: "month",
+                forecastNumber: 6,
+                label: "6 Months"
+            }
+        ],
+        selectedPeriod: 2
     }
 }
 
 
-const exchangeRate = createAsyncThunk('rate', async () => {
+const exchangeRate = createAsyncThunk('rate', async ({ forecastNumber, forecastPeriod }) => {
     try {
         let accessToken = localStorage.getItem('accessToken') ? JSON.parse(localStorage.getItem('accessToken')) : null
 
-        const res = await Axios.get('api/v1/zoho/exchange/rate', {
+        const res = await Axios.get(`api/v1/zoho/exchange/rate/${forecastNumber}/${forecastPeriod}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${accessToken}`
@@ -70,13 +97,13 @@ const updateExchangeRate = createAsyncThunk('updateRate', async ({ id, latestRat
 
 
 
-const generateReport = createAsyncThunk('generate', async ({ forecastNumber, forecastPeriod }) => {
+const generateReport = createAsyncThunk('generate', async ({ id, forecastNumber, forecastPeriod }) => {
     try {
-        console.log('calling generate');
+        console.log('calling generate', id);
         let accessToken = localStorage.getItem('accessToken') ? JSON.parse(localStorage.getItem('accessToken')) : null
         let zohoAccessToken = localStorage.getItem('zohoAccessToken') ? JSON.parse(localStorage.getItem('zohoAccessToken')) : null
 
-        console.log('generate report', zohoAccessToken);
+        console.log('forecastNumber', forecastNumber)
 
         const res = await Axios.post('api/v1/zoho/opening/balance', {
             forecastNumber, forecastPeriod, zohoAccessToken
@@ -89,7 +116,13 @@ const generateReport = createAsyncThunk('generate', async ({ forecastNumber, for
 
 
         console.log('response from my app', res.data.data);
-        return res.data.data
+        let response = {
+            id,
+            forecastNumber,
+            forecastPeriod,
+            data: res.data.data,
+        }
+        return response;
 
     } catch (error) {
         console.log('generate report error', error)
@@ -134,6 +167,9 @@ const forecastSlice = createSlice({
                 state.isGeneratingReport = true;
             })
             .addCase(generateReport.fulfilled, (state, action) => {
+                state.forecastDropdown.selectedPeriod = action.payload.id
+                state.forecastInfo.forecastPeriod = action.payload.forecastPeriod
+                state.forecastInfo.forecastNumber = action.payload.forecastNumber
                 state.isGeneratingReport = false;
 
             })
