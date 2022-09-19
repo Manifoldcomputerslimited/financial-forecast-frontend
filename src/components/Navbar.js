@@ -34,7 +34,7 @@ const Navbar = (props) => {
           {/* Duration */}
           <ul className="flex-col md:flex-row list-none hidden md:flex">
 
-            <button onClick={downloadReportHandler} className="mr-2 inline-flex justify-center  py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-900 hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-900"> Download</button>
+            <button onClick={downloadReportHandler} className="mr-2 justify-center  py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-900 hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-900"> Download</button>
             {/* TODO:: enhance or delete this */}
 
             <DurationDropdown />

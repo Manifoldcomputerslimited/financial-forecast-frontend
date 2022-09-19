@@ -148,9 +148,10 @@ const loginSlice = createSlice({
     initialState,
     reducers: {
         logout(state) {
-            state = state.initialState
             localStorage.clear()
-            state.isAuthenticated = false
+            state.isAuthenticated = false;
+            state.isZohoAuthenticated = false;
+            state = state.initialState;
         }
     },
     extraReducers: (builder) => {
