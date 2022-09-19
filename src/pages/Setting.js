@@ -16,19 +16,19 @@ import { exchangeRate, updateExchangeRate, generateReport } from "../redux/slice
 const Setting = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    const isChangePasswordLoading = useSelector(state => state.auth.isChangePasswordLoading);
+    const isUpdateExchangeRateLoading = useSelector(state => state.forecast.isUpdateExchangeRateLoading);
+    const { forecastNumber, forecastPeriod } = useSelector(state => state.forecast.forecastInfo);
+    const { latest, id } = useSelector(state => state.forecast.rate);
+    const { selectedPeriod } = useSelector(state => state.forecast.forecastDropdown);
+
     const [showCurrentPassword, setShowCurrentPassword] = useState(false);
     const [showNewPassword, setShowNewPassword] = useState(false);
-    const isChangePasswordLoading = useSelector(state => state.auth.isChangePasswordLoading)
-    const { latest, id } = useSelector(state => state.forecast.rate);
     const [latestRate, setLatestRate] = useState(latest);
-    let { forecastNumber, forecastPeriod } = useSelector(state => state.forecast.forecastInfo);
-    const isUpdateExchangeRateLoading = useSelector(state => state.forecast.isUpdateExchangeRateLoading)
-    let { selectedPeriod } = useSelector(state => state.forecast.forecastDropdown)
-
-
-
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
+
 
     const changeCurrentPasswordHandler = (e) => setCurrentPassword(e.target.value)
 
@@ -39,9 +39,9 @@ const Setting = () => {
 
     const updateExchangeRateHandler = async (e) => {
         e.preventDefault();
-        console.log('latest rate', latestRate)
-        console.log('forecast number', forecastNumber);
-        console.log('forecast period ', forecastPeriod);
+        // console.log('latest rate', latestRate)
+        // console.log('forecast number', forecastNumber);
+        // console.log('forecast period ', forecastPeriod);
         dispatch(updateExchangeRate({ id, latestRate, forecastNumber, forecastPeriod }))
 
     }
@@ -78,8 +78,8 @@ const Setting = () => {
     useEffect(() => {
         // Get exchange rate from backend
         // if local storage is empty then call the backend to fetch exchange rate
-        console.log('rate is', latestRate);
-        console.log('new', latest);
+        // console.log('rate is', latestRate);
+        // console.log('new', latest);
         // if (!latestRate) {
         dispatch(exchangeRate({ forecastNumber, forecastPeriod }));
         if (latestRate != latest) {
@@ -113,46 +113,51 @@ const Setting = () => {
                 {/* End Navbar */}
                 {/* Header */}
 
-                {!isUpdateExchangeRateLoading && (
-                    <div>
-                        <div className="w-full px-4 pt-12">
-                            <form className='space-y-6 py-6' onSubmit={updateExchangeRateHandler}>
-                                <div className=" flex  w-full bg-white  m-auto  mb-6  justify-center items-center">
-                                    <div className="w-full px-4">
+                {/* {!isUpdateExchangeRateLoading && ( */}
+                <div>
+                    <div className="w-full px-4 pt-12">
+                        <form className='space-y-6 py-6' onSubmit={updateExchangeRateHandler}>
+                            <div className=" flex  w-full bg-white  m-auto  mb-6  justify-center items-center">
+                                <div className="w-full px-4">
 
-                                        <div className="flex flex-col  bg-white  mb-6  justify-center items-center" >
-                                            <div className="w-4/12 ">
-                                                <h1 className="text-red-700 font-medium text-2xl mb-1">Exchange Rate</h1>
-                                                <h1 className="text-md font-normal text-gray-600 mb-7">Input naira equivalent to dollar
-                                                </h1>
-                                            </div>
-                                            <div className="relative w-4/12">
-                                                <label
-                                                    className="block text-gray-700"
+                                    <div className="flex flex-col  bg-white  mb-6  justify-center items-center" >
+                                        <div className="w-4/12 ">
+                                            <h1 className="text-red-700 font-medium text-2xl mb-1">Exchange Rate</h1>
+                                            <h1 className="text-md font-normal text-gray-600 mb-7">Input naira equivalent to dollar
+                                            </h1>
+                                        </div>
+                                        <div className="relative w-4/12">
+                                            <label
+                                                className="block text-gray-700"
 
-                                                >
-                                                    Exchange Rate
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200
+                                            >
+                                                Exchange Rate
+                                            </label>
+                                            <input
+                                                type="text"
+                                                className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200
                                             focus:bg-white focus:outline-none"
-                                                    placeholder="Update exchange rate"
-                                                    style={{ transition: "all .15s ease" }}
-                                                    value={latestRate || ''}
-                                                    onChange={exchangeRateHandler}
-                                                />
-                                            </div>
-                                            <div className='pt-6'>
-                                                <button type="submit" className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300">Update</button>
-                                            </div>
+                                                placeholder="Update exchange rate"
+                                                style={{ transition: "all .15s ease" }}
+                                                value={latestRate || ''}
+                                                onChange={exchangeRateHandler}
+                                            />
+                                        </div>
+                                        <div className='pt-6'>
+                                            <button
+                                                type="submit"
+                                                disabled={isUpdateExchangeRateLoading}
+                                                className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300">
+                                                {isUpdateExchangeRateLoading ? 'loading...' : 'Update'}
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
-                            </form>
-                        </div>
+                            </div>
+                        </form>
                     </div>
-                )}
+                </div>
+                {/* )} */}
 
 
                 <div className="hidden sm:block" aria-hidden="true">

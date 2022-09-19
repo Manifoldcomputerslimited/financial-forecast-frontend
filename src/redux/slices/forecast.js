@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { Axios } from '../../api/instances';
+import { toast } from 'react-toastify';
+
 var fileDownload = require('js-file-download');
-import { navigate } from '../../utils/utils'
 
 const initialState = {
     isGeneratingReport: false,
@@ -171,7 +172,6 @@ const forecastSlice = createSlice({
                 state.forecastInfo.forecastPeriod = action.payload.forecastPeriod
                 state.forecastInfo.forecastNumber = action.payload.forecastNumber
                 state.isGeneratingReport = false;
-
             })
             .addCase(generateReport.rejected, (state, action) => {
                 state.isGeneratingReport = false;
@@ -203,10 +203,12 @@ const forecastSlice = createSlice({
             .addCase(updateExchangeRate.fulfilled, (state, action) => {
                 state.rate = action.payload;
                 state.isUpdateExchangeRateLoading = false;
+                toast.success('Exchange rate updated', { autoClose: 2000 })
 
             })
             .addCase(updateExchangeRate.rejected, (state, action) => {
                 state.isUpdateExchangeRateLoading = false;
+                toast.error(action.error.message, { autoClose: 2000 })
             })
     }
 })

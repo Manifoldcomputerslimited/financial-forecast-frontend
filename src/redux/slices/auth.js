@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 import { Axios } from '../../api/instances';
-import { history } from '../../utils/utils'
 
 const initialState = {
     user: {},
