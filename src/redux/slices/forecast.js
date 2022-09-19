@@ -181,10 +181,11 @@ const forecastSlice = createSlice({
             })
             .addCase(downloadReport.fulfilled, (state, action) => {
                 state.isDownloadingReport = false;
-
+                toast.success('Report downloaded', { autoClose: 2000 })
             })
             .addCase(downloadReport.rejected, (state, action) => {
                 state.isDownloadingReport = false;
+                toast.error(action.error.message, { autoClose: 2000 })
             })
             .addCase(exchangeRate.pending, (state, action) => {
                 state.isExchangeRateLoading = true;

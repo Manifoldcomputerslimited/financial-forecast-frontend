@@ -33,6 +33,8 @@ const Dashboard = (props) => {
 	const zohoLoading = useSelector(state => state.zoho.isLoading);
 	const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
 	let isZohoAuthenticated = useSelector(state => state.auth.isZohoAuthenticated);
+	let isDownloadingReport = useSelector(state => state.forecast.isDownloadingReport);
+	let isGeneratingReport = useSelector(state => state.forecast.isGeneratingReport);
 	let { forecastNumber, forecastPeriod } = useSelector(state => state.forecast.forecastInfo);
 	let user = useSelector(state => state.auth.user);
 	let zohoAuthenticated = localStorage.getItem('zohoAuthenticated') ? localStorage.getItem('zohoAuthenticated') : false
@@ -85,32 +87,32 @@ const Dashboard = (props) => {
 
 	}, [searchParams, localStorage.getItem('zohoAccessToken')]);
 
-	console.log('user data', user)
-
-	console.log('zoho authenticated dashboard', zohoAuthenticated)
 	return (
 
 		<>
 
-			{(isZohoAuthenticated && isLoading) && (
+			{(isZohoAuthenticated && isLoading && isGeneratingReport) && (
 				// <p>isZohoAuthenticated {{isZohoAuthenticated}}, isLoading {{isLoading}}</p>
 				<Navigate to="/" replace={true} />
 			)}
 
-			{(isLoading) && (
-				<div className="grid h-screen place-items-center">
-					<InfinitySpin
-						width='200'
-						color="red"
-					/>
-				</div>
+			{(isLoading || isGeneratingReport) && (
+				<>
+					<div className="grid h-screen place-items-center">
+						<InfinitySpin
+							width='200'
+							color="red"
+						/>
+					</div>
+
+				</>
 			)}
 
 			{(!zohoGrant && !isLoading) && (
 				<Navigate to="/login" replace={true} />
 			)}
 
-			{(zohoAuthenticated) && (
+			{(zohoAuthenticated && !isGeneratingReport) && (
 				<>
 					<Sidebar />
 					<div className="relative md:ml-64 bg-blueGray-100">
