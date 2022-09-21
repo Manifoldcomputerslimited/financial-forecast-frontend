@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
+import CurrencyFormat from 'react-currency-format';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Navigate, useSearchParams, useNavigate } from "react-router-dom";
 import { InfinitySpin } from 'react-loader-spinner'
+
 
 
 import Sidebar from "../components/Sidebar";
@@ -36,6 +38,7 @@ const Dashboard = (props) => {
 	let isDownloadingReport = useSelector(state => state.forecast.isDownloadingReport);
 	let isGeneratingReport = useSelector(state => state.forecast.isGeneratingReport);
 	let { forecastNumber, forecastPeriod } = useSelector(state => state.forecast.forecastInfo);
+	let { openingBalance, totalCashInflow, totalCashOutflow, networkingCapital } = useSelector(state => state.forecast.report)
 	let user = useSelector(state => state.auth.user);
 	let zohoAuthenticated = localStorage.getItem('zohoAuthenticated') ? localStorage.getItem('zohoAuthenticated') : false
 	let { selectedPeriod } = useSelector(state => state.forecast.forecastDropdown)
@@ -87,6 +90,8 @@ const Dashboard = (props) => {
 
 	}, [searchParams, localStorage.getItem('zohoAccessToken')]);
 
+	console.log('niara is', totalCashInflow.naira)
+
 	return (
 
 		<>
@@ -136,7 +141,8 @@ const Dashboard = (props) => {
 																<span className="font-semibold text-sm text-red-700">
 																	&#8358;
 																</span>{" "}
-																350,897
+																<CurrencyFormat value={parseFloat(openingBalance.naira)} displayType={'text'} thousandSeparator={true}  decimalScale={2} />
+			
 															</span>
 														</div>
 														<div className="relative w-auto pl-4 flex-initial">
@@ -152,7 +158,7 @@ const Dashboard = (props) => {
 													<p className="text-sm text-blueGray-400 mt-4">
 														<span className="font-semibold">
 															<span className="text-sm text-red-700">&#36;</span>{" "}
-															131,830
+															<CurrencyFormat value={parseFloat(openingBalance.dollar)} displayType={'text'} thousandSeparator={true}  decimalScale={2} />
 														</span>
 													</p>
 												</div>
@@ -170,7 +176,7 @@ const Dashboard = (props) => {
 																<span className="font-semibold text-sm text-red-700">
 																	&#8358;
 																</span>{" "}
-																133,350,897
+																<CurrencyFormat value={parseFloat(totalCashInflow.naira)} displayType={'text'} thousandSeparator={true}  decimalScale={2} />
 															</span>
 														</div>
 														<div className="relative w-auto pl-4 flex-initial">
@@ -185,9 +191,9 @@ const Dashboard = (props) => {
 													<p className="text-sm text-blueGray-400 mt-4">
 														<span className="font-semibold mr-2">
 															<span className="text-sm text-red-700">&#36;</span>{" "}
-															131,830
+															<CurrencyFormat value={parseFloat(totalCashInflow.dollar)} displayType={'text'} thousandSeparator={true}  decimalScale={2} />
 														</span>
-														<span className="whitespace-nowrap">for 4 months</span>
+														<span className="whitespace-nowrap">for {forecastNumber} {forecastPeriod}</span>
 													</p>
 												</div>
 											</div>
@@ -204,7 +210,7 @@ const Dashboard = (props) => {
 																<span className="font-semibold text-sm text-red-700">
 																	&#8358;
 																</span>{" "}
-																133,350,897
+																<CurrencyFormat value={parseFloat(totalCashOutflow.naira)} displayType={'text'} thousandSeparator={true}  decimalScale={2} />
 															</span>
 														</div>
 														<div className="relative w-auto pl-4 flex-initial">
@@ -219,9 +225,9 @@ const Dashboard = (props) => {
 													<p className="text-sm text-blueGray-400 mt-4">
 														<span className="font-semibold mr-2">
 															<span className="text-sm text-red-700">&#36;</span>{" "}
-															131,830
+															<CurrencyFormat value={parseFloat(totalCashOutflow.dollar)} displayType={'text'} thousandSeparator={true}  decimalScale={2} />
 														</span>
-														<span className="whitespace-nowrap">for 4 months</span>
+														<span className="whitespace-nowrap">for {forecastNumber} {forecastPeriod}</span>
 													</p>
 												</div>
 											</div>
@@ -232,13 +238,13 @@ const Dashboard = (props) => {
 													<div className="flex flex-wrap">
 														<div className="relative w-full pr-4 max-w-full flex-grow flex-1">
 															<h5 className="text-red-700 font-bold text-xs">
-																Capital
+																Networking Capital
 															</h5>
 															<span className="font-semibold text-md text-blueGray-700">
 																<span className="font-semibold text-sm text-red-700">
 																	&#8358;
 																</span>{" "}
-																133,350,897
+																<CurrencyFormat value={parseFloat(networkingCapital.naira)} displayType={'text'} thousandSeparator={true}  decimalScale={2} />
 															</span>
 														</div>
 														<div className="relative w-auto pl-4 flex-initial">
@@ -253,9 +259,9 @@ const Dashboard = (props) => {
 													<p className="text-sm text-blueGray-400 mt-4">
 														<span className="font-semibold mr-2">
 															<span className="text-sm text-red-700">&#36;</span>{" "}
-															131,830
+															<CurrencyFormat value={parseFloat(networkingCapital.dollar)} displayType={'text'} thousandSeparator={true}  decimalScale={2} />
 														</span>
-														<span className="whitespace-nowrap">for 4 months</span>
+														<span className="whitespace-nowrap">for {forecastNumber} {forecastPeriod}</span>
 													</p>
 												</div>
 											</div>

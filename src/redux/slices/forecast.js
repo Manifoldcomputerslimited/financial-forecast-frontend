@@ -44,7 +44,27 @@ const initialState = {
             }
         ],
         selectedPeriod: 2
-    }
+    },
+    report: {
+        openingBalance: {
+            naira: null,
+            dollar: null
+        },
+        totalCashInflow: {
+            naira: null,
+            dollar: null
+        },
+        totalCashOutflow: {
+            naira: null,
+            dollar: null
+        },
+        networkingCapital: {
+            naira: null,
+            dollar: null
+        }
+    },
+    invoices: [],
+    bills: []
 }
 
 
@@ -116,7 +136,7 @@ const generateReport = createAsyncThunk('generate', async ({ id, forecastNumber,
         });
 
 
-        console.log('response from my app', res.data.data);
+        console.log('response from my app', res.data.data)
         let response = {
             id,
             forecastNumber,
@@ -171,6 +191,13 @@ const forecastSlice = createSlice({
                 state.forecastDropdown.selectedPeriod = action.payload.id
                 state.forecastInfo.forecastPeriod = action.payload.forecastPeriod
                 state.forecastInfo.forecastNumber = action.payload.forecastNumber
+              
+                state.report.openingBalance = action.payload.data.report.openingBalance
+                state.report.totalCashInflow = action.payload.data.report.totalCashInflow
+                state.report.totalCashOutflow = action.payload.data.report.totalCashOutflow
+                state.report.networkingCapital = action.payload.data.report.networkingCapital
+                state.invoices = action.payload.data.invoices
+                state.bills = action.payload.data.bills
                 state.isGeneratingReport = false;
             })
             .addCase(generateReport.rejected, (state, action) => {
