@@ -50,7 +50,8 @@ const Register = () => {
             return;
 
         }).catch(e => {
-            console.log('register user', e)
+            dispatch(logout())
+            navigate('/')
         })
     }
 

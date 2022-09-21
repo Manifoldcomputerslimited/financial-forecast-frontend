@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
+import CurrencyFormat from 'react-currency-format';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Navigate, useSearchParams, useNavigate } from "react-router-dom";
 import { InfinitySpin } from 'react-loader-spinner'
+
 
 
 import Sidebar from "../components/Sidebar";
@@ -33,7 +35,12 @@ const Dashboard = (props) => {
 	const zohoLoading = useSelector(state => state.zoho.isLoading);
 	const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
 	let isZohoAuthenticated = useSelector(state => state.auth.isZohoAuthenticated);
+	let isDownloadingReport = useSelector(state => state.forecast.isDownloadingReport);
+	let isGeneratingReport = useSelector(state => state.forecast.isGeneratingReport);
 	let { forecastNumber, forecastPeriod } = useSelector(state => state.forecast.forecastInfo);
+	let { openingBalance, totalCashInflow, totalCashOutflow, networkingCapital } = useSelector(state => state.forecast.report)
+	let invoices = useSelector(state => state.forecast.invoices);
+	let bills = useSelector(state => state.forecast.bills);
 	let user = useSelector(state => state.auth.user);
 	let zohoAuthenticated = localStorage.getItem('zohoAuthenticated') ? localStorage.getItem('zohoAuthenticated') : false
 	let { selectedPeriod } = useSelector(state => state.forecast.forecastDropdown)
@@ -85,32 +92,35 @@ const Dashboard = (props) => {
 
 	}, [searchParams, localStorage.getItem('zohoAccessToken')]);
 
-	console.log('user data', user)
+	console.log('invoices', invoices)
+	console.log('bills', bills);
 
-	console.log('zoho authenticated dashboard', zohoAuthenticated)
 	return (
 
 		<>
 
-			{(isZohoAuthenticated && isLoading) && (
+			{(isZohoAuthenticated && isLoading && isGeneratingReport) && (
 				// <p>isZohoAuthenticated {{isZohoAuthenticated}}, isLoading {{isLoading}}</p>
 				<Navigate to="/" replace={true} />
 			)}
 
-			{(isLoading) && (
-				<div className="grid h-screen place-items-center">
-					<InfinitySpin
-						width='200'
-						color="red"
-					/>
-				</div>
+			{(isLoading || isGeneratingReport) && (
+				<>
+					<div className="grid h-screen place-items-center">
+						<InfinitySpin
+							width='200'
+							color="red"
+						/>
+					</div>
+
+				</>
 			)}
 
 			{(!zohoGrant && !isLoading) && (
 				<Navigate to="/login" replace={true} />
 			)}
 
-			{(zohoAuthenticated) && (
+			{(zohoAuthenticated && !isGeneratingReport) && (
 				<>
 					<Sidebar />
 					<div className="relative md:ml-64 bg-blueGray-100">
@@ -134,7 +144,8 @@ const Dashboard = (props) => {
 																<span className="font-semibold text-sm text-red-700">
 																	&#8358;
 																</span>{" "}
-																350,897
+																<CurrencyFormat value={parseFloat(openingBalance.naira)} displayType={'text'} thousandSeparator={true} decimalScale={2} />
+
 															</span>
 														</div>
 														<div className="relative w-auto pl-4 flex-initial">
@@ -150,7 +161,7 @@ const Dashboard = (props) => {
 													<p className="text-sm text-blueGray-400 mt-4">
 														<span className="font-semibold">
 															<span className="text-sm text-red-700">&#36;</span>{" "}
-															131,830
+															<CurrencyFormat value={parseFloat(openingBalance.dollar)} displayType={'text'} thousandSeparator={true} decimalScale={2} />
 														</span>
 													</p>
 												</div>
@@ -168,7 +179,7 @@ const Dashboard = (props) => {
 																<span className="font-semibold text-sm text-red-700">
 																	&#8358;
 																</span>{" "}
-																133,350,897
+																<CurrencyFormat value={parseFloat(totalCashInflow.naira)} displayType={'text'} thousandSeparator={true} decimalScale={2} />
 															</span>
 														</div>
 														<div className="relative w-auto pl-4 flex-initial">
@@ -183,9 +194,9 @@ const Dashboard = (props) => {
 													<p className="text-sm text-blueGray-400 mt-4">
 														<span className="font-semibold mr-2">
 															<span className="text-sm text-red-700">&#36;</span>{" "}
-															131,830
+															<CurrencyFormat value={parseFloat(totalCashInflow.dollar)} displayType={'text'} thousandSeparator={true} decimalScale={2} />
 														</span>
-														<span className="whitespace-nowrap">for 4 months</span>
+														<span className="whitespace-nowrap">for {forecastNumber} {forecastPeriod}</span>
 													</p>
 												</div>
 											</div>
@@ -202,7 +213,7 @@ const Dashboard = (props) => {
 																<span className="font-semibold text-sm text-red-700">
 																	&#8358;
 																</span>{" "}
-																133,350,897
+																<CurrencyFormat value={parseFloat(totalCashOutflow.naira)} displayType={'text'} thousandSeparator={true} decimalScale={2} />
 															</span>
 														</div>
 														<div className="relative w-auto pl-4 flex-initial">
@@ -217,9 +228,9 @@ const Dashboard = (props) => {
 													<p className="text-sm text-blueGray-400 mt-4">
 														<span className="font-semibold mr-2">
 															<span className="text-sm text-red-700">&#36;</span>{" "}
-															131,830
+															<CurrencyFormat value={parseFloat(totalCashOutflow.dollar)} displayType={'text'} thousandSeparator={true} decimalScale={2} />
 														</span>
-														<span className="whitespace-nowrap">for 4 months</span>
+														<span className="whitespace-nowrap">for {forecastNumber} {forecastPeriod}</span>
 													</p>
 												</div>
 											</div>
@@ -230,13 +241,13 @@ const Dashboard = (props) => {
 													<div className="flex flex-wrap">
 														<div className="relative w-full pr-4 max-w-full flex-grow flex-1">
 															<h5 className="text-red-700 font-bold text-xs">
-																Capital
+																Networking Capital
 															</h5>
 															<span className="font-semibold text-md text-blueGray-700">
 																<span className="font-semibold text-sm text-red-700">
 																	&#8358;
 																</span>{" "}
-																133,350,897
+																<CurrencyFormat value={parseFloat(networkingCapital.naira)} displayType={'text'} thousandSeparator={true} decimalScale={2} />
 															</span>
 														</div>
 														<div className="relative w-auto pl-4 flex-initial">
@@ -251,9 +262,9 @@ const Dashboard = (props) => {
 													<p className="text-sm text-blueGray-400 mt-4">
 														<span className="font-semibold mr-2">
 															<span className="text-sm text-red-700">&#36;</span>{" "}
-															131,830
+															<CurrencyFormat value={parseFloat(networkingCapital.dollar)} displayType={'text'} thousandSeparator={true} decimalScale={2} />
 														</span>
-														<span className="whitespace-nowrap">for 4 months</span>
+														<span className="whitespace-nowrap">for {forecastNumber} {forecastPeriod}</span>
 													</p>
 												</div>
 											</div>
@@ -289,126 +300,71 @@ const Dashboard = (props) => {
 											</div> */}
 											</div>
 										</div>
+										<h2 className="text-black text-sm font-semibold px-7">
+											Invoices
+										</h2>
 										<div className="table-wrp block max-h-96  overflow-x-auto">
 											{/* Projects table */}
+
 											<table className="items-center w-full bg-transparent border-collapse">
 												<thead className="bg-white border-blueGray-100 sticky top-0">
 													<tr>
-														<th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+														<th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-bold text-left">
 															#
 														</th>
-														<th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-															Name
+														<th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap  font-bold text-left">
+															Invoice No.
 														</th>
-														<th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-															Email
-														</th>
-														<th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-															Balance Due
+														<th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap  font-semibold text-left">
+															Customer Name
 														</th>
 														<th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
 															Balance Due
 														</th>
 														<th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-															Balance Due
+															Currency
 														</th>
 														<th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-															Balance Due
+															Status
 														</th>
+														<th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+															Due Date
+														</th>
+
 													</tr>
 												</thead>
-												<tbody className="">
-													<tr>
-														<th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-															1
-														</th>
-														<th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-															/argon/
-														</th>
-														<td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-															4,569
-														</td>
-														<td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-															340
-														</td>
-														<td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-															<i className="fas fa-arrow-up text-emerald-500 mr-4"></i>
-															46,53%
-														</td>
-													</tr>
-													<tr>
-														<th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-															2
-														</th>
-														<th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-															/argon/
-														</th>
-														<td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-															4,569
-														</td>
-														<td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-															340
-														</td>
-														<td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-															<i className="fas fa-arrow-up text-emerald-500 mr-4"></i>
-															46,53%
-														</td>
-													</tr>
-													<tr>
-														<th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-															3
-														</th>
-														<th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-															/argon/
-														</th>
-														<td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-															4,569
-														</td>
-														<td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-															340
-														</td>
-														<td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-															<i className="fas fa-arrow-up text-emerald-500 mr-4"></i>
-															46,53%
-														</td>
-													</tr>
-													<tr>
-														<th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-															4
-														</th>
-														<th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-															/argon/index.html
-														</th>
-														<td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-															3,985
-														</td>
-														<td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-															319
-														</td>
-														<td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-															<i className="fas fa-arrow-down text-orange-500 mr-4"></i>
-															46,53%
-														</td>
-													</tr>
-													<tr>
-														<th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-															5
-														</th>
-														<th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-															/argon/charts.html
-														</th>
-														<td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-															3,513
-														</td>
-														<td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-															294
-														</td>
-														<td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-															<i className="fas fa-arrow-down text-orange-500 mr-4"></i>
-															36,49%
-														</td>
-													</tr>
-												</tbody>
+												{(!isGeneratingReport) && (
+													<tbody className="">
+														{invoices.map((invoice, i) => (
+															<tr key={invoice.id}>
+																<th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+																	{i + 1}
+																</th>
+																<th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+																	{invoice.invoiceNumber}
+																</th>
+																<td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+																	{invoice.customerName}
+																</td>
+																<td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+																	<CurrencyFormat value={parseFloat(invoice.balance)} displayType={'text'} thousandSeparator={true} decimalScale={2} />
+																</td>
+																<td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+																	<i className="fas fa-arrow-up text-emerald-500 mr-4"></i>
+																	{invoice.currencyCode}
+																</td>
+																<td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+																	<i className="fas fa-arrow-up text-emerald-500 mr-4"></i>
+																	{invoice.status}
+																</td>
+																<td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+																	<i className="fas fa-arrow-up text-emerald-500 mr-4"></i>
+																	{invoice.dueDate}
+																</td>
+															</tr>
+														))}
+													</tbody>
+												)}
 											</table>
 										</div>
 									</div>
@@ -434,76 +390,70 @@ const Dashboard = (props) => {
 											</div> */}
 											</div>
 										</div>
+										<h2 className="text-black text-sm font-semibold px-7">
+											Bills
+										</h2>
 										<div className="table-wrp block max-h-96  overflow-x-auto">
 											{/* Projects table */}
 											<table className="w-full">
 												<thead className="bg-white border-blueGray-100 sticky top-0">
 													<tr>
-														<th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-															ID
+														<th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-bold text-left">
+															#
+														</th>
+														<th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap  font-bold text-left">
+															Bills ID
+														</th>
+														<th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap  font-semibold text-left">
+															Vendor Name
 														</th>
 														<th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-															Name
+															Balance Due
 														</th>
 														<th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-															Amount
+															Currency
+														</th>
+														<th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+															Status
+														</th>
+														<th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+															Due Date
 														</th>
 													</tr>
 												</thead>
-												<tbody className="border-blueGray-100 ">
-													<tr>
-														<th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-															1
-														</th>
-														<td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-															Abiodun Manasseh
-														</td>
-														<td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-															<div className="flex items-center">
-																<span className="mr-2">60%</span>
-															</div>
-														</td>
-													</tr>
-													<tr>
-														<th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-															1
-														</th>
-														<td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-															Abiodun Manasseh
-														</td>
-														<td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-															<div className="flex items-center">
-																<span className="mr-2">60%</span>
-															</div>
-														</td>
-													</tr>
-													<tr>
-														<th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-															1
-														</th>
-														<td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-															Abiodun Manasseh
-														</td>
-														<td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-															<div className="flex items-center">
-																<span className="mr-2">60%</span>
-															</div>
-														</td>
-													</tr>
-													<tr>
-														<th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-															1
-														</th>
-														<td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-															Abiodun Manasseh
-														</td>
-														<td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-															<div className="flex items-center">
-																<span className="mr-2">60%</span>
-															</div>
-														</td>
-													</tr>
-												</tbody>
+												{(!isGeneratingReport) && (
+													<tbody className="border-blueGray-100 ">
+														{bills.map((bill, i) => (
+															<tr key={bill.id}>
+																<th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+																	{i + 1}
+																</th>
+																<th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+																	{bill.refrenceNumber}
+																</th>
+																<td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+																	{bill.vendorName}
+																</td>
+																<td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+																	<CurrencyFormat value={parseFloat(bill.balance)} displayType={'text'} thousandSeparator={true} decimalScale={2} />
+																</td>
+																<td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+																	<i className="fas fa-arrow-up text-emerald-500 mr-4"></i>
+																	{bill.currencyCode}
+																</td>
+																<td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+																	<i className="fas fa-arrow-up text-emerald-500 mr-4"></i>
+																	{bill.status}
+																</td>
+																<td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+																	<i className="fas fa-arrow-up text-emerald-500 mr-4"></i>
+																	{bill.dueDate}
+																</td>
+															</tr>
+														))}
+													</tbody>
+												)}
+
 											</table>
 										</div>
 									</div>

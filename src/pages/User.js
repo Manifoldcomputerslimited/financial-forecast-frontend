@@ -37,10 +37,17 @@ const User = () => {
 
     // Allows admin to invite user to the applicaiton and also re-invite a user
     // if the email fails
-    const onSubmit = async (data) => {
 
-        let email = (!data || !data.email) ? email : data.email
 
+    const onDeleteUser = async () => {
+        await dispatch(deleteUser({ email }))
+        setShowDeleteModal(false)
+
+        await dispatch(getUsers());
+
+    }
+
+    const onReInviteUser = async () => {
         await dispatch(inviteUser({ email: email })).then((res) => {
             if (!res.payload) return
 
@@ -57,31 +64,41 @@ const User = () => {
         await dispatch(getUsers());
     }
 
-    const onDeleteUser = async () => {
-        await dispatch(deleteUser({ email }))
-        setShowDeleteModal(false)
-
-        await dispatch(getUsers());
-
-    }
-
     const deleteModal = (user) => {
         setShowDeleteModal(true)
         setEmail(user.email)
     }
 
     const inviteModal = (user) => {
-
+        console.log('invite email', user.email)
         setShowInviteModal(true)
         setEmail(user.email)
-        console.log('invite email', user.email)
-
+        console.log(email);
     }
 
     const updateUserStaus = async (user) => {
         await dispatch(updateAdminStatus({ user }))
 
         dispatch(getUsers());
+    }
+
+    const onSubmit = async (data) => {
+        let email = (!data || !data.email) ? email : data.email
+
+        await dispatch(inviteUser({ email: email })).then((res) => {
+            if (!res.payload) return
+
+            // TODO:: should redirect to login page
+            reset({
+                email: ""
+            })
+
+            setShowModal(false)
+            setShowInviteModal(false)
+
+        })
+
+        await dispatch(getUsers());
     }
 
     useEffect(() => {
@@ -202,31 +219,31 @@ const User = () => {
                                 <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
 
                                     {/*body*/}
-                                    <form className='space-y-6 py-6' onSubmit={handleSubmit(onSubmit)}>
-                                        <div className="relative px-8 flex-auto">
-                                            <div className="relative w-12/12">
-                                                <p className="my-4 text-slate-500 text-lg leading-relaxed">
-                                                    Do you want to reinvite user?
-                                                </p>
-                                            </div>
+                                    {/* <form className='space-y-6 py-6' onSubmit={handleSubmit(onSubmit)}> */}
+                                    <div className="relative px-8 flex-auto">
+                                        <div className="relative w-12/12">
+                                            <p className="my-4 text-slate-500 text-lg leading-relaxed">
+                                                Do you want to reinvite user?
+                                            </p>
                                         </div>
-                                        {/*footer*/}
-                                        <div className="flex items-center justify-center p-6 mt-5 rounded-b">
-                                            <button
-                                                onClick={() => setShowInviteModal(false)}
-                                                className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 mb-1 mr-2"
-                                                type="submit"
-                                            >
-                                                No
-                                            </button>
-                                            <button
-                                                className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 mb-1"
-                                                type="submit"
-                                            >
-                                                {isInviteUserLoading ? 're-inviting...' : 'Yes'}
-                                            </button>
-                                        </div>
-                                    </form>
+                                    </div>
+                                    {/*footer*/}
+                                    <div className="flex items-center justify-center p-6 mt-5 rounded-b">
+                                        <button
+                                            onClick={() => setShowInviteModal(false)}
+                                            className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 mb-1 mr-2"
+
+                                        >
+                                            No
+                                        </button>
+                                        <button
+                                            className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 mb-1"
+                                            onClick={onReInviteUser}
+                                        >
+                                            {isInviteUserLoading ? 're-inviting...' : 'Yes'}
+                                        </button>
+                                    </div>
+                                    {/* </form> */}
                                 </div>
                             </div>
                         </div>

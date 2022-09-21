@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 import { Axios } from '../../api/instances';
-import { history } from '../../utils/utils'
 
 const initialState = {
     user: {},
@@ -148,9 +147,10 @@ const loginSlice = createSlice({
     initialState,
     reducers: {
         logout(state) {
-            state = state.initialState
             localStorage.clear()
-            state.isAuthenticated = false
+            state.isAuthenticated = false;
+            state.isZohoAuthenticated = false;
+            state = state.initialState;
         }
     },
     extraReducers: (builder) => {

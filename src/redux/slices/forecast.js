@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { Axios } from '../../api/instances';
+import { toast } from 'react-toastify';
+
 var fileDownload = require('js-file-download');
-import { navigate } from '../../utils/utils'
 
 const initialState = {
     isGeneratingReport: false,
@@ -43,7 +44,27 @@ const initialState = {
             }
         ],
         selectedPeriod: 2
-    }
+    },
+    report: {
+        openingBalance: {
+            naira: null,
+            dollar: null
+        },
+        totalCashInflow: {
+            naira: null,
+            dollar: null
+        },
+        totalCashOutflow: {
+            naira: null,
+            dollar: null
+        },
+        networkingCapital: {
+            naira: null,
+            dollar: null
+        }
+    },
+    invoices: [],
+    bills: []
 }
 
 
@@ -115,7 +136,7 @@ const generateReport = createAsyncThunk('generate', async ({ id, forecastNumber,
         });
 
 
-        console.log('response from my app', res.data.data);
+        console.log('response from my app', res.data.data)
         let response = {
             id,
             forecastNumber,
@@ -170,8 +191,14 @@ const forecastSlice = createSlice({
                 state.forecastDropdown.selectedPeriod = action.payload.id
                 state.forecastInfo.forecastPeriod = action.payload.forecastPeriod
                 state.forecastInfo.forecastNumber = action.payload.forecastNumber
+              
+                state.report.openingBalance = action.payload.data.report.openingBalance
+                state.report.totalCashInflow = action.payload.data.report.totalCashInflow
+                state.report.totalCashOutflow = action.payload.data.report.totalCashOutflow
+                state.report.networkingCapital = action.payload.data.report.networkingCapital
+                state.invoices = action.payload.data.invoices
+                state.bills = action.payload.data.bills
                 state.isGeneratingReport = false;
-
             })
             .addCase(generateReport.rejected, (state, action) => {
                 state.isGeneratingReport = false;
@@ -181,10 +208,11 @@ const forecastSlice = createSlice({
             })
             .addCase(downloadReport.fulfilled, (state, action) => {
                 state.isDownloadingReport = false;
-
+                toast.success('Report downloaded', { autoClose: 2000 })
             })
             .addCase(downloadReport.rejected, (state, action) => {
                 state.isDownloadingReport = false;
+                toast.error(action.error.message, { autoClose: 2000 })
             })
             .addCase(exchangeRate.pending, (state, action) => {
                 state.isExchangeRateLoading = true;
@@ -203,10 +231,12 @@ const forecastSlice = createSlice({
             .addCase(updateExchangeRate.fulfilled, (state, action) => {
                 state.rate = action.payload;
                 state.isUpdateExchangeRateLoading = false;
+                toast.success('Exchange rate updated', { autoClose: 2000 })
 
             })
             .addCase(updateExchangeRate.rejected, (state, action) => {
                 state.isUpdateExchangeRateLoading = false;
+                toast.error(action.error.message, { autoClose: 2000 })
             })
     }
 })
