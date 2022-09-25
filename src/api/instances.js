@@ -35,9 +35,8 @@ let setZohoToken = async (zohoAccessToken) => {
 
 // export const getAuthorizationHeader = () => `Bearer ${getToken()}`;
 
-
 const instance = axios.create({
-    baseURL: `${process.env.BASE_URL}`,
+    baseURL: `${process.env.REACT_APP_BASE_URL}`,
     headers: {
         'Content-Type': 'application/json',
     },
@@ -57,7 +56,7 @@ instance.interceptors.request.use(async req => {
 
     console.log('access', accessToken)
     console.log('zoho', zohoAccessToken)
-    
+
     // returns true if user does not have acess token and zoho token
     if (accessToken && zohoAccessToken) {
         console.log('have access token', accessToken)
@@ -93,7 +92,7 @@ instance.interceptors.request.use(async req => {
         console.log('ddoings')
         await deleteToken();
 
-        const response = await axios.post(`${process.env.MANIFOLD_API_URL}/token/refresh`, {
+        const response = await axios.post(`${process.env.REACT_APP_MANIFOLD_API_URL}/token/refresh`, {
             refreshToken: refreshToken
         });
 
@@ -114,7 +113,7 @@ instance.interceptors.request.use(async req => {
         }
         console.log('silver')
 
-        const response = await axios.get(`${process.env.MANIFOLD_API_URL}/zoho/token/refresh`, options);
+        const response = await axios.get(`${process.env.REACT_APP_MANIFOLD_API_URL}/zoho/token/refresh`, options);
 
         console.log(response);
 
