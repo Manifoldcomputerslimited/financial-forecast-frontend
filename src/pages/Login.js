@@ -57,7 +57,7 @@ const Login = (props) => {
               </h1>
             </div>
             {(isAuthenticated) && (!isZohoAuthenticated && !authLoading) && (
-              window.location.replace('https://accounts.zoho.com/oauth/v2/auth?scope=ZohoBooks.settings.READ,ZohoBooks.invoices.READ,ZohoBooks.salesorders.READ,ZohoBooks.purchaseorders.READ,ZohoBooks.bills.READ&client_id=1000.CQTBLDCOQ2UH51JCIA2L32O2V8J3EO&state=testing&response_type=code&redirect_uri=http://localhost:3000&access_type=offline&prompt=Consent')
+              window.location.replace(`https://accounts.zoho.com/oauth/v2/auth?scope=ZohoBooks.settings.READ,ZohoBooks.invoices.READ,ZohoBooks.salesorders.READ,ZohoBooks.purchaseorders.READ,ZohoBooks.bills.READ&client_id=${process.env.REACT_APP_ZOHO_CLIENT_ID}&state=testing&response_type=code&redirect_uri=${process.env.REACT_APP_BASE_URL}&access_type=offline&prompt=Consent`)
             )}
             {(isAuthenticated && isZohoAuthenticated) && (
               <Navigate to="/" replace={true} />
