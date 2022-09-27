@@ -54,9 +54,11 @@ const zohoSlice = createSlice({
                 state.isLoading = true;
             })
             .addCase(zoho.fulfilled, (state, action) => {
+                console.log('payload', action.payload)
                 state.isLoading = false;
                 localStorage.setItem('zohoAuthenticated', true)
                 localStorage.setItem('zohoAccessToken', JSON.stringify(action.payload.zohoAccessToken))
+                localStorage.setItem('zohoTokenExpiry', JSON.stringify(action.payload.zohoTokenExpiry))
             })
             .addCase(zoho.rejected, (state, action) => {
                 state.isLoading = false;
