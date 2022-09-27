@@ -36,7 +36,7 @@ let setZohoToken = async (zohoAccessToken) => {
 // export const getAuthorizationHeader = () => `Bearer ${getToken()}`;
 
 const instance = axios.create({
-    baseURL: `${process.env.REACT_APP_BASE_URL}`,
+    baseURL: `${process.env.REACT_APP_MANIFOLD_API_URL}`,
     headers: {
         'Content-Type': 'application/json',
     },
