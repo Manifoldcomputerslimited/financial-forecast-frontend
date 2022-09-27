@@ -116,7 +116,7 @@ const Dashboard = (props) => {
 				</>
 			)}
 
-			{(!zohoGrant && !isLoading) && (
+			{(isZohoAuthenticated && !isLoading) && (
 				<Navigate to="/login" replace={true} />
 			)}
 

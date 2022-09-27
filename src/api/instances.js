@@ -70,6 +70,11 @@ instance.interceptors.request.use(async req => {
         return req;
     }
 
+    if(!zohoAccessToken){
+        console.log('no zoho token');
+        return req;
+    }
+
     const user = accessToken ? jwt_decode(accessToken, { header: true }) : null
     console.log('user instance', user)
     if (!user) {
