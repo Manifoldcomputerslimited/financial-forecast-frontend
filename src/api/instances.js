@@ -67,6 +67,7 @@ instance.interceptors.request.use(async req => {
         let isZohoTokenExpired = (dayjs.unix(zohoTokenExpiry).diff(dayjs()) < 1);
 
         if ((!isUserExpired && isUserExpired !== null) && (!isZohoTokenExpired && isZohoTokenExpired !== null)) {
+            req.headers['Authorization'] = `Bearer ${accessToken}`
             return req;
         }
 
@@ -99,7 +100,7 @@ instance.interceptors.request.use(async req => {
 
             await setZohoToken(response.data.data);
         }
-
+        console.log('got here');
         req.headers['Authorization'] = `Bearer ${accessToken}`
         return req;
     }
@@ -112,7 +113,7 @@ instance.interceptors.request.use(async req => {
     if (!zohoTokenExpiry) {
         return req;
     }
-
+    req.headers['Authorization'] = `Bearer ${accessToken}`
     return req
 })
 
