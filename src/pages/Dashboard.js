@@ -45,7 +45,7 @@ const Dashboard = (props) => {
 	let zohoAuthenticated = localStorage.getItem('zohoAuthenticated') ? localStorage.getItem('zohoAuthenticated') : false
 	let { selectedPeriod } = useSelector(state => state.forecast.forecastDropdown)
 
-	useEffect(() => {
+	useEffect(async () => {
 		dispatch(getUser());
 		console.log('forecastNumber', forecastNumber)
 		console.log('forecastPeriod', forecastPeriod)
@@ -82,7 +82,7 @@ const Dashboard = (props) => {
 			console.log('zoho access token generated?', localStorage.getItem('zohoAccessToken'));
 			if (zohoAuthenticated && isAuthenticated) {
 				console.log('i no won enter here', selectedPeriod)
-				dispatch(generateReport({ id: selectedPeriod, forecastNumber, forecastPeriod }))
+				await dispatch(generateReport({ id: selectedPeriod, forecastNumber, forecastPeriod }))
 			}
 
 		}
