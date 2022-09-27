@@ -72,7 +72,7 @@ const exchangeRate = createAsyncThunk('rate', async ({ forecastNumber, forecastP
     try {
         let accessToken = localStorage.getItem('accessToken') ? JSON.parse(localStorage.getItem('accessToken')) : null
 
-        const res = await Axios.get(`api/v1/zoho/exchange/rate/${forecastNumber}/${forecastPeriod}`, {
+        const res = await Axios.get(`/zoho/exchange/rate/${forecastNumber}/${forecastPeriod}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${accessToken}`
@@ -94,7 +94,7 @@ const updateExchangeRate = createAsyncThunk('updateRate', async ({ id, latestRat
         let accessToken = localStorage.getItem('accessToken') ? JSON.parse(localStorage.getItem('accessToken')) : null
         let zohoAccessToken = localStorage.getItem('zohoAccessToken') ? JSON.parse(localStorage.getItem('zohoAccessToken')) : null
 
-        const res = await Axios.put(`api/v1/zoho/exchange/rate/${id}`, {
+        const res = await Axios.put(`/zoho/exchange/rate/${id}`, {
             forecastPeriod,
             forecastNumber,
             zohoAccessToken,
@@ -126,7 +126,7 @@ const generateReport = createAsyncThunk('generate', async ({ id, forecastNumber,
 
         console.log('forecastNumber', forecastNumber)
 
-        const res = await Axios.post('api/v1/zoho/opening/balance', {
+        const res = await Axios.post('/zoho/opening/balance', {
             forecastNumber, forecastPeriod, zohoAccessToken
         }, {
             headers: {
@@ -155,7 +155,7 @@ const downloadReport = createAsyncThunk('download', async ({ forecastNumber, for
     try {
         let zohoAccessToken = localStorage.getItem('zohoAccessToken') ? JSON.parse(localStorage.getItem('zohoAccessToken')) : null
 
-        const res = Axios.post('api/v1/zoho/report/download', {
+        const res = Axios.post('/zoho/report/download', {
             zohoAccessToken,
             forecastNumber,
             forecastPeriod
@@ -188,16 +188,15 @@ const forecastSlice = createSlice({
                 state.isGeneratingReport = true;
             })
             .addCase(generateReport.fulfilled, (state, action) => {
+                state.invoices = action.payload.data.invoices
+                state.bills = action.payload.data.bills
                 state.forecastDropdown.selectedPeriod = action.payload.id
                 state.forecastInfo.forecastPeriod = action.payload.forecastPeriod
                 state.forecastInfo.forecastNumber = action.payload.forecastNumber
-              
                 state.report.openingBalance = action.payload.data.report.openingBalance
                 state.report.totalCashInflow = action.payload.data.report.totalCashInflow
                 state.report.totalCashOutflow = action.payload.data.report.totalCashOutflow
                 state.report.networkingCapital = action.payload.data.report.networkingCapital
-                state.invoices = action.payload.data.invoices
-                state.bills = action.payload.data.bills
                 state.isGeneratingReport = false;
             })
             .addCase(generateReport.rejected, (state, action) => {

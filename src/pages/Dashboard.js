@@ -27,7 +27,7 @@ import { withAuth } from "../hoc/withAuth";
 const Dashboard = (props) => {
 	let [searchParams, setSearchParams] = useSearchParams(props);
 	// grant user access to zoho
-	let [zohoGrant, setZohoGrant] = useState(true);
+	let [zohoGrant, setZohoGrant] = useState(false);
 	let [isLoading, setIsLoading] = useState(true);
 	let [code, setCode] = useState("");
 	const dispatch = useDispatch();
@@ -60,9 +60,10 @@ const Dashboard = (props) => {
 		console.log('accept')
 		if (!zohoAuthenticated && searchParams.get('code')) {
 			console.log('search param')
+			setZohoGrant(true);
 			setCode(searchParams.get('code'));
 			dispatch(zoho({ code: searchParams.get('code') }));
-			navigate('/')
+
 			return;
 		}
 
@@ -72,7 +73,6 @@ const Dashboard = (props) => {
 		if (!zohoAuthenticated && isAuthenticated) {
 			console.log('use refresh token')
 			dispatch(zoho({ code: '' }));
-
 
 
 		}
@@ -89,11 +89,12 @@ const Dashboard = (props) => {
 
 
 		setIsLoading(false);
+		setZohoGrant(true);
 
-	}, [searchParams, localStorage.getItem('zohoAccessToken')]);
+	}, [zohoGrant, searchParams, localStorage.getItem('zohoAccessToken')]);
 
-	console.log('invoices', invoices)
-	console.log('bills', bills);
+	console.log('is user authenticated', isAuthenticated)
+	console.log('is zoho authenticated', zohoGrant);
 
 	return (
 
@@ -116,7 +117,7 @@ const Dashboard = (props) => {
 				</>
 			)}
 
-			{(!zohoGrant && !isLoading) && (
+			{(!zohoGrant && !isAuthenticated && !isLoading) && (
 				<Navigate to="/login" replace={true} />
 			)}
 

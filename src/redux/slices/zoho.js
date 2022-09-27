@@ -15,7 +15,7 @@ const zoho = createAsyncThunk('zoho', async ({ code }) => {
     try {
         let accessToken = localStorage.getItem('accessToken') ? JSON.parse(localStorage.getItem('accessToken')) : null
 
-        const res = await Axios.post('api/v1/zoho/token/generate', {
+        const res = await Axios.post('/zoho/token/generate', {
             code: code
         }, {
             headers: {
@@ -40,7 +40,7 @@ const zohoRefresh = createAsyncThunk('zoho/refresh', async () => {
             'Authorization': `Bearer ${accessToken}`
         }
     }
-    const res = await Axios.get('api/v1/zoho/token/refresh', options)
+    const res = await Axios.get('/zoho/token/refresh', options)
 
     return res.data.data
 })
@@ -54,9 +54,11 @@ const zohoSlice = createSlice({
                 state.isLoading = true;
             })
             .addCase(zoho.fulfilled, (state, action) => {
+                console.log('payload', action.payload)
                 state.isLoading = false;
                 localStorage.setItem('zohoAuthenticated', true)
                 localStorage.setItem('zohoAccessToken', JSON.stringify(action.payload.zohoAccessToken))
+                localStorage.setItem('zohoTokenExpiry', JSON.stringify(action.payload.zohoTokenExpiry))
             })
             .addCase(zoho.rejected, (state, action) => {
                 state.isLoading = false;
