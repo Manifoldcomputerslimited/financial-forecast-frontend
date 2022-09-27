@@ -75,15 +75,15 @@ const Setting = () => {
         setShowNewPassword(!showNewPassword);
     }
 
-    useEffect(async () => {
+    useEffect(() => {
         // Get exchange rate from backend
         // if local storage is empty then call the backend to fetch exchange rate
         // console.log('rate is', latestRate);
         // console.log('new', latest);
         // if (!latestRate) {
-        await dispatch(exchangeRate({ forecastNumber, forecastPeriod }));
+        dispatch(exchangeRate({ forecastNumber, forecastPeriod }));
         if (latestRate != latest) {
-            await dispatch(generateReport({ id: selectedPeriod, forecastNumber, forecastPeriod }))
+            dispatch(generateReport({ id: selectedPeriod, forecastNumber, forecastPeriod }))
         }
         setLatestRate(latest)
 
