@@ -20,7 +20,7 @@ const login = createAsyncThunk('login', async ({ email, password }) => {
     try {
         localStorage.clear()
 
-        const response = await Axios.post('api/v1/login', {
+        const response = await Axios.post('login', {
             email,
             password
         }, {
@@ -35,7 +35,7 @@ const login = createAsyncThunk('login', async ({ email, password }) => {
 
 const changePassword = createAsyncThunk("/changePassword", async ({ currentPassword, newPassword }) => {
     try {
-        const res = await Axios.post('api/v1/password/update', {
+        const res = await Axios.post('/password/update', {
             currentPassword, newPassword
         }, {
             'Content-Type': 'application/json'
@@ -54,7 +54,7 @@ const changePassword = createAsyncThunk("/changePassword", async ({ currentPassw
 const inviteUser = createAsyncThunk("/invite", async ({ email }) => {
 
     try {
-        const res = await Axios.post('api/v1/invite', {
+        const res = await Axios.post('/invite', {
             email
         }, {
             'Content-Type': 'application/json'
@@ -72,7 +72,7 @@ const getUser = createAsyncThunk("/me", async () => {
     console.log('fantastic working ')
     let accessToken = localStorage.getItem('accessToken') ? JSON.parse(localStorage.getItem('accessToken')) : null
     try {
-        const res = await Axios.get('api/v1/me', {
+        const res = await Axios.get('/me', {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${accessToken}`
@@ -93,7 +93,7 @@ const signup = createAsyncThunk("/register", async ({ data,
     console.table('signup', data)
     console.log('inviteToken', inviteToken)
     try {
-        const res = await Axios.post('api/v1/register', {
+        const res = await Axios.post('/register', {
             ...data,
             inviteToken
         }, {
@@ -111,7 +111,7 @@ const signup = createAsyncThunk("/register", async ({ data,
 const forgotPassword = createAsyncThunk("/forgotPassword", async ({ email }) => {
 
     try {
-        const res = await Axios.post('api/v1/password/forgot', {
+        const res = await Axios.post('/password/forgot', {
             email
         }, {
             'Content-Type': 'application/json'
@@ -128,7 +128,7 @@ const forgotPassword = createAsyncThunk("/forgotPassword", async ({ email }) => 
 const reset = createAsyncThunk("/reset", async ({ password, token }) => {
 
     try {
-        const res = await Axios.post('api/v1/password/reset', {
+        const res = await Axios.post('/password/reset', {
             password, token
         }, {
             'Content-Type': 'application/json'

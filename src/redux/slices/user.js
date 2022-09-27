@@ -17,7 +17,7 @@ const getUsers = createAsyncThunk('/users', async () => {
                 'Authorization': `Bearer ${accessToken}`
             }
         }
-        const res = await Axios.get('api/v1/users', options);
+        const res = await Axios.get('/users', options);
 
         return res.data.data
     } catch (error) {
@@ -35,7 +35,7 @@ const updateAdminStatus = createAsyncThunk('/updateAdminStatus', async ({ user }
                 'Authorization': `Bearer ${accessToken}`
             }
         }
-        const res = await Axios.patch('api/v1/users/role/update', {
+        const res = await Axios.patch('/users/role/update', {
             role: user.role, email: user.email
         }, options);
 
@@ -55,7 +55,7 @@ const deleteUser = createAsyncThunk('/deleteUser', async ({ email }) => {
                 'Authorization': `Bearer ${accessToken}`
             }
         }
-        await Axios.delete(`api/v1/users/delete/${email}`, options);
+        await Axios.delete(`/users/delete/${email}`, options);
 
         // return res.data.data
     } catch (error) {
