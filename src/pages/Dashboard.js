@@ -63,7 +63,7 @@ const Dashboard = (props) => {
 			setZohoGrant(true);
 			setCode(searchParams.get('code'));
 			dispatch(zoho({ code: searchParams.get('code') }));
-			navigate('/', { replace: true });
+
 			return;
 		}
 
@@ -73,7 +73,6 @@ const Dashboard = (props) => {
 		if (!zohoAuthenticated && isAuthenticated) {
 			console.log('use refresh token')
 			dispatch(zoho({ code: '' }));
-
 
 
 		}
