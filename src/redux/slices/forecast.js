@@ -188,16 +188,15 @@ const forecastSlice = createSlice({
                 state.isGeneratingReport = true;
             })
             .addCase(generateReport.fulfilled, (state, action) => {
+                state.invoices = action.payload.data.invoices
+                state.bills = action.payload.data.bills
                 state.forecastDropdown.selectedPeriod = action.payload.id
                 state.forecastInfo.forecastPeriod = action.payload.forecastPeriod
                 state.forecastInfo.forecastNumber = action.payload.forecastNumber
-              
                 state.report.openingBalance = action.payload.data.report.openingBalance
                 state.report.totalCashInflow = action.payload.data.report.totalCashInflow
                 state.report.totalCashOutflow = action.payload.data.report.totalCashOutflow
                 state.report.networkingCapital = action.payload.data.report.networkingCapital
-                state.invoices = action.payload.data.invoices
-                state.bills = action.payload.data.bills
                 state.isGeneratingReport = false;
             })
             .addCase(generateReport.rejected, (state, action) => {
