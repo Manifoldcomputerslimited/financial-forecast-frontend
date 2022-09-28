@@ -52,7 +52,7 @@ const Dashboard = (props) => {
 		console.log('is zoho auth', zohoAuthenticated)
 		if (searchParams.get('error') === 'access_denied') {
 			// setZohoGrant(false);
-			// navigate('/login');
+			navigate('/login');
 			dispatch(logout())
 			return;
 		}
@@ -80,7 +80,7 @@ const Dashboard = (props) => {
 		if (localStorage.getItem('zohoAccessToken')) {
 			//TODO::: openingBalanceHandler
 			console.log('zoho access token generated?', localStorage.getItem('zohoAccessToken'));
-			if (zohoAuthenticated && isAuthenticated) {
+			if (zohoAuthenticated && isAuthenticated && !isLoading) {
 				console.log('i no won enter here', selectedPeriod)
 				dispatch(generateReport({ id: selectedPeriod, forecastNumber, forecastPeriod }))
 			}
@@ -105,7 +105,19 @@ const Dashboard = (props) => {
 				<Navigate to="/" replace={true} />
 			)}
 
-			{(isLoading || isGeneratingReport) && (
+			{(isLoading) && (
+				<>
+					<div className="grid h-screen place-items-center">
+						<InfinitySpin
+							width='200'
+							color="red"
+						/>
+					</div>
+
+				</>
+			)}
+
+			{(isGeneratingReport) && (
 				<>
 					<div className="grid h-screen place-items-center">
 						<InfinitySpin
