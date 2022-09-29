@@ -120,11 +120,18 @@ const Dashboard = (props) => {
 			{(isGeneratingReport) && (
 				<>
 					<div className="grid h-screen place-items-center">
-						<InfinitySpin
-							width='200'
-							color="red"
-						/>
-					</div>
+                            <div >
+                                <h1>Please wait while we generate your report...</h1>
+                                <div class="flex items-center justify-center">
+                                    <InfinitySpin
+                                        width='200'
+                                        color="red"
+                                    /></div>
+
+                            </div>
+
+                        </div>
+
 
 				</>
 			)}

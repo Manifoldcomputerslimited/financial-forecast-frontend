@@ -200,6 +200,7 @@ const forecastSlice = createSlice({
                 state.isGeneratingReport = false;
             })
             .addCase(generateReport.rejected, (state, action) => {
+                toast.warning('An error occured while generating report', { autoClose: 2000 })
                 state.isGeneratingReport = false;
             })
             .addCase(downloadReport.pending, (state, action) => {
