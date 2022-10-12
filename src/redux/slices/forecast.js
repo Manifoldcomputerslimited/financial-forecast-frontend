@@ -126,8 +126,8 @@ const generateReport = createAsyncThunk('generate', async ({ id, forecastNumber,
 
         console.log('forecastNumber', forecastNumber)
 
-        const res = await Axios.post('/zoho/opening/balance', {
-            forecastNumber, forecastPeriod, zohoAccessToken
+        const res = await Axios.post('/zoho/generate/report', {
+            forecastNumber, forecastPeriod, zohoAccessToken, download: false
         }, {
             headers: {
                 'Content-Type': 'application/json',
@@ -155,10 +155,11 @@ const downloadReport = createAsyncThunk('download', async ({ forecastNumber, for
     try {
         let zohoAccessToken = localStorage.getItem('zohoAccessToken') ? JSON.parse(localStorage.getItem('zohoAccessToken')) : null
 
-        const res = Axios.post('/zoho/report/download', {
+        const res = Axios.post('/zoho/generate/report', {
             zohoAccessToken,
             forecastNumber,
-            forecastPeriod
+            forecastPeriod,
+            download: true
         }, { responseType: 'arraybuffer' })
             .then(response => {
                 const blob = new Blob([response.data], {
