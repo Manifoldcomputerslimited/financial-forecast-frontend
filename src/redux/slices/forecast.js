@@ -58,7 +58,7 @@ const initialState = {
             naira: null,
             dollar: null
         },
-        networkingCapital: {
+        closingBalance: {
             naira: null,
             dollar: null
         }
@@ -197,7 +197,7 @@ const forecastSlice = createSlice({
                 state.report.openingBalance = action.payload.data.report.openingBalance
                 state.report.totalCashInflow = action.payload.data.report.totalCashInflow
                 state.report.totalCashOutflow = action.payload.data.report.totalCashOutflow
-                state.report.networkingCapital = action.payload.data.report.networkingCapital
+                state.report.closingBalance = action.payload.data.report.closingBalance
                 state.isGeneratingReport = false;
             })
             .addCase(generateReport.rejected, (state, action) => {

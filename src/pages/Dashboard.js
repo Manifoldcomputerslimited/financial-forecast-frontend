@@ -38,7 +38,7 @@ const Dashboard = (props) => {
 	let isDownloadingReport = useSelector(state => state.forecast.isDownloadingReport);
 	let isGeneratingReport = useSelector(state => state.forecast.isGeneratingReport);
 	let { forecastNumber, forecastPeriod } = useSelector(state => state.forecast.forecastInfo);
-	let { openingBalance, totalCashInflow, totalCashOutflow, networkingCapital } = useSelector(state => state.forecast.report)
+	let { openingBalance, totalCashInflow, totalCashOutflow, closingBalance } = useSelector(state => state.forecast.report)
 	let invoices = useSelector(state => state.forecast.invoices);
 	let bills = useSelector(state => state.forecast.bills);
 	let user = useSelector(state => state.auth.user);
@@ -261,13 +261,13 @@ const Dashboard = (props) => {
 													<div className="flex flex-wrap">
 														<div className="relative w-full pr-4 max-w-full flex-grow flex-1">
 															<h5 className="text-red-700 font-bold text-xs">
-																Networking Capital
+																Closing Balance
 															</h5>
 															<span className="font-semibold text-md text-blueGray-700">
 																<span className="font-semibold text-sm text-red-700">
 																	&#8358;
 																</span>{" "}
-																<CurrencyFormat value={parseFloat(networkingCapital.naira)} displayType={'text'} thousandSeparator={true} decimalScale={2} />
+																<CurrencyFormat value={parseFloat(closingBalance.naira)} displayType={'text'} thousandSeparator={true} decimalScale={2} />
 															</span>
 														</div>
 														<div className="relative w-auto pl-4 flex-initial">
@@ -282,7 +282,7 @@ const Dashboard = (props) => {
 													<p className="text-sm text-blueGray-400 mt-4">
 														<span className="font-semibold mr-2">
 															<span className="text-sm text-red-700">&#36;</span>{" "}
-															<CurrencyFormat value={parseFloat(networkingCapital.dollar)} displayType={'text'} thousandSeparator={true} decimalScale={2} />
+															<CurrencyFormat value={parseFloat(closingBalance.dollar)} displayType={'text'} thousandSeparator={true} decimalScale={2} />
 														</span>
 														<span className="whitespace-nowrap">for {forecastNumber} {forecastPeriod}</span>
 													</p>
