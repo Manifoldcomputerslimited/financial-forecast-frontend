@@ -27,7 +27,6 @@ const getUsers = createAsyncThunk('/users', async () => {
 
 const updateAdminStatus = createAsyncThunk('/updateAdminStatus', async ({ user }) => {
     try {
-        console.log('user role why here', user.role)
         let accessToken = localStorage.getItem('accessToken') ? JSON.parse(localStorage.getItem('accessToken')) : null
         let options = {
             headers: {
@@ -47,7 +46,6 @@ const updateAdminStatus = createAsyncThunk('/updateAdminStatus', async ({ user }
 
 const deleteUser = createAsyncThunk('/deleteUser', async ({ email }) => {
     try {
-        console.log('my email', email)
         let accessToken = localStorage.getItem('accessToken') ? JSON.parse(localStorage.getItem('accessToken')) : null
         let options = {
             headers: {

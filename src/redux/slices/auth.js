@@ -41,12 +41,9 @@ const changePassword = createAsyncThunk("/changePassword", async ({ currentPassw
             'Content-Type': 'application/json'
         });
 
-        console.log('response change password', res)
-        //  window.location.reload(true)
         return res;
 
     } catch (error) {
-        console.log('my error', error)
         throw error.response.data || error.message;
     }
 });
@@ -60,7 +57,6 @@ const inviteUser = createAsyncThunk("/invite", async ({ email }) => {
             'Content-Type': 'application/json'
         });
 
-        console.log('response change password', res)
         return res;
 
     } catch (error) {
@@ -69,7 +65,6 @@ const inviteUser = createAsyncThunk("/invite", async ({ email }) => {
 });
 
 const getUser = createAsyncThunk("/me", async () => {
-    console.log('fantastic working ')
     let accessToken = localStorage.getItem('accessToken') ? JSON.parse(localStorage.getItem('accessToken')) : null
     try {
         const res = await Axios.get('/me', {
@@ -79,19 +74,15 @@ const getUser = createAsyncThunk("/me", async () => {
             }
         });
 
-        console.log('responseget user', res)
         return res.data.data;
 
     } catch (error) {
-        console.log('i got erro')
         throw error.response.data || error.message;
     }
 });
 
 const signup = createAsyncThunk("/register", async ({ data,
     inviteToken }) => {
-    console.table('signup', data)
-    console.log('inviteToken', inviteToken)
     try {
         const res = await Axios.post('/register', {
             ...data,
@@ -100,7 +91,6 @@ const signup = createAsyncThunk("/register", async ({ data,
             'Content-Type': 'application/json'
         });
 
-        console.log('response register user', res)
         return res;
 
     } catch (error) {
@@ -117,7 +107,6 @@ const forgotPassword = createAsyncThunk("/forgotPassword", async ({ email }) => 
             'Content-Type': 'application/json'
         });
 
-        console.log('response forgot password user', res)
         return res;
 
     } catch (error) {
@@ -134,7 +123,6 @@ const reset = createAsyncThunk("/reset", async ({ password, token }) => {
             'Content-Type': 'application/json'
         });
 
-        console.log('response forgot password user', res)
         return res;
 
     } catch (error) {
@@ -201,7 +189,6 @@ const loginSlice = createSlice({
                 state.isUserLoading = true
             })
             .addCase(getUser.fulfilled, (state, action) => {
-                console.log(action.payload)
                 state.user = action.payload
                 state.isUserLoading = false
             })

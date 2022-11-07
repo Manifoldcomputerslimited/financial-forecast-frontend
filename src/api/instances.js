@@ -43,14 +43,10 @@ const instance = axios.create({
 
 // Automatically refresh token if it is about to expire
 instance.interceptors.request.use(async req => {
-    console.log('here')
 
     accessToken = localStorage.getItem('accessToken') ? JSON.parse(localStorage.getItem('accessToken')) : null
     refreshToken = localStorage.getItem('refreshToken') ? JSON.parse(localStorage.getItem('refreshToken')) : null
     let zohoTokenExpiry = localStorage.getItem('zohoTokenExpiry') ? JSON.parse(localStorage.getItem('zohoTokenExpiry')) : null
-
-    console.log('access', accessToken)
-    console.log('zoho', zohoTokenExpiry)
 
     // check if it exists
 
@@ -92,20 +88,16 @@ instance.interceptors.request.use(async req => {
                     'Authorization': `Bearer ${accessToken}`
                 }
             }
-            console.log('silver')
 
             const response = await axios.get(`${process.env.REACT_APP_MANIFOLD_API_URL}/zoho/token/refresh`, options);
 
-            console.log(response);
 
             await setZohoToken(response.data.data);
         }
-        console.log('got here');
         req.headers['Authorization'] = `Bearer ${accessToken}`
         return req;
     }
 
-    console.log('got outside here', zohoTokenExpiry)
     if (!accessToken && !zohoTokenExpiry) {
         return req;
     }

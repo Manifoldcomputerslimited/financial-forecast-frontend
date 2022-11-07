@@ -70,10 +70,8 @@ const User = () => {
     }
 
     const inviteModal = (user) => {
-        console.log('invite email', user.email)
         setShowInviteModal(true)
         setEmail(user.email)
-        console.log(email);
     }
 
     const updateUserStaus = async (user) => {

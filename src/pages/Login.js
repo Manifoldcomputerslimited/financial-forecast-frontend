@@ -28,12 +28,10 @@ const Login = (props) => {
 
   const loginHandler = (e) => {
     e.preventDefault();
-    console.log('logging in')
     dispatch(login({ email, password }))
   }
 
   const togglePasswordVisibility = (e) => {
-    console.log(authLoading)
     e.preventDefault();
     setShowPassword(!showPassword);
   }

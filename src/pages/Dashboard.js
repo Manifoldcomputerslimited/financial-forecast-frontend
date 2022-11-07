@@ -47,19 +47,13 @@ const Dashboard = (props) => {
 
 	useEffect(() => {
 		dispatch(getUser());
-		console.log('forecastNumber', forecastNumber)
-		console.log('forecastPeriod', forecastPeriod)
-		console.log('is zoho auth', zohoAuthenticated)
 		if (searchParams.get('error') === 'access_denied') {
-			// setZohoGrant(false);
 			navigate('/login');
 			dispatch(logout())
 			return;
 		}
 
-		console.log('accept')
 		if (!zohoAuthenticated && searchParams.get('code')) {
-			console.log('search param')
 			setZohoGrant(true);
 			setCode(searchParams.get('code'));
 			dispatch(zoho({ code: searchParams.get('code') }));
@@ -67,21 +61,13 @@ const Dashboard = (props) => {
 			return;
 		}
 
-		console.log('why getting here');
-		console.log('zoho authenticated', !zohoAuthenticated)
-		console.log('is Authenti', isAuthenticated)
 		if (!zohoAuthenticated && isAuthenticated) {
-			console.log('use refresh token')
 			dispatch(zoho({ code: '' }));
 
 
 		}
-		console.log('i am running', localStorage.getItem('zohoAccessToken'))
 		if (localStorage.getItem('zohoAccessToken')) {
-			//TODO::: openingBalanceHandler
-			console.log('zoho access token generated?', localStorage.getItem('zohoAccessToken'));
 			if (zohoAuthenticated && isAuthenticated && !isLoading) {
-				console.log('i no won enter here', selectedPeriod)
 				dispatch(generateReport({ id: selectedPeriod, forecastNumber, forecastPeriod }))
 			}
 
@@ -92,9 +78,6 @@ const Dashboard = (props) => {
 		setZohoGrant(true);
 
 	}, [zohoGrant, searchParams, localStorage.getItem('zohoAccessToken')]);
-
-	console.log('is user authenticated', isAuthenticated)
-	console.log('is zoho authenticated', zohoGrant);
 
 	return (
 
