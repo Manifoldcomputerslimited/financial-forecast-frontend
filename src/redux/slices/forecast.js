@@ -80,11 +80,9 @@ const exchangeRate = createAsyncThunk('rate', async ({ forecastNumber, forecastP
         });
 
 
-        console.log('response from exchange rate', res.data.data);
         return res.data.data
 
     } catch (error) {
-        console.log('exchange error', error)
         throw error.response.data || error.message;
     }
 });
@@ -107,11 +105,9 @@ const updateExchangeRate = createAsyncThunk('updateRate', async ({ id, latestRat
         });
 
 
-        console.log('response from update rate', res.data.data);
         return res.data.data
 
     } catch (error) {
-        console.log('exchange error', error)
         throw error.response.data || error.message;
     }
 });
@@ -120,11 +116,9 @@ const updateExchangeRate = createAsyncThunk('updateRate', async ({ id, latestRat
 
 const generateReport = createAsyncThunk('generate', async ({ id, forecastNumber, forecastPeriod }) => {
     try {
-        console.log('calling generate', id);
         let accessToken = localStorage.getItem('accessToken') ? JSON.parse(localStorage.getItem('accessToken')) : null
         let zohoAccessToken = localStorage.getItem('zohoAccessToken') ? JSON.parse(localStorage.getItem('zohoAccessToken')) : null
 
-        console.log('forecastNumber', forecastNumber)
 
         const res = await Axios.post('/zoho/generate/report', {
             forecastNumber, forecastPeriod, zohoAccessToken, download: false
@@ -136,7 +130,6 @@ const generateReport = createAsyncThunk('generate', async ({ id, forecastNumber,
         });
 
 
-        console.log('response from my app', res.data.data)
         let response = {
             id,
             forecastNumber,
@@ -146,7 +139,6 @@ const generateReport = createAsyncThunk('generate', async ({ id, forecastNumber,
         return response;
 
     } catch (error) {
-        console.log('generate report error', error)
         throw error.response.data || error.message;
     }
 });
@@ -173,7 +165,6 @@ const downloadReport = createAsyncThunk('download', async ({ forecastNumber, for
         return res;
 
     } catch (error) {
-        console.log('cannot download report', error)
         throw error.response.data || error.message;
     }
 });

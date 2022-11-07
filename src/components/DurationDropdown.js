@@ -19,8 +19,6 @@ const DurationDropdown = () => {
       }));
   }
 
-  console.log("what is forecast period", selectedPeriod)
-
   return (
     <>
       <select

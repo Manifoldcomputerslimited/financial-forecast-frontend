@@ -27,7 +27,6 @@ const zoho = createAsyncThunk('zoho', async ({ code }) => {
         return res.data.data
 
     } catch (error) {
-        console.log('I got this zoho error', error)
         throw error.response.data || error.message;
     }
 });
@@ -54,7 +53,6 @@ const zohoSlice = createSlice({
                 state.isLoading = true;
             })
             .addCase(zoho.fulfilled, (state, action) => {
-                console.log('payload', action.payload)
                 state.isLoading = false;
                 localStorage.setItem('zohoAuthenticated', true)
                 localStorage.setItem('zohoAccessToken', JSON.stringify(action.payload.zohoAccessToken))

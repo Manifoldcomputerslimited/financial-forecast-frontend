@@ -41,9 +41,6 @@ const Setting = () => {
 
     const updateExchangeRateHandler = async (e) => {
         e.preventDefault();
-        // console.log('latest rate', latestRate)
-        // console.log('forecast number', forecastNumber);
-        // console.log('forecast period ', forecastPeriod);
         dispatch(updateExchangeRate({ id, latestRate, forecastNumber, forecastPeriod }))
 
     }
@@ -79,22 +76,15 @@ const Setting = () => {
 
     useEffect(() => {
         // Get exchange rate from backend
-        // if local storage is empty then call the backend to fetch exchange rate
-        // console.log('rate is', latestRate);
-        // console.log('new', latest);
-        // if (!latestRate) {
         dispatch(exchangeRate({ forecastNumber, forecastPeriod }));
         if (latestRate != latest) {
             dispatch(generateReport({ id: selectedPeriod, forecastNumber, forecastPeriod }))
         }
         setLatestRate(latest)
 
-        // }
 
     }, [latest]);
 
-    console.log(latest)
-    console.log('latestRest', latestRate);
     return (
         <>
             <Sidebar />
