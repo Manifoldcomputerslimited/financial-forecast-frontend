@@ -6,6 +6,7 @@ import ForgotPassword from '../pages/ForgotPassword';
 import ResetPassword from '../pages/ResetPassword';
 import Register from '../pages/Register';
 import Rate from '../pages/Rate';
+import OpeningBalance from '../pages/OpeningBalance';
 
 export const appRoutes = [
   {
@@ -42,6 +43,11 @@ export const appRoutes = [
     path: '/exchange-rates',
     key: '/exchange-rates',
     component: Rate,
+  },
+  {
+    path: '/opening-balance',
+    key: '/opening-balance',
+    component: OpeningBalance,
   },
   {
     path: '/setting',

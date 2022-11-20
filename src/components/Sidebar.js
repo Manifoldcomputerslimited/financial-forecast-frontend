@@ -9,6 +9,7 @@ import {
   faBars,
   faTimes,
   faRotate,
+  faMoneyBillTrendUp,
 } from '@fortawesome/free-solid-svg-icons';
 import DurationDropdown from './DurationDropdown.js';
 import { NavLink } from 'react-router-dom';
@@ -145,6 +146,25 @@ const Sidebar = () => {
                   Rates
                 </NavLink>
               </li>
+
+              <li className="items-center">
+                <NavLink
+                  className="text-blueGray-700 hover:text-red-600 text-sm   py-3 font-bold block"
+                  to="/opening-balance"
+                  style={({ isActive }) => (isActive ? activeStyle : undefined)}
+                >
+                  <FontAwesomeIcon
+                    icon={faMoneyBillTrendUp}
+                    style={{
+                      fontSize: 13,
+                      color: 'text-blueGray-700',
+                      paddingRight: 13,
+                    }}
+                  />
+                  Opening Balance
+                </NavLink>
+              </li>
+
               <li className="items-center">
                 <NavLink
                   className="text-blueGray-700 hover:text-red-600 text-sm   py-3 font-bold block"
