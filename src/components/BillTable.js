@@ -2,11 +2,16 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import CurrencyFormat from 'react-currency-format';
 
-const BillTable = () => {
+const BillTable = (props) => {
   let isGeneratingReport = useSelector(
     (state) => state.forecast.isGeneratingReport
   );
   let bills = useSelector((state) => state.forecast.bills);
+
+  const updateBillDetail = (sale) => {
+    props.setShowBillDetailModal(true);
+    props.setBillDetail(sale);
+  };
 
   return (
     <>
@@ -21,7 +26,7 @@ const BillTable = () => {
               </div>
             </div>
           </div>
-          <h2 className="text-black text-sm font-semibold px-7">Sales Order</h2>
+          <h2 className="text-black text-sm font-semibold px-7">Bills</h2>
           <div className="table-wrp block max-h-96  overflow-x-auto">
             {/* Projects table */}
             <table className="w-full">
@@ -53,7 +58,7 @@ const BillTable = () => {
               {!isGeneratingReport && (
                 <tbody className="border-blueGray-100 ">
                   {bills.map((bill, i) => (
-                    <tr key={bill.id}>
+                    <tr key={bill.id} onClick={() => updateBillDetail(bill)}>
                       <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
                         {i + 1}
                       </th>
