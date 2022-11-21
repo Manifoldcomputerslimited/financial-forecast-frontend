@@ -134,7 +134,7 @@ const Dashboard = (props) => {
             {showDetailModal ? (
               <>
                 <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-                  <div className="relative w-auto my-6 mx-auto max-w-xl">
+                  <div className="fixed w-auto my-6 mx-auto max-w-xl">
                     {/*content*/}
                     <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                       {/*header*/}
@@ -169,29 +169,134 @@ const Dashboard = (props) => {
                         </button>
                       </div>
                       {/*body*/}
-                      <form className="space-y-6 py-6">
-                        <div className="relative px-8 flex-auto">
-                          <div className="relative w-12/12">
-                            <p className="my-4 text-slate-500 text-lg leading-relaxed">
-                              Invoice detail for {invoiceDetail.invoiceNumber}
-                            </p>
+                      <div className="relative px-8 flex-auto">
+                        <div className="relative w-12/12">
+                          <p className="my-4 text-slate-500 text-lg leading-relaxed">
+                            Invoice detail for {invoiceDetail.invoiceId}
+                          </p>
 
-                            <label className="block text-gray-700">
-                              Customer Name
-                            </label>
+                          <div className="mb-4 md:flex md:justify-between">
+                            <div className="w-full">
+                              <label className="block text-gray-700">
+                                Customer Name
+                              </label>
 
-                            <input
-                              type="text"
-                              name="email"
-                              value={invoiceDetail.customerName}
-                              style={{ transition: 'all .15s ease' }}
-                              className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
-                            />
+                              <input
+                                type="text"
+                                name="email"
+                                value={invoiceDetail.customerName}
+                                style={{ transition: 'all .15s ease' }}
+                                className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="mb-4 md:flex md:justify-between">
+                            <div className="w-full">
+                              <label className="block text-gray-700">
+                                Reference Number
+                              </label>
+
+                              <input
+                                type="text"
+                                name="email"
+                                value={invoiceDetail.refrenceNumber}
+                                style={{ transition: 'all .15s ease' }}
+                                className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="mb-4 md:flex md:justify-between">
+                            <div className="mb-4 md:mr-2 md:mb-0">
+                              <label className="block text-gray-700">
+                                Invoice Number
+                              </label>
+
+                              <input
+                                type="text"
+                                name="email"
+                                value={invoiceDetail.invoiceNumber}
+                                style={{ transition: 'all .15s ease' }}
+                                className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
+                              />
+                            </div>
+                            <div className="mb-4 md:mr-2 md:mb-0">
+                              <label className="block text-gray-700">
+                                Status
+                              </label>
+
+                              <input
+                                type="text"
+                                name="email"
+                                value={invoiceDetail.status}
+                                style={{ transition: 'all .15s ease' }}
+                                className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="mb-4 md:flex md:justify-between">
+                            <div className="mb-4 md:mr-2 md:mb-0">
+                              <label className="block text-gray-700">
+                                Balance
+                              </label>
+
+                              <input
+                                type="text"
+                                name="email"
+                                value={invoiceDetail.balance}
+                                style={{ transition: 'all .15s ease' }}
+                                className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
+                              />
+                            </div>
+                            <div className="mb-4 md:mr-2 md:mb-0">
+                              <label className="block text-gray-700">
+                                Exchange Rate
+                              </label>
+
+                              <input
+                                type="text"
+                                name="email"
+                                value={invoiceDetail.exchangeRate}
+                                style={{ transition: 'all .15s ease' }}
+                                className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="mb-4 md:flex md:justify-between">
+                            <div className="mb-4 md:mr-2 md:mb-0">
+                              <label className="block text-gray-700">
+                                Date created
+                              </label>
+
+                              <input
+                                type="text"
+                                name="email"
+                                value={invoiceDetail.date}
+                                style={{ transition: 'all .15s ease' }}
+                                className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
+                              />
+                            </div>
+                            <div className="mb-4 md:mr-2 md:mb-0">
+                              <label className="block text-gray-700">
+                                Due Date
+                              </label>
+
+                              <input
+                                type="text"
+                                name="email"
+                                value={invoiceDetail.dueDate}
+                                style={{ transition: 'all .15s ease' }}
+                                className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
+                              />
+                            </div>
                           </div>
                         </div>
-                        {/*footer*/}
-                        <div className="flex items-center justify-center p-6 mt-5 rounded-b"></div>
-                      </form>
+                      </div>
+                      {/*footer*/}
+                      <div className="flex items-center justify-center p-6 mt-5 rounded-b"></div>
                     </div>
                   </div>
                 </div>
