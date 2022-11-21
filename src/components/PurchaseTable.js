@@ -2,11 +2,16 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import CurrencyFormat from 'react-currency-format';
 
-const PurchaseTable = () => {
+const PurchaseTable = (props) => {
   let isGeneratingReport = useSelector(
     (state) => state.forecast.isGeneratingReport
   );
   let purchases = useSelector((state) => state.forecast.purchases);
+
+  const updatePurchaseDetail = (purchase) => {
+    props.setShowPurchaseDetailModal(true);
+    props.setPurchaseDetail(purchase);
+  };
 
   return (
     <>
@@ -46,7 +51,10 @@ const PurchaseTable = () => {
               {!isGeneratingReport && (
                 <tbody className="border-blueGray-100 ">
                   {purchases.map((purchase, i) => (
-                    <tr key={purchase.id}>
+                    <tr
+                      key={purchase.id}
+                      onClick={() => updatePurchaseDetail(purchase)}
+                    >
                       <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
                         {i + 1}
                       </th>

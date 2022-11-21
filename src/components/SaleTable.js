@@ -2,11 +2,16 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import CurrencyFormat from 'react-currency-format';
 
-const SaleTable = () => {
+const SaleTable = (props) => {
   let isGeneratingReport = useSelector(
     (state) => state.forecast.isGeneratingReport
   );
   let sales = useSelector((state) => state.forecast.sales);
+
+  const updateSaleDetail = (sale) => {
+    props.setShowSaleDetailModal(true);
+    props.setSaleDetail(sale);
+  };
 
   return (
     <>
@@ -44,7 +49,7 @@ const SaleTable = () => {
               {!isGeneratingReport && (
                 <tbody className="border-blueGray-100 ">
                   {sales.map((sale, i) => (
-                    <tr key={sale.id}>
+                    <tr key={sale.id} onClick={() => updateSaleDetail(sale)}>
                       <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
                         {i + 1}
                       </th>
