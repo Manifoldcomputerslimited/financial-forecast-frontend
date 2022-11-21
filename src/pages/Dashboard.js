@@ -21,12 +21,18 @@ import {
   faFileInvoice,
 } from '@fortawesome/free-solid-svg-icons';
 import { withAuth } from '../hoc/withAuth';
+import InvoiceTable from '../components/InvoiceTable';
+import BillTable from '../components/BillTable';
+import SaleTable from '../components/SaleTable';
+import PurchaseTable from '../components/PurchaseTable';
 
 const Dashboard = (props) => {
   let [searchParams, setSearchParams] = useSearchParams(props);
   // grant user access to zoho
   let [zohoGrant, setZohoGrant] = useState(false);
   let [isLoading, setIsLoading] = useState(true);
+  let [showDetailModal, setShowDetailModal] = useState(false);
+  let [invoiceDetail, setInvoiceDetail] = useState('');
   let [code, setCode] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -107,7 +113,7 @@ const Dashboard = (props) => {
           <div className="grid h-screen place-items-center">
             <div>
               <h1>Please wait while we generate your report...</h1>
-              <div class="flex items-center justify-center">
+              <div className="flex items-center justify-center">
                 <InfinitySpin width="200" color="red" />
               </div>
             </div>
@@ -124,6 +130,179 @@ const Dashboard = (props) => {
           <Sidebar />
           <div className="relative md:ml-64 bg-blueGray-100">
             <Navbar user={user} />
+
+            {showDetailModal ? (
+              <>
+                <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+                  <div className="fixed w-auto my-6 mx-auto max-w-xl">
+                    {/*content*/}
+                    <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                      {/*header*/}
+                      <div className="flex items-start justify-around mt-5 rounded-t">
+                        <div className="flex-initial w-64 justify-center">
+                          <h3 className="text-red-700 font-medium text-lg mb-1 ">
+                            Invoice Detail
+                          </h3>
+                        </div>
+                        <button
+                          onClick={() => setShowDetailModal(false)}
+                          type="button"
+                          className=" rounded-md p-1 inline-flex items-center justify-center text-red-400 hover:text-red-500 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-red-500"
+                        >
+                          <span className="sr-only">Close menu</span>
+
+                          <svg
+                            className="h-5 w-5"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            aria-hidden="true"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M6 18L18 6M6 6l12 12"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                      {/*body*/}
+                      <div className="relative px-8 flex-auto">
+                        <div className="relative w-12/12">
+                          <p className="my-4 text-slate-500 text-lg leading-relaxed">
+                            Invoice detail for {invoiceDetail.invoiceId}
+                          </p>
+
+                          <div className="mb-4 md:flex md:justify-between">
+                            <div className="w-full">
+                              <label className="block text-gray-700">
+                                Customer Name
+                              </label>
+
+                              <input
+                                type="text"
+                                name="email"
+                                value={invoiceDetail.customerName}
+                                style={{ transition: 'all .15s ease' }}
+                                className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="mb-4 md:flex md:justify-between">
+                            <div className="w-full">
+                              <label className="block text-gray-700">
+                                Reference Number
+                              </label>
+
+                              <input
+                                type="text"
+                                name="email"
+                                value={invoiceDetail.refrenceNumber}
+                                style={{ transition: 'all .15s ease' }}
+                                className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="mb-4 md:flex md:justify-between">
+                            <div className="mb-4 md:mr-2 md:mb-0">
+                              <label className="block text-gray-700">
+                                Invoice Number
+                              </label>
+
+                              <input
+                                type="text"
+                                name="email"
+                                value={invoiceDetail.invoiceNumber}
+                                style={{ transition: 'all .15s ease' }}
+                                className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
+                              />
+                            </div>
+                            <div className="mb-4 md:mr-2 md:mb-0">
+                              <label className="block text-gray-700">
+                                Status
+                              </label>
+
+                              <input
+                                type="text"
+                                name="email"
+                                value={invoiceDetail.status}
+                                style={{ transition: 'all .15s ease' }}
+                                className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="mb-4 md:flex md:justify-between">
+                            <div className="mb-4 md:mr-2 md:mb-0">
+                              <label className="block text-gray-700">
+                                Balance
+                              </label>
+
+                              <input
+                                type="text"
+                                name="email"
+                                value={invoiceDetail.balance}
+                                style={{ transition: 'all .15s ease' }}
+                                className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
+                              />
+                            </div>
+                            <div className="mb-4 md:mr-2 md:mb-0">
+                              <label className="block text-gray-700">
+                                Exchange Rate
+                              </label>
+
+                              <input
+                                type="text"
+                                name="email"
+                                value={invoiceDetail.exchangeRate}
+                                style={{ transition: 'all .15s ease' }}
+                                className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="mb-4 md:flex md:justify-between">
+                            <div className="mb-4 md:mr-2 md:mb-0">
+                              <label className="block text-gray-700">
+                                Date created
+                              </label>
+
+                              <input
+                                type="text"
+                                name="email"
+                                value={invoiceDetail.date}
+                                style={{ transition: 'all .15s ease' }}
+                                className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
+                              />
+                            </div>
+                            <div className="mb-4 md:mr-2 md:mb-0">
+                              <label className="block text-gray-700">
+                                Due Date
+                              </label>
+
+                              <input
+                                type="text"
+                                name="email"
+                                value={invoiceDetail.dueDate}
+                                style={{ transition: 'all .15s ease' }}
+                                className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      {/*footer*/}
+                      <div className="flex items-center justify-center p-6 mt-5 rounded-b"></div>
+                    </div>
+                  </div>
+                </div>
+                <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+              </>
+            ) : null}
 
             {/* Header */}
             <div className="relative bg-pink-600 md:pt-32 pb-32 pt-12">
@@ -332,192 +511,18 @@ const Dashboard = (props) => {
                 <BarChart />
               </div>
               <div className="flex flex-wrap mt-4">
-                <div className="w-full xl:w-6/12 mb-12 xl:mb-0 px-4">
-                  <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
-                    <div className="rounded-t mb-0 px-4 py-3 border-0">
-                      <div className="flex flex-wrap items-center">
-                        <div className="relative w-full px-4 max-w-full flex-grow flex-1">
-                          <h3 className="font-semibold text-base text-red-700">
-                            Inflow details
-                          </h3>
-                        </div>
-                        {/* <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
-												<button
-													className="bg-indigo-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1"
-													type="button"
-													style={{ transition: "all .15s ease" }}
-												>
-													See all
-												</button>
-											</div> */}
-                      </div>
-                    </div>
-                    <h2 className="text-black text-sm font-semibold px-7">
-                      Invoices
-                    </h2>
-                    <div className="table-wrp block max-h-96  overflow-x-auto">
-                      {/* Projects table */}
+                <InvoiceTable
+                  setShowDetailModal={setShowDetailModal}
+                  setInvoiceDetail={setInvoiceDetail}
+                />
 
-                      <table className="items-center w-full bg-transparent border-collapse">
-                        <thead className="bg-white border-blueGray-100 sticky top-0">
-                          <tr>
-                            <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-bold text-left">
-                              #
-                            </th>
-                            <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap  font-bold text-left">
-                              Invoice No.
-                            </th>
-                            <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap  font-semibold text-left">
-                              Customer Name
-                            </th>
-                            <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                              Balance Due
-                            </th>
-                            <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                              Currency
-                            </th>
-                            <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                              Status
-                            </th>
-                            <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                              Due Date
-                            </th>
-                          </tr>
-                        </thead>
-                        {!isGeneratingReport && (
-                          <tbody className="">
-                            {invoices.map((invoice, i) => (
-                              <tr key={invoice.id}>
-                                <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-                                  {i + 1}
-                                </th>
-                                <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-                                  {invoice.invoiceNumber}
-                                </th>
-                                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                  {invoice.customerName}
-                                </td>
-                                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                  <CurrencyFormat
-                                    value={parseFloat(invoice.balance)}
-                                    displayType={'text'}
-                                    thousandSeparator={true}
-                                    decimalScale={2}
-                                  />
-                                </td>
-                                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                  <i className="fas fa-arrow-up text-emerald-500 mr-4"></i>
-                                  {invoice.currencyCode}
-                                </td>
-                                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                  <i className="fas fa-arrow-up text-emerald-500 mr-4"></i>
-                                  {invoice.status}
-                                </td>
-                                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                  <i className="fas fa-arrow-up text-emerald-500 mr-4"></i>
-                                  {invoice.dueDate}
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        )}
-                      </table>
-                    </div>
-                  </div>
-                </div>
+                <BillTable />
+              </div>
 
-                <div className="w-full xl:w-6/12 px-4">
-                  <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
-                    <div className="rounded-t mb-0 px-4 py-3 border-0">
-                      <div className="flex flex-wrap items-center">
-                        <div className="relative w-full px-4 max-w-full flex-grow flex-1">
-                          <h3 className="font-semibold text-base text-red-700">
-                            Outflow details
-                          </h3>
-                        </div>
-                        {/* <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
-												<button
-													className="bg-indigo-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1"
-													type="button"
-													style={{ transition: "all .15s ease" }}
-												>
-													See all
-												</button>
-											</div> */}
-                      </div>
-                    </div>
-                    <h2 className="text-black text-sm font-semibold px-7">
-                      Bills
-                    </h2>
-                    <div className="table-wrp block max-h-96  overflow-x-auto">
-                      {/* Projects table */}
-                      <table className="w-full">
-                        <thead className="bg-white border-blueGray-100 sticky top-0">
-                          <tr>
-                            <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-bold text-left">
-                              #
-                            </th>
-                            <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap  font-bold text-left">
-                              Bills ID
-                            </th>
-                            <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap  font-semibold text-left">
-                              Vendor Name
-                            </th>
-                            <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                              Balance Due
-                            </th>
-                            <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                              Currency
-                            </th>
-                            <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                              Status
-                            </th>
-                            <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                              Due Date
-                            </th>
-                          </tr>
-                        </thead>
-                        {!isGeneratingReport && (
-                          <tbody className="border-blueGray-100 ">
-                            {bills.map((bill, i) => (
-                              <tr key={bill.id}>
-                                <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-                                  {i + 1}
-                                </th>
-                                <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-                                  {bill.refrenceNumber}
-                                </th>
-                                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                  {bill.vendorName}
-                                </td>
-                                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                  <CurrencyFormat
-                                    value={parseFloat(bill.balance)}
-                                    displayType={'text'}
-                                    thousandSeparator={true}
-                                    decimalScale={2}
-                                  />
-                                </td>
-                                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                  <i className="fas fa-arrow-up text-emerald-500 mr-4"></i>
-                                  {bill.currencyCode}
-                                </td>
-                                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                  <i className="fas fa-arrow-up text-emerald-500 mr-4"></i>
-                                  {bill.status}
-                                </td>
-                                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                  <i className="fas fa-arrow-up text-emerald-500 mr-4"></i>
-                                  {bill.dueDate}
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        )}
-                      </table>
-                    </div>
-                  </div>
-                </div>
+              <div className="flex flex-wrap mt-4">
+                <SaleTable />
+
+                <PurchaseTable />
               </div>
 
               <footer className="block py-4">
