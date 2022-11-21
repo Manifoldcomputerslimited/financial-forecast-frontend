@@ -9,7 +9,7 @@ const InvoiceTable = (props) => {
   let invoices = useSelector((state) => state.forecast.invoices);
 
   const updateInvoiceDetail = (invoice) => {
-    props.setShowDetailModal(true);
+    props.setShowInvoiceDetailModal(true);
     props.setInvoiceDetail(invoice);
   };
   
