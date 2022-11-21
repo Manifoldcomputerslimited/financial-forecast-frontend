@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import CurrencyFormat from 'react-currency-format';
 
-const InvoiceTable = () => {
+const InvoiceTable = (props) => {
   let isGeneratingReport = useSelector(
     (state) => state.forecast.isGeneratingReport
   );
   let invoices = useSelector((state) => state.forecast.invoices);
 
+  const updateInvoiceDetail = (invoice) => {
+    props.setShowDetailModal(true);
+    props.setInvoiceDetail(invoice);
+  };
+  
   return (
     <>
       <div className="w-full xl:w-6/12 mb-12 xl:mb-0 px-4">
@@ -54,7 +59,11 @@ const InvoiceTable = () => {
               {!isGeneratingReport && (
                 <tbody className="">
                   {invoices.map((invoice, i) => (
-                    <tr key={invoice.id}>
+                    // <div>
+                    <tr
+                      key={invoice.id}
+                      onClick={() => updateInvoiceDetail(invoice)}
+                    >
                       <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
                         {i + 1}
                       </th>
@@ -85,6 +94,7 @@ const InvoiceTable = () => {
                         {invoice.dueDate}
                       </td>
                     </tr>
+                    // </div>
                   ))}
                 </tbody>
               )}

@@ -31,6 +31,8 @@ const Dashboard = (props) => {
   // grant user access to zoho
   let [zohoGrant, setZohoGrant] = useState(false);
   let [isLoading, setIsLoading] = useState(true);
+  const [showDetailModal, setShowDetailModal] = useState(false);
+  const [invoiceDetail, setInvoiceDetail] = useState('');
   let [code, setCode] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -331,7 +333,10 @@ const Dashboard = (props) => {
                 <BarChart />
               </div>
               <div className="flex flex-wrap mt-4">
-                <InvoiceTable />
+                <InvoiceTable
+                  setShowDetailModal={setShowDetailModal}
+                  setInvoiceDetail={setInvoiceDetail}
+                />
 
                 <BillTable />
               </div>
