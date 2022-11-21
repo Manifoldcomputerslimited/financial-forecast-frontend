@@ -31,16 +31,19 @@ const Dashboard = (props) => {
   // grant user access to zoho
   let [zohoGrant, setZohoGrant] = useState(false);
   let [isLoading, setIsLoading] = useState(true);
-  const [showDetailModal, setShowDetailModal] = useState(false);
-  const [invoiceDetail, setInvoiceDetail] = useState('');
+  let [showDetailModal, setShowDetailModal] = useState(false);
+  let [invoiceDetail, setInvoiceDetail] = useState('');
   let [code, setCode] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const zohoLoading = useSelector((state) => state.zoho.isLoading);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   let isZohoAuthenticated = useSelector(
     (state) => state.auth.isZohoAuthenticated
   );
-
+  let isDownloadingReport = useSelector(
+    (state) => state.forecast.isDownloadingReport
+  );
   let isGeneratingReport = useSelector(
     (state) => state.forecast.isGeneratingReport
   );
@@ -49,6 +52,8 @@ const Dashboard = (props) => {
   );
   let { openingBalance, totalCashInflow, totalCashOutflow, closingBalance } =
     useSelector((state) => state.forecast.report);
+  let invoices = useSelector((state) => state.forecast.invoices);
+  let bills = useSelector((state) => state.forecast.bills);
   let user = useSelector((state) => state.auth.user);
   let zohoAuthenticated = localStorage.getItem('zohoAuthenticated')
     ? localStorage.getItem('zohoAuthenticated')
@@ -125,6 +130,74 @@ const Dashboard = (props) => {
           <Sidebar />
           <div className="relative md:ml-64 bg-blueGray-100">
             <Navbar user={user} />
+
+            {showDetailModal ? (
+              <>
+                <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+                  <div className="relative w-auto my-6 mx-auto max-w-xl">
+                    {/*content*/}
+                    <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                      {/*header*/}
+                      <div className="flex items-start justify-around mt-5 rounded-t">
+                        <div className="flex-initial w-64 justify-center">
+                          <h3 className="text-red-700 font-medium text-lg mb-1 ">
+                            Invoice Detail
+                          </h3>
+                        </div>
+                        <button
+                          onClick={() => setShowDetailModal(false)}
+                          type="button"
+                          className=" rounded-md p-1 inline-flex items-center justify-center text-red-400 hover:text-red-500 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-red-500"
+                        >
+                          <span className="sr-only">Close menu</span>
+
+                          <svg
+                            className="h-5 w-5"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            aria-hidden="true"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M6 18L18 6M6 6l12 12"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                      {/*body*/}
+                      <form className="space-y-6 py-6">
+                        <div className="relative px-8 flex-auto">
+                          <div className="relative w-12/12">
+                            <p className="my-4 text-slate-500 text-lg leading-relaxed">
+                              Invoice detail for {invoiceDetail.invoiceNumber}
+                            </p>
+
+                            <label className="block text-gray-700">
+                              Customer Name
+                            </label>
+
+                            <input
+                              type="text"
+                              name="email"
+                              value={invoiceDetail.customerName}
+                              style={{ transition: 'all .15s ease' }}
+                              className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
+                            />
+                          </div>
+                        </div>
+                        {/*footer*/}
+                        <div className="flex items-center justify-center p-6 mt-5 rounded-b"></div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+              </>
+            ) : null}
 
             {/* Header */}
             <div className="relative bg-pink-600 md:pt-32 pb-32 pt-12">
