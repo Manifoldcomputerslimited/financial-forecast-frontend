@@ -96,7 +96,6 @@ const Dashboard = (props) => {
   return (
     <>
       {isZohoAuthenticated && isLoading && isGeneratingReport && (
-        // <p>isZohoAuthenticated {{isZohoAuthenticated}}, isLoading {{isLoading}}</p>
         <Navigate to="/" replace={true} />
       )}
 
