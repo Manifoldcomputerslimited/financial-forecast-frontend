@@ -31,7 +31,7 @@ const Dashboard = (props) => {
   // grant user access to zoho
   let [zohoGrant, setZohoGrant] = useState(false);
   let [isLoading, setIsLoading] = useState(true);
-  let [showDetailModal, setShowDetailModal] = useState(false);
+  let [showInvoiceDetailModal, setShowInvoiceDetailModal] = useState(false);
   let [invoiceDetail, setInvoiceDetail] = useState('');
   let [code, setCode] = useState('');
   const dispatch = useDispatch();
@@ -130,7 +130,7 @@ const Dashboard = (props) => {
           <div className="relative md:ml-64 bg-blueGray-100">
             <Navbar user={user} />
 
-            {showDetailModal ? (
+            {showInvoiceDetailModal ? (
               <>
                 <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
                   <div className="fixed w-auto my-6 mx-auto max-w-xl">
@@ -144,7 +144,7 @@ const Dashboard = (props) => {
                           </h3>
                         </div>
                         <button
-                          onClick={() => setShowDetailModal(false)}
+                          onClick={() => setShowInvoiceDetailModal(false)}
                           type="button"
                           className=" rounded-md p-1 inline-flex items-center justify-center text-red-400 hover:text-red-500 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-red-500"
                         >
@@ -511,7 +511,7 @@ const Dashboard = (props) => {
               </div>
               <div className="flex flex-wrap mt-4">
                 <InvoiceTable
-                  setShowDetailModal={setShowDetailModal}
+                  setShowInvoiceDetailModal={setShowInvoiceDetailModal}
                   setInvoiceDetail={setInvoiceDetail}
                 />
 
