@@ -10,6 +10,7 @@ const initialState = {
   isExchangeRateLoading: false,
   isUpdateExchangeRateLoading: false,
   isExchangeRateListLoading: false,
+  isBankAccountsLoading: false,
   rate: {
     id: null,
     latest: null,
@@ -71,7 +72,27 @@ const initialState = {
   sales: [],
   purchases: [],
   rates: [],
+  bankAccounts: [],
 };
+
+const getBankAccounts = createAsyncThunk('/bank-accounts', async () => {
+  try {
+    let accessToken = localStorage.getItem('accessToken')
+      ? JSON.parse(localStorage.getItem('accessToken'))
+      : null;
+    let options = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+    const res = await Axios.get('zoho/bank/accounts', options);
+
+    return res.data.data;
+  } catch (error) {
+    throw error.response.data || error.message;
+  }
+});
 
 const getExchangeRates = createAsyncThunk('/rates', async () => {
   try {
@@ -295,6 +316,16 @@ const forecastSlice = createSlice({
       })
       .addCase(getExchangeRates.rejected, (state, action) => {
         state.isExchangeRateListLoading = false;
+      })
+      .addCase(getBankAccounts.pending, (state, action) => {
+        state.isBankAccountsLoading = true;
+      })
+      .addCase(getBankAccounts.fulfilled, (state, action) => {
+        state.isBankAccountsLoading = false;
+        state.bankAccounts = action.payload;
+      })
+      .addCase(getBankAccounts.rejected, (state, action) => {
+        state.isBankAccountsLoading = false;
       });
   },
 });
@@ -305,6 +336,7 @@ export {
   exchangeRate,
   updateExchangeRate,
   getExchangeRates,
+  getBankAccounts,
 };
 
 export default forecastSlice.reducer;

@@ -2,7 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CurrencyFormat from 'react-currency-format';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Navigate, useSearchParams, useNavigate } from 'react-router-dom';
+import {
+  Navigate,
+  useSearchParams,
+  useNavigate,
+  NavLink,
+} from 'react-router-dom';
 import { InfinitySpin } from 'react-loader-spinner';
 
 import Sidebar from '../components/Sidebar';
@@ -835,7 +840,10 @@ const Dashboard = (props) => {
                 <div>
                   {/* Card stats */}
                   <div className="flex flex-wrap">
-                    <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
+                    <a
+                      href="/opening-balance"
+                      className="w-full lg:w-6/12 xl:w-3/12 px-4"
+                    >
                       <div className="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg">
                         <div className="flex-auto p-4">
                           <div className="flex flex-wrap">
@@ -880,7 +888,7 @@ const Dashboard = (props) => {
                           </p>
                         </div>
                       </div>
-                    </div>
+                    </a>
                     <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                       <div className="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg">
                         <div className="flex-auto p-4">
