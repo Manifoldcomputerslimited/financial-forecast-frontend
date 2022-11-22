@@ -11,6 +11,7 @@ const initialState = {
   isUpdateExchangeRateLoading: false,
   isExchangeRateListLoading: false,
   isBankAccountsLoading: false,
+  isSynchronizing: false,
   rate: {
     id: null,
     latest: null,
@@ -244,6 +245,25 @@ const downloadReport = createAsyncThunk(
   }
 );
 
+const resynApplication = createAsyncThunk('/resync', async () => {
+  try {
+    let accessToken = localStorage.getItem('accessToken')
+      ? JSON.parse(localStorage.getItem('accessToken'))
+      : null;
+    let options = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+    const res = await Axios.delete('/zoho/forecast/resync', options);
+
+    return res.data.data;
+  } catch (error) {
+    throw error.response.data || error.message;
+  }
+});
+
 const forecastSlice = createSlice({
   name: 'forecast',
   initialState,
@@ -326,6 +346,17 @@ const forecastSlice = createSlice({
       })
       .addCase(getBankAccounts.rejected, (state, action) => {
         state.isBankAccountsLoading = false;
+      })
+      .addCase(resynApplication.pending, (state, action) => {
+        state.isSynchronizing = true;
+      })
+      .addCase(resynApplication.fulfilled, (state, action) => {
+        state.isSynchronizing = false;
+        toast.success('resynced', { autoClose: 2000 });
+      })
+      .addCase(resynApplication.rejected, (state, action) => {
+        state.isSynchronizing = false;
+        toast.error(action.error.message, { autoClose: 2000 });
       });
   },
 });
@@ -337,6 +368,7 @@ export {
   updateExchangeRate,
   getExchangeRates,
   getBankAccounts,
+  resynApplication,
 };
 
 export default forecastSlice.reducer;
