@@ -49,6 +49,9 @@ const Dashboard = (props) => {
   const navigate = useNavigate();
   const zohoLoading = useSelector((state) => state.zoho.isLoading);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const isSynchronizing = useSelector(
+    (state) => state.forecast.isSynchronizing
+  );
   let isZohoAuthenticated = useSelector(
     (state) => state.auth.isZohoAuthenticated
   );
@@ -74,6 +77,7 @@ const Dashboard = (props) => {
   );
 
   useEffect(() => {
+    console.log('got here');
     dispatch(getUser());
     if (searchParams.get('error') === 'access_denied') {
       navigate('/login');
@@ -110,9 +114,14 @@ const Dashboard = (props) => {
         <Navigate to="/" replace={true} />
       )}
 
-      {isLoading && (
+      {(isLoading || isSynchronizing) && (
         <>
           <div className="grid h-screen place-items-center">
+            {isSynchronizing && (
+              <>
+                <h1>Please wait while the application syncs...</h1>
+              </>
+            )}
             <InfinitySpin width="200" color="red" />
           </div>
         </>
