@@ -1,6 +1,19 @@
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Sidebar from '../components/Sidebar';
+import { getBankAccounts } from '../redux/slices/forecast';
 
 const OpeningBalance = () => {
+  const dispatch = useDispatch();
+  const isBankAccountsLoading = useSelector(
+    (state) => state.forecast.isBankAccountsLoading
+  );
+  const bankAccounts = useSelector((state) => state.forecast.bankAccounts);
+
+  useEffect(() => {
+    dispatch(getBankAccounts());
+  }, [dispatch]);
+
   return (
     <>
       <Sidebar />
@@ -44,126 +57,66 @@ const OpeningBalance = () => {
                           scope="col"
                           className="py-3 px-6 text-xs font-medium tracking-wider text-left text-white uppercase dark:text-white"
                         >
+                          Account Type
+                        </th>
+                        <th
+                          scope="col"
+                          className="py-3 px-6 text-xs font-medium tracking-wider text-left text-white uppercase dark:text-white"
+                        >
+                          Account Number
+                        </th>
+                        <th
+                          scope="col"
+                          className="py-3 px-6 text-xs font-medium tracking-wider text-left text-white uppercase dark:text-white"
+                        >
+                          Bank Name
+                        </th>
+                        <th
+                          scope="col"
+                          className="py-3 px-6 text-xs font-medium tracking-wider text-left text-white uppercase dark:text-white"
+                        >
                           Currency
                         </th>
                         <th
                           scope="col"
                           className="py-3 px-6 text-xs font-medium tracking-wider text-left text-white uppercase dark:text-white"
                         >
-                          Rate
-                        </th>
-                        <th
-                          scope="col"
-                          className="py-3 px-6 text-xs font-medium tracking-wider text-left text-white uppercase dark:text-white"
-                        >
-                          Amount
+                          Balance
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          1
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">
-                          Access Bank
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          USD
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          440
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          $1000
-                        </td>
-                      </tr>
-                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          1
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">
-                          Access Bank
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          USD
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          440
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          $1000
-                        </td>
-                      </tr>
-                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          1
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">
-                          Access Bank
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          USD
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          440
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          $1000
-                        </td>
-                      </tr>
-                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          1
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">
-                          Access Bank
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          USD
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          440
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          $1000
-                        </td>
-                      </tr>
-                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          1
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">
-                          Access Bank
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          USD
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          440
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          $1000
-                        </td>
-                      </tr>
-                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          1
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">
-                          Access Bank
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          USD
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          440
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          $1000
-                        </td>
-                      </tr>
-                    </tbody>
+                    {!isBankAccountsLoading && (
+                      <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+                        {bankAccounts.map((bankAccount, i) => (
+                          <tr
+                            key={bankAccount.id}
+                            className="hover:bg-gray-100 dark:hover:bg-gray-700"
+                          >
+                            <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                              {i + 1}
+                            </td>
+                            <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">
+                              {bankAccount.accountName}
+                            </td>
+                            <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                              {bankAccount.accountType}
+                            </td>
+                            <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                              {bankAccount.accountNumber}
+                            </td>
+                            <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                              {bankAccount.bankName}
+                            </td>
+                            <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                              {bankAccount.currency}
+                            </td>
+                            <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                              {bankAccount.balance}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    )}
                   </table>
                 </div>
               </div>
