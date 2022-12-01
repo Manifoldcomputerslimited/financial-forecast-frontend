@@ -519,9 +519,9 @@ const Dashboard = (props) => {
               </div>
 
               <div className="flex flex-wrap mt-4">
-                <SaleTable />
+                {/* <SaleTable /> */}
 
-                <PurchaseTable />
+                {/* <PurchaseTable /> */}
               </div>
 
               <footer className="block py-4">
