@@ -1065,15 +1065,15 @@ const Dashboard = (props) => {
               </div>
 
               <div className="flex flex-wrap mt-4">
-                <SaleTable
+                {/* <SaleTable
                   setShowSaleDetailModal={setShowSaleDetailModal}
                   setSaleDetail={setSaleDetail}
-                />
+                /> */}
 
-                <PurchaseTable
+                {/* <PurchaseTable
                   setShowPurchaseDetailModal={setShowPurchaseDetailModal}
                   setPurchaseDetail={setPurchaseDetail}
-                />
+                /> */}
               </div>
 
               <footer className="block py-4">
