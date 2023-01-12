@@ -152,7 +152,10 @@ const Dashboard = (props) => {
 
             {showInvoiceDetailModal ? (
               <>
-                <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+                <div
+                  className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
+                  onClick={() => setShowInvoiceDetailModal(false)}
+                >
                   <div className="fixed w-auto my-6 mx-auto max-w-xl">
                     {/*content*/}
                     <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
@@ -191,7 +194,19 @@ const Dashboard = (props) => {
                       <div className="relative px-8 flex-auto">
                         <div className="relative w-12/12">
                           <p className="my-4 text-slate-500 text-lg leading-relaxed">
-                            Invoice detail for {invoiceDetail.invoiceId}
+                            Invoice detail for{' '}
+                            <a
+                              target="_blank"
+                              href={
+                                process.env.REACT_APP_ZOHO_BASE_URL +
+                                process.env.REACT_APP_ORGANIZATION_ID +
+                                '#/invoices/' +
+                                invoiceDetail.invoiceId
+                              }
+                              class="text-blue-500 underline"
+                            >
+                              {invoiceDetail.invoiceId}
+                            </a>
                           </p>
 
                           <div className="mb-4 md:flex md:justify-between">
@@ -325,7 +340,10 @@ const Dashboard = (props) => {
 
             {showSaleDetailModal ? (
               <>
-                <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+                <div
+                  className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
+                  onClick={() => setShowSaleDetailModal(false)}
+                >
                   <div className="fixed w-auto my-6 mx-auto max-w-xl">
                     {/*content*/}
                     <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
@@ -364,7 +382,20 @@ const Dashboard = (props) => {
                       <div className="relative px-8 flex-auto">
                         <div className="relative w-12/12">
                           <p className="my-4 text-slate-500 text-lg leading-relaxed">
-                            Sale detail for {saleDetail.saleOrderId}
+                            Sale detail for
+                            <a
+                              target="_blank"
+                              href={
+                                process.env.REACT_APP_ZOHO_BASE_URL +
+                                '/' +
+                                process.env.REACT_APP_ORGANIZATION_ID +
+                                '/salesorders/' +
+                                saleDetail.saleOrderId
+                              }
+                              class="text-blue-500 underline"
+                            >
+                              {saleDetail.saleOrderId}
+                            </a>
                           </p>
 
                           <div className="mb-4 md:flex md:justify-between">
@@ -498,7 +529,10 @@ const Dashboard = (props) => {
 
             {showBillDetailModal ? (
               <>
-                <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+                <div
+                  className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
+                  onClick={() => setShowBillDetailModal(false)}
+                >
                   <div className="fixed w-auto my-6 mx-auto max-w-xl">
                     {/*content*/}
                     <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
@@ -537,7 +571,20 @@ const Dashboard = (props) => {
                       <div className="relative px-8 flex-auto">
                         <div className="relative w-12/12">
                           <p className="my-4 text-slate-500 text-lg leading-relaxed">
-                            Bill detail for {billDetail.billId}
+                            Bill detail for
+                            <a
+                              target="_blank"
+                              href={
+                                process.env.REACT_APP_ZOHO_BASE_URL +
+                                '/' +
+                                process.env.REACT_APP_ORGANIZATION_ID +
+                                '#/bills/' +
+                                billDetail.billId
+                              }
+                              class="text-blue-500 underline"
+                            >
+                              {billDetail.billId}
+                            </a>
                           </p>
 
                           <div className="mb-4 md:flex md:justify-between">
@@ -575,7 +622,7 @@ const Dashboard = (props) => {
                           <div className="mb-4 md:flex md:justify-between">
                             <div className="mb-4 md:mr-2 md:mb-0">
                               <label className="block text-gray-700">
-                                Invoice Number
+                                Bill Number
                               </label>
 
                               <input
@@ -672,7 +719,10 @@ const Dashboard = (props) => {
             {/* Purchase Modal */}
             {showPurchaseDetailModal ? (
               <>
-                <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+                <div
+                  className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
+                  onClick={() => setShowPurchaseDetailModal(false)}
+                >
                   <div className="fixed w-auto my-6 mx-auto max-w-xl">
                     {/*content*/}
                     <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
