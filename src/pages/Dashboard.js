@@ -14,7 +14,7 @@ import Sidebar from '../components/Sidebar';
 import Navbar from '../components/Navbar';
 import LineChart from '../components/LineChart';
 import BarChart from '../components/BarChart';
-
+import dayjs from 'dayjs';
 import { zoho } from '../redux/slices/zoho';
 import { logout, getUser } from '../redux/slices/auth';
 import { generateReport } from '../redux/slices/forecast';
@@ -308,7 +308,9 @@ const Dashboard = (props) => {
                               <input
                                 type="text"
                                 name="email"
-                                value={invoiceDetail.date}
+                                value={dayjs(invoiceDetail.date).format(
+                                  'DD-MMM-YYYY'
+                                )}
                                 style={{ transition: 'all .15s ease' }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                               />
@@ -321,7 +323,9 @@ const Dashboard = (props) => {
                               <input
                                 type="text"
                                 name="email"
-                                value={invoiceDetail.dueDate}
+                                value={dayjs(invoiceDetail.dueDate).format(
+                                  'DD-MMM-YYYY'
+                                )}
                                 style={{ transition: 'all .15s ease' }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                               />
@@ -497,7 +501,9 @@ const Dashboard = (props) => {
                               <input
                                 type="text"
                                 name="email"
-                                value={saleDetail.date}
+                                value={dayjs(saleDetail.date).format(
+                                  'DD-MMM-YYYY'
+                                )}
                                 style={{ transition: 'all .15s ease' }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                               />
@@ -510,7 +516,9 @@ const Dashboard = (props) => {
                               <input
                                 type="text"
                                 name="email"
-                                value={saleDetail.shipmentDate}
+                                value={dayjs(saleDetail.shipmentDate).format(
+                                  'DD-MMM-YYYY'
+                                )}
                                 style={{ transition: 'all .15s ease' }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                               />
@@ -686,7 +694,9 @@ const Dashboard = (props) => {
                               <input
                                 type="text"
                                 name="email"
-                                value={billDetail.date}
+                                value={dayjs(billDetail.date).format(
+                                  'DD-MMM-YYYY'
+                                )}
                                 style={{ transition: 'all .15s ease' }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                               />
@@ -699,7 +709,9 @@ const Dashboard = (props) => {
                               <input
                                 type="text"
                                 name="email"
-                                value={billDetail.dueDate}
+                                value={dayjs(billDetail.dueDate).format(
+                                  'DD-MMM-YYYY'
+                                )}
                                 style={{ transition: 'all .15s ease' }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                               />
@@ -863,7 +875,9 @@ const Dashboard = (props) => {
                               <input
                                 type="text"
                                 name="email"
-                                value={purchaseDetail.date}
+                                value={dayjs(purchaseDetail.date).format(
+                                  'DD-MMM-YYYY'
+                                )}
                                 style={{ transition: 'all .15s ease' }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                               />
@@ -876,7 +890,9 @@ const Dashboard = (props) => {
                               <input
                                 type="text"
                                 name="email"
-                                value={purchaseDetail.dueDate}
+                                value={dayjs(purchaseDetail.dueDate).format(
+                                  'DD-MMM-YYYY'
+                                )}
                                 style={{ transition: 'all .15s ease' }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                               />
