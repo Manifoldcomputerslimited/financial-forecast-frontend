@@ -198,7 +198,7 @@ const Dashboard = (props) => {
                             <a
                               target="_blank"
                               href={
-                                process.env.REACT_APP_ZOHO_BASE_URL +
+                                process.env.REACT_APP_ZOHO_BASE_URL + '/' +
                                 process.env.REACT_APP_ORGANIZATION_ID +
                                 '#/invoices/' +
                                 invoiceDetail.invoiceId
