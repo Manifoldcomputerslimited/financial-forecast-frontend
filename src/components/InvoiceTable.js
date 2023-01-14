@@ -12,7 +12,7 @@ const InvoiceTable = (props) => {
     props.setShowInvoiceDetailModal(true);
     props.setInvoiceDetail(invoice);
   };
-  
+
   return (
     <>
       <div className="w-full xl:w-6/12 mb-12 xl:mb-0 px-4">

@@ -1,6 +1,20 @@
+import dayjs from 'dayjs';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Sidebar from '../components/Sidebar';
+import { getExchangeRates } from '../redux/slices/forecast';
 
 const Rate = () => {
+  const dispatch = useDispatch();
+  const isExchangeRateListLoading = useSelector(
+    (state) => state.forecast.isExchangeRateListLoading
+  );
+  const rates = useSelector((state) => state.forecast.rates);
+
+  useEffect(() => {
+    dispatch(getExchangeRates());
+  }, [dispatch]);
+
   return (
     <>
       <Sidebar />
@@ -50,426 +64,26 @@ const Rate = () => {
                         </th> */}
                       </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          1
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">
-                          440
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          04-11-2022
-                        </td>
-                        {/* <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                          <a
-                            href="#"
-                            className="text-blue-600 dark:text-blue-500 hover:underline"
+                    {!isExchangeRateListLoading && (
+                      <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+                        {rates.map((rate, i) => (
+                          <tr
+                            key={rate.id}
+                            className="hover:bg-gray-100 dark:hover:bg-gray-700"
                           >
-                            Edit
-                          </a>
-                        </td> */}
-                      </tr>
-                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          2
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">
-                          441.39
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          05-11-2022
-                        </td>
-                        {/* <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                          <a
-                            href="#"
-                            className="text-blue-600 dark:text-blue-500 hover:underline"
-                          >
-                            Edit
-                          </a>
-                        </td> */}
-                      </tr>
-                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          3
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">
-                          441.21
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          06-11-2022
-                        </td>
-                        {/* <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                          <a
-                            href="#"
-                            className="text-blue-600 dark:text-blue-500 hover:underline"
-                          >
-                            Edit
-                          </a>
-                        </td> */}
-                      </tr>
-                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          4
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">
-                          441.21
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          07-11-2022
-                        </td>
-                        {/* <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                          <a
-                            href="#"
-                            className="text-blue-600 dark:text-blue-500 hover:underline"
-                          >
-                            Edit
-                          </a>
-                        </td> */}
-                      </tr>
-                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          5
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">
-                          441.21
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          09-11-2022
-                        </td>
-                        {/* <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                          <a
-                            href="#"
-                            className="text-blue-600 dark:text-blue-500 hover:underline"
-                          >
-                            Edit
-                          </a>
-                        </td> */}
-                      </tr>
-                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          1
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">
-                          440
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          04-11-2022
-                        </td>
-                        {/* <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                          <a
-                            href="#"
-                            className="text-blue-600 dark:text-blue-500 hover:underline"
-                          >
-                            Edit
-                          </a>
-                        </td> */}
-                      </tr>
-                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          1
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">
-                          440
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          04-11-2022
-                        </td>
-                        {/* <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                          <a
-                            href="#"
-                            className="text-blue-600 dark:text-blue-500 hover:underline"
-                          >
-                            Edit
-                          </a>
-                        </td> */}
-                      </tr>
-                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          1
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">
-                          440
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          04-11-2022
-                        </td>
-                        {/* <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                          <a
-                            href="#"
-                            className="text-blue-600 dark:text-blue-500 hover:underline"
-                          >
-                            Edit
-                          </a>
-                        </td> */}
-                      </tr>
-                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          1
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">
-                          440
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          04-11-2022
-                        </td>
-                        {/* <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                          <a
-                            href="#"
-                            className="text-blue-600 dark:text-blue-500 hover:underline"
-                          >
-                            Edit
-                          </a>
-                        </td> */}
-                      </tr>
-                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          1
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">
-                          440
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          04-11-2022
-                        </td>
-                        {/* <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                          <a
-                            href="#"
-                            className="text-blue-600 dark:text-blue-500 hover:underline"
-                          >
-                            Edit
-                          </a>
-                        </td> */}
-                      </tr>
-                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          1
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">
-                          440
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          04-11-2022
-                        </td>
-                        {/* <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                          <a
-                            href="#"
-                            className="text-blue-600 dark:text-blue-500 hover:underline"
-                          >
-                            Edit
-                          </a>
-                        </td> */}
-                      </tr>
-                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          1
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">
-                          440
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          04-11-2022
-                        </td>
-                        {/* <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                          <a
-                            href="#"
-                            className="text-blue-600 dark:text-blue-500 hover:underline"
-                          >
-                            Edit
-                          </a>
-                        </td> */}
-                      </tr>
-                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          1
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">
-                          440
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          04-11-2022
-                        </td>
-                        {/* <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                          <a
-                            href="#"
-                            className="text-blue-600 dark:text-blue-500 hover:underline"
-                          >
-                            Edit
-                          </a>
-                        </td> */}
-                      </tr>
-                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          1
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">
-                          440
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          04-11-2022
-                        </td>
-                        {/* <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                          <a
-                            href="#"
-                            className="text-blue-600 dark:text-blue-500 hover:underline"
-                          >
-                            Edit
-                          </a>
-                        </td> */}
-                      </tr>
-                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          1
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">
-                          440
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          04-11-2022
-                        </td>
-                        {/* <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                          <a
-                            href="#"
-                            className="text-blue-600 dark:text-blue-500 hover:underline"
-                          >
-                            Edit
-                          </a>
-                        </td> */}
-                      </tr>
-                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          1
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">
-                          440
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          04-11-2022
-                        </td>
-                        {/* <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                          <a
-                            href="#"
-                            className="text-blue-600 dark:text-blue-500 hover:underline"
-                          >
-                            Edit
-                          </a>
-                        </td> */}
-                      </tr>
-                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          1
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">
-                          440
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          04-11-2022
-                        </td>
-                        {/* <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                          <a
-                            href="#"
-                            className="text-blue-600 dark:text-blue-500 hover:underline"
-                          >
-                            Edit
-                          </a>
-                        </td> */}
-                      </tr>
-                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          1
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">
-                          440
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          04-11-2022
-                        </td>
-                        {/* <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                          <a
-                            href="#"
-                            className="text-blue-600 dark:text-blue-500 hover:underline"
-                          >
-                            Edit
-                          </a>
-                        </td> */}
-                      </tr>
-                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          1
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">
-                          440
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          04-11-2022
-                        </td>
-                        {/* <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                          <a
-                            href="#"
-                            className="text-blue-600 dark:text-blue-500 hover:underline"
-                          >
-                            Edit
-                          </a>
-                        </td> */}
-                      </tr>
-                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          1
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">
-                          440
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          04-11-2022
-                        </td>
-                        {/* <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                          <a
-                            href="#"
-                            className="text-blue-600 dark:text-blue-500 hover:underline"
-                          >
-                            Edit
-                          </a>
-                        </td> */}
-                      </tr>
-                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          1
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">
-                          440
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          04-11-2022
-                        </td>
-                        {/* <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                          <a
-                            href="#"
-                            className="text-blue-600 dark:text-blue-500 hover:underline"
-                          >
-                            Edit
-                          </a>
-                        </td> */}
-                      </tr>
-                      <tr className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          1
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">
-                          440
-                        </td>
-                        <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          04-11-2022
-                        </td>
-                        {/* <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                          <a
-                            href="#"
-                            className="text-blue-600 dark:text-blue-500 hover:underline"
-                          >
-                            Edit
-                          </a>
-                        </td> */}
-                      </tr>
-                    </tbody>
+                            <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                              {i + 1}
+                            </td>
+                            <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">
+                              {rate.rate}
+                            </td>
+                            <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                              {dayjs(rate.createdAt).format('DD-MMM-YYYY')}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    )}
                   </table>
                 </div>
               </div>

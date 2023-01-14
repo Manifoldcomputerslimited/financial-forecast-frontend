@@ -9,6 +9,9 @@ const initialState = {
   isDownloadingReport: false,
   isExchangeRateLoading: false,
   isUpdateExchangeRateLoading: false,
+  isExchangeRateListLoading: false,
+  isBankAccountsLoading: false,
+  isSynchronizing: false,
   rate: {
     id: null,
     latest: null,
@@ -69,7 +72,47 @@ const initialState = {
   bills: [],
   sales: [],
   purchases: [],
+  rates: [],
+  bankAccounts: [],
 };
+
+const getBankAccounts = createAsyncThunk('/bank-accounts', async () => {
+  try {
+    let accessToken = localStorage.getItem('accessToken')
+      ? JSON.parse(localStorage.getItem('accessToken'))
+      : null;
+    let options = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+    const res = await Axios.get('zoho/bank/accounts', options);
+
+    return res.data.data;
+  } catch (error) {
+    throw error.response.data || error.message;
+  }
+});
+
+const getExchangeRates = createAsyncThunk('/rates', async () => {
+  try {
+    let accessToken = localStorage.getItem('accessToken')
+      ? JSON.parse(localStorage.getItem('accessToken'))
+      : null;
+    let options = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+    const res = await Axios.get('zoho/exchange/rate', options);
+
+    return res.data.data;
+  } catch (error) {
+    throw error.response.data || error.message;
+  }
+});
 
 const exchangeRate = createAsyncThunk(
   'rate',
@@ -202,6 +245,25 @@ const downloadReport = createAsyncThunk(
   }
 );
 
+const resynApplication = createAsyncThunk('/resync', async () => {
+  try {
+    let accessToken = localStorage.getItem('accessToken')
+      ? JSON.parse(localStorage.getItem('accessToken'))
+      : null;
+    let options = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+    const res = await Axios.delete('/zoho/forecast/resync', options);
+
+    return res.data.data;
+  } catch (error) {
+    throw error.response.data || error.message;
+  }
+});
+
 const forecastSlice = createSlice({
   name: 'forecast',
   initialState,
@@ -264,10 +326,49 @@ const forecastSlice = createSlice({
       .addCase(updateExchangeRate.rejected, (state, action) => {
         state.isUpdateExchangeRateLoading = false;
         toast.error(action.error.message, { autoClose: 2000 });
+      })
+      .addCase(getExchangeRates.pending, (state, action) => {
+        state.isExchangeRateListLoading = true;
+      })
+      .addCase(getExchangeRates.fulfilled, (state, action) => {
+        state.isExchangeRateListLoading = false;
+        state.rates = action.payload;
+      })
+      .addCase(getExchangeRates.rejected, (state, action) => {
+        state.isExchangeRateListLoading = false;
+      })
+      .addCase(getBankAccounts.pending, (state, action) => {
+        state.isBankAccountsLoading = true;
+      })
+      .addCase(getBankAccounts.fulfilled, (state, action) => {
+        state.isBankAccountsLoading = false;
+        state.bankAccounts = action.payload;
+      })
+      .addCase(getBankAccounts.rejected, (state, action) => {
+        state.isBankAccountsLoading = false;
+      })
+      .addCase(resynApplication.pending, (state, action) => {
+        state.isSynchronizing = true;
+      })
+      .addCase(resynApplication.fulfilled, (state, action) => {
+        state.isSynchronizing = false;
+        toast.success('resynced', { autoClose: 2000 });
+      })
+      .addCase(resynApplication.rejected, (state, action) => {
+        state.isSynchronizing = false;
+        toast.error(action.error.message, { autoClose: 2000 });
       });
   },
 });
 
-export { generateReport, downloadReport, exchangeRate, updateExchangeRate };
+export {
+  generateReport,
+  downloadReport,
+  exchangeRate,
+  updateExchangeRate,
+  getExchangeRates,
+  getBankAccounts,
+  resynApplication,
+};
 
 export default forecastSlice.reducer;

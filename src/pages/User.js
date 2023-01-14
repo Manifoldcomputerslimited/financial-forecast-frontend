@@ -359,7 +359,7 @@ const User = () => {
                                                     {user.status ? 'completed' : 'invited'}
                                                 </td>
                                                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                                    {dayjs(user.createdAt).format('DD-MMM-YYYY')}
+                                                    {dayjs(user.inviteDate).format('DD-MMM-YYYY')}
                                                 </td>
                                                 <td className=" border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                                                     <div className="flex justify-start space-x-5">
