@@ -77,7 +77,6 @@ const Dashboard = (props) => {
   );
 
   useEffect(() => {
-    console.log('got here');
     dispatch(getUser());
     if (searchParams.get('error') === 'access_denied') {
       navigate('/login');
