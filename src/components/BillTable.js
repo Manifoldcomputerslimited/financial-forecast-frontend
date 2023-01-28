@@ -15,7 +15,7 @@ const BillTable = (props) => {
 
   return (
     <>
-      <div className="w-full xl:w-6/12 px-4">
+      <div className="w-full xl:w-12/12 px-4">
         <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
           <div className="rounded-t mb-0 px-4 py-3 border-0">
             <div className="flex flex-wrap items-center">
