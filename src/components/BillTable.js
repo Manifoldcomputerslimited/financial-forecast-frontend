@@ -69,6 +69,15 @@ const BillTable = (props) => {
                         {bill.vendorName}
                       </td>
                       <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        {bill.currencyCode != 'USD' ? (
+                          <span className="font-semibold text-sm text-red-700">
+                            &#8358;
+                          </span>
+                        ) : (
+                          <span className="font-semibold text-sm text-red-700">
+                            &#36;
+                          </span>
+                        )}{' '}
                         <CurrencyFormat
                           value={parseFloat(bill.balance)}
                           displayType={'text'}

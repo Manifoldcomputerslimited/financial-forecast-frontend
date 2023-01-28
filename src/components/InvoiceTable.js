@@ -74,6 +74,15 @@ const InvoiceTable = (props) => {
                         {invoice.customerName}
                       </td>
                       <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        {invoice.currencyCode != 'USD' ? (
+                          <span className="font-semibold text-sm text-red-700">
+                            &#8358;
+                          </span>
+                        ) : (
+                          <span className="font-semibold text-sm text-red-700">
+                            &#36;
+                          </span>
+                        )}{' '}
                         <CurrencyFormat
                           value={parseFloat(invoice.balance)}
                           displayType={'text'}

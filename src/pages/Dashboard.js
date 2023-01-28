@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CurrencyFormat from 'react-currency-format';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import CurrencyInput from 'react-currency-input-field';
 import {
   Navigate,
   useSearchParams,
@@ -64,8 +65,12 @@ const Dashboard = (props) => {
   let { forecastNumber, forecastPeriod } = useSelector(
     (state) => state.forecast.forecastInfo
   );
-  let { openingBalance, totalCashInflow, totalCashOutflow, closingBalance } =
-    useSelector((state) => state.forecast.report);
+  let {
+    openingBalance,
+    totalCashInflow,
+    totalCashOutflow,
+    closingBalance,
+  } = useSelector((state) => state.forecast.report);
   let invoices = useSelector((state) => state.forecast.invoices);
   let bills = useSelector((state) => state.forecast.bills);
   let user = useSelector((state) => state.auth.user);
@@ -197,7 +202,8 @@ const Dashboard = (props) => {
                             <a
                               target="_blank"
                               href={
-                                process.env.REACT_APP_ZOHO_BASE_URL + '/' +
+                                process.env.REACT_APP_ZOHO_BASE_URL +
+                                '/' +
                                 process.env.REACT_APP_ORGANIZATION_ID +
                                 '#/invoices/' +
                                 invoiceDetail.invoiceId
@@ -274,26 +280,38 @@ const Dashboard = (props) => {
                               <label className="block text-gray-700">
                                 Balance
                               </label>
-
-                              <input
-                                type="text"
-                                name="email"
-                                value={invoiceDetail.balance}
-                                style={{ transition: 'all .15s ease' }}
+                              <CurrencyInput
+                                intlConfig={{
+                                  locale:
+                                    invoiceDetail.currencyCode != 'USD'
+                                      ? 'en-NG'
+                                      : 'en-US',
+                                  currency:
+                                    invoiceDetail.currencyCode != 'USD'
+                                      ? 'NGN'
+                                      : 'USD',
+                                }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
+                                id="innvoice-balance"
+                                name="invoice-balance"
+                                defaultValue={invoiceDetail.balance}
+                                decimalsLimit={2}
+                                disabled={true}
                               />
                             </div>
                             <div className="mb-4 md:mr-2 md:mb-0">
                               <label className="block text-gray-700">
                                 Exchange Rate
                               </label>
-
-                              <input
-                                type="text"
-                                name="email"
-                                value={invoiceDetail.exchangeRate}
-                                style={{ transition: 'all .15s ease' }}
+                              <CurrencyInput
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
+                                id="exchange-rate"
+                                name="exchange-rat"
+                                defaultValue={parseFloat(
+                                  invoiceDetail.exchangeRate
+                                )}
+                                decimalsLimit={2}
+                                disabled={true}
                               />
                             </div>
                           </div>
@@ -660,13 +678,23 @@ const Dashboard = (props) => {
                               <label className="block text-gray-700">
                                 Balance
                               </label>
-
-                              <input
-                                type="text"
-                                name="email"
-                                value={billDetail.balance}
-                                style={{ transition: 'all .15s ease' }}
+                              <CurrencyInput
+                                intlConfig={{
+                                  locale:
+                                    billDetail.currencyCode != 'USD'
+                                      ? 'en-NG'
+                                      : 'en-US',
+                                  currency:
+                                    billDetail.currencyCode != 'USD'
+                                      ? 'NGN'
+                                      : 'USD',
+                                }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
+                                id="bill-balance"
+                                name="bill-balance"
+                                defaultValue={billDetail.balance}
+                                decimalsLimit={2}
+                                disabled={true}
                               />
                             </div>
                             <div className="mb-4 md:mr-2 md:mb-0">
