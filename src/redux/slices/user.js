@@ -102,6 +102,7 @@ const userSlice = createSlice({
             .addCase(deleteUser.rejected, (state, action) => {
                 toast.error(action.error.message, { autoClose: 2000 })
             })
+            
     }
 })
 
