@@ -7,6 +7,7 @@ import ResetPassword from '../pages/ResetPassword';
 import Register from '../pages/Register';
 import Rate from '../pages/Rate';
 import OpeningBalance from '../pages/OpeningBalance';
+import Overdraft from '../pages/Overdraft';
 
 export const appRoutes = [
   {
@@ -53,5 +54,10 @@ export const appRoutes = [
     path: '/setting',
     key: '/setting',
     component: Setting,
+  },
+  {
+    path: '/overdraft',
+    key: '/overdraft',
+    component: Overdraft,
   },
 ];
