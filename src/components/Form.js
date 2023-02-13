@@ -66,14 +66,7 @@ const Form = () => {
                       <div className="relative w-14/14 grid gap-4  grid-cols-2 ">
                         <div>
                           <label className="block text-gray-700  ">Name:</label>
-                          {/*<input
-                         className="w-full px-4 py-3 rounded-lg  bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
-                         type="text"
-                         name="Name"
                         
-                         {...register("Name")}
-                         
-        />*/}{" "}
                           <div className=" ">
                             <select className="w-full px-6 py-3  rounded-lg  bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none">
                               <option value="fruit"></option>
