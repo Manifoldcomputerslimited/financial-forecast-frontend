@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 const initialState = {
   isLoading: false,
   isOverdraftLoading: false,
+  isOverdraftUpdateLoading: false,
   error: null,
   zohoAccessToken: '',
   zohoRefreshToken: '',
@@ -99,6 +100,34 @@ const getOverdrafts = createAsyncThunk('/overdrafts', async () => {
   }
 });
 
+const updateOverdraft = createAsyncThunk(
+  '/overdraft/update',
+  async ({ data }) => {
+    try {
+      let accessToken = localStorage.getItem('accessToken')
+        ? JSON.parse(localStorage.getItem('accessToken'))
+        : null;
+
+      const res = await Axios.put(
+        `/zoho/overdraft/${data.accountId}`,
+        {
+          ...data,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      return res.data.data;
+    } catch (error) {
+      throw error.response.data || error.message;
+    }
+  }
+);
+
 const deleteOverdraft = createAsyncThunk(
   '/deleteOverdraft',
   async ({ accountId }) => {
@@ -186,10 +215,28 @@ const zohoSlice = createSlice({
       })
       .addCase(deleteOverdraft.rejected, (state, action) => {
         toast.error(action.error.message, { autoClose: 2000 });
+      })
+      .addCase(updateOverdraft.pending, (state, action) => {
+        state.isOverdraftUpdateLoading = true;
+      })
+      .addCase(updateOverdraft.fulfilled, (state, action) => {
+        state.isOverdraftUpdateLoading = false;
+        toast.success('Overdraft loan updated', { autoClose: 2000 });
+      })
+      .addCase(updateOverdraft.rejected, (state, action) => {
+        state.isOverdraftUpdateLoading = false;
+        toast.error(action.error.message, { autoClose: 2000 });
       });
   },
 });
 
-export { zoho, zohoRefresh, createOverdraft, getOverdrafts, deleteOverdraft };
+export {
+  zoho,
+  zohoRefresh,
+  createOverdraft,
+  getOverdrafts,
+  updateOverdraft,
+  deleteOverdraft,
+};
 
 export default zohoSlice.reducer;

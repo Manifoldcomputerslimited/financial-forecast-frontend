@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { getOverdrafts, deleteOverdraft } from '../redux/slices/zoho';
+import { resynApplication } from '../redux/slices/forecast';
 
 const Delete = (props) => {
   const dispatch = useDispatch();
@@ -14,6 +15,7 @@ const Delete = (props) => {
     setShowDeleteModal(false);
 
     await dispatch(getOverdrafts());
+    await dispatch(resynApplication());
   };
 
   return (

@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { withAuth } from '../hoc/withAuth';
 import { createOverdraft, getOverdrafts } from '../redux/slices/zoho';
 import { getUsers } from '../redux/slices/user';
+import { resynApplication } from '../redux/slices/forecast';
 
 const Form = () => {
   const dispatch = useDispatch();
@@ -76,7 +77,7 @@ const Form = () => {
       currency,
       amount,
     };
-    dispatch(createOverdraft({ data })).then((res) => {
+    dispatch(createOverdraft({ data })).then(async (res) => {
       if (res.error) return;
       setAccountId('');
       setAccountName('');
@@ -88,11 +89,10 @@ const Form = () => {
       setAmount('');
       setShowModal(false);
       navigate('/overdraft');
-      dispatch(getOverdrafts());
-      dispatch(getUsers());
+      await dispatch(getOverdrafts());
+      await dispatch(getUsers());
+      await dispatch(resynApplication());
     });
-
-    // await
   };
 
   useEffect(() => {
