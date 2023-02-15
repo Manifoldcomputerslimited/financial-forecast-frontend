@@ -15,7 +15,7 @@ const InvoiceTable = (props) => {
 
   return (
     <>
-      <div className="w-full xl:w-6/12 mb-12 xl:mb-0 px-4">
+      <div className="w-full xl:w-12/12 mb-12 xl:mb-0 px-4">
         <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
           <div className="rounded-t mb-0 px-4 py-3 border-0">
             <div className="flex flex-wrap items-center">
@@ -74,6 +74,15 @@ const InvoiceTable = (props) => {
                         {invoice.customerName}
                       </td>
                       <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        {invoice.currencyCode != 'USD' ? (
+                          <span className="font-semibold text-sm text-red-700">
+                            &#8358;
+                          </span>
+                        ) : (
+                          <span className="font-semibold text-sm text-red-700">
+                            &#36;
+                          </span>
+                        )}{' '}
                         <CurrencyFormat
                           value={parseFloat(invoice.balance)}
                           displayType={'text'}
