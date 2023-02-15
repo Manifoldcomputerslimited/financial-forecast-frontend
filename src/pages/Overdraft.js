@@ -1,20 +1,22 @@
-import React, { useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Sidebar from '../components/Sidebar';
 import Form from '../components/Form';
 import Edit from '../components/Edit';
 import Delete from '../components/Delete';
-import { getBankAccounts } from '../redux/slices/forecast';
+import { getOverdrafts } from '../redux/slices/zoho';
+import CurrencyFormat from 'react-currency-format';
 
 const Overdraft = () => {
-  const [name, setName] = useState(['Chisom']);
-  const [type, setType] = useState(['day']);
-  const [number, setNumber] = useState([4]);
-  const [bank, setBank] = useState(['UBA']);
-  const [currency, setCurrency] = useState(['USD']);
-  const [amount, setAmount] = useState([50000]);
+  const dispatch = useDispatch();
+  const isOverdraftLoading = useSelector(
+    (state) => state.zoho.isOverdraftLoading
+  );
+  const overdrafts = useSelector((state) => state.zoho.overdrafts);
 
-
+  useEffect(() => {
+    dispatch(getOverdrafts());
+  }, [dispatch]);
 
   return (
     <>
@@ -42,16 +44,16 @@ const Overdraft = () => {
             <thead className="bg-white border-blueGray-100 sticky top-0">
               <tr>
                 <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                  Name
+                  AccountName
                 </th>
                 <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                  Type
+                  Account Type
                 </th>
                 <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                  Number
+                  Account Number
                 </th>
                 <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                  Bank
+                  Bank Name
                 </th>
                 <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
                   Currency
@@ -64,34 +66,52 @@ const Overdraft = () => {
                 </th>
               </tr>
             </thead>
-            <thead>
-              <tr>
-                <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-                  {name}
-                </th>
-                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                  {type}
-                </td>
-                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                  {number}
-                </td>
-                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                  {bank}
-                </td>
-                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                  {currency}
-                </td>
-                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                  {amount}
-                </td>
-                <td className=" border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                  <div className="flex justify-start space-x-5">
-                    <Edit />
-                    <Delete />
-                  </div>
-                </td>
-              </tr>
-            </thead>
+            {!isOverdraftLoading && (
+              <tbody>
+                {overdrafts.map((overdraft, i) => (
+                  <tr>
+                    <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+                      {overdraft.accountName}
+                    </th>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                      {overdraft.accountType}
+                    </td>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                      {overdraft.accountNumber}
+                    </td>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                      {overdraft.bankName}
+                    </td>
+                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                      {overdraft.currency}
+                    </td>
+                    <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-black">
+                      {overdraft.currency != 'USD' ? (
+                        <span className="font-semibold text-sm text-black">
+                          &#8358;
+                        </span>
+                      ) : (
+                        <span className="font-semibold text-sm text-black">
+                          &#36;
+                        </span>
+                      )}
+                      <CurrencyFormat
+                        value={`${parseFloat(overdraft.amount)}`}
+                        displayType={'text'}
+                        thousandSeparator={true}
+                        decimalScale={2}
+                      />
+                    </td>
+                    <td className=" border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                      <div className="flex justify-start space-x-5">
+                        <Edit />
+                        <Delete />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            )}
           </table>
         </div>
       </div>

@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 
 const initialState = {
   isLoading: false,
-  isOverdraftIsLoading: false,
+  isOverdraftLoading: false,
   error: null,
   zohoAccessToken: '',
   zohoRefreshToken: '',
@@ -79,6 +79,26 @@ const createOverdraft = createAsyncThunk(
   }
 );
 
+const getOverdrafts = createAsyncThunk('/overdrafts', async () => {
+  try {
+    let accessToken = localStorage.getItem('accessToken')
+      ? JSON.parse(localStorage.getItem('accessToken'))
+      : null;
+    let options = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+    const res = await Axios.get('zoho/overdraft', options);
+
+    console.log(res.data.data);
+    return res.data.data;
+  } catch (error) {
+    throw error.response.data || error.message;
+  }
+});
+
 const zohoSlice = createSlice({
   name: 'zoho',
   initialState,
@@ -119,19 +139,29 @@ const zohoSlice = createSlice({
         state.error = action.error;
       })
       .addCase(createOverdraft.pending, (state, action) => {
-        state.isOverdraftIsLoading = true;
+        state.isOverdraftLoading = true;
       })
       .addCase(createOverdraft.fulfilled, (state, action) => {
-        state.isOverdraftIsLoading = false;
+        state.isOverdraftLoading = false;
         toast.success('Successful', { autoClose: 2000 });
       })
       .addCase(createOverdraft.rejected, (state, action) => {
-        state.isOverdraftIsLoading = false;
+        state.isOverdraftLoading = false;
         toast.error(action.error.message, { autoClose: 2000 });
+      })
+      .addCase(getOverdrafts.pending, (state, action) => {
+        state.isOverdraftLoading = true;
+      })
+      .addCase(getOverdrafts.fulfilled, (state, action) => {
+        state.isOverdraftLoading = false;
+        state.overdrafts = action.payload;
+      })
+      .addCase(getOverdrafts.rejected, (state, action) => {
+        state.isOverdraftLoading = false;
       });
   },
 });
 
-export { zoho, zohoRefresh, createOverdraft };
+export { zoho, zohoRefresh, createOverdraft, getOverdrafts };
 
 export default zohoSlice.reducer;

@@ -4,7 +4,8 @@ import { getBankAccounts } from '../redux/slices/forecast';
 import CurrencyInput from 'react-currency-input-field';
 import { useNavigate } from 'react-router-dom';
 import { withAuth } from '../hoc/withAuth';
-import { createOverdraft } from '../redux/slices/zoho';
+import { createOverdraft, getOverdrafts } from '../redux/slices/zoho';
+import { getUsers } from '../redux/slices/user';
 
 const Form = () => {
   const dispatch = useDispatch();
@@ -21,8 +22,8 @@ const Form = () => {
   const [amount, setAmount] = useState('');
   const [enableButton, setEnableButton] = useState('');
 
-  let isOverdraftIsLoading = useSelector(
-    (state) => state.zoho.isOverdraftIsLoading
+  let isOverdraftLoading = useSelector(
+    (state) => state.zoho.isOverdraftLoading
   );
 
   const isBankAccountsLoading = useSelector(
@@ -65,7 +66,7 @@ const Form = () => {
 
   const amountHandler = (e) => setAmount(e);
 
-  const submitOverdraft = (e) => {
+  const submitOverdraft = async (e) => {
     e.preventDefault();
     let data = {
       accountId,
@@ -87,7 +88,11 @@ const Form = () => {
       setAmount('');
       setShowModal(false);
       navigate('/overdraft');
+      dispatch(getOverdrafts());
+      dispatch(getUsers());
     });
+
+    // await
   };
 
   useEffect(() => {
@@ -261,9 +266,9 @@ const Form = () => {
                               : 'bg-red-200 rounded focus:outline-none disabled:opacity-75'
                           } `}
                           type="save"
-                          disabled={!enableButton || isOverdraftIsLoading}
+                          disabled={!enableButton || isOverdraftLoading}
                         >
-                          {isOverdraftIsLoading ? 'loading...' : 'save'}
+                          {isOverdraftLoading ? 'loading...' : 'save'}
                         </button>
                       </div>
                     </div>
