@@ -1,16 +1,20 @@
-import React, { useState } from "react";
-import Sidebar from "../components/Sidebar";
-import Form from "../components/Form";
-import Edit from "../components/Edit";
-import Delete from "../components/Delete";
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import Sidebar from '../components/Sidebar';
+import Form from '../components/Form';
+import Edit from '../components/Edit';
+import Delete from '../components/Delete';
+import { getBankAccounts } from '../redux/slices/forecast';
 
 const Overdraft = () => {
-  const [name, setName] = useState(["Chisom"]);
-  const [type, setType] = useState(["day"]);
+  const [name, setName] = useState(['Chisom']);
+  const [type, setType] = useState(['day']);
   const [number, setNumber] = useState([4]);
-  const [bank, setBank] = useState(["UBA"]);
-  const [currency, setCurrency] = useState(["USD"]);
+  const [bank, setBank] = useState(['UBA']);
+  const [currency, setCurrency] = useState(['USD']);
   const [amount, setAmount] = useState([50000]);
+
+
 
   return (
     <>
