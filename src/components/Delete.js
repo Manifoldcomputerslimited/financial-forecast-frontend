@@ -1,9 +1,21 @@
-import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { getOverdrafts, deleteOverdraft } from '../redux/slices/zoho';
 
-const Delete = () => {
+const Delete = (props) => {
+  const dispatch = useDispatch();
+
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const onDeleteOverdraft = async () => {
+    await dispatch(deleteOverdraft({ accountId: props.overdraft.accountId }));
+    setShowDeleteModal(false);
+
+    await dispatch(getOverdrafts());
+  };
+
   return (
     <>
       {showDeleteModal ? (
@@ -33,6 +45,7 @@ const Delete = () => {
                   <button
                     className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 mb-1"
                     type="submit"
+                    onClick={onDeleteOverdraft}
                   >
                     Yes
                   </button>
@@ -47,11 +60,11 @@ const Delete = () => {
 
       <div className="has-tooltip" onClick={() => setShowDeleteModal(true)}>
         <span className="tooltip rounded shadow-lg p-2 bg-gray-100 text-red-500 -mt-8">
-          delete overdraft{" "}
+          delete overdraft{' '}
         </span>
         <FontAwesomeIcon
           icon={faTrashAlt}
-          style={{ fontSize: 17, color: "red" }}
+          style={{ fontSize: 17, color: 'red' }}
         />
       </div>
     </>

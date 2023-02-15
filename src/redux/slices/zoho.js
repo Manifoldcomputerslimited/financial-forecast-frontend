@@ -99,6 +99,28 @@ const getOverdrafts = createAsyncThunk('/overdrafts', async () => {
   }
 });
 
+const deleteOverdraft = createAsyncThunk(
+  '/deleteOverdraft',
+  async ({ accountId }) => {
+    try {
+      let accessToken = localStorage.getItem('accessToken')
+        ? JSON.parse(localStorage.getItem('accessToken'))
+        : null;
+      let options = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      };
+      await Axios.delete(`/zoho/overdraft/${accountId}`, options);
+
+      // return res.data.data
+    } catch (error) {
+      throw error.response.data || error.message;
+    }
+  }
+);
+
 const zohoSlice = createSlice({
   name: 'zoho',
   initialState,
@@ -158,10 +180,16 @@ const zohoSlice = createSlice({
       })
       .addCase(getOverdrafts.rejected, (state, action) => {
         state.isOverdraftLoading = false;
+      })
+      .addCase(deleteOverdraft.fulfilled, (state, action) => {
+        toast.success('Deleted successfully', { autoClose: 2000 });
+      })
+      .addCase(deleteOverdraft.rejected, (state, action) => {
+        toast.error(action.error.message, { autoClose: 2000 });
       });
   },
 });
 
-export { zoho, zohoRefresh, createOverdraft, getOverdrafts };
+export { zoho, zohoRefresh, createOverdraft, getOverdrafts, deleteOverdraft };
 
 export default zohoSlice.reducer;

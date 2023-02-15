@@ -104,8 +104,8 @@ const Overdraft = () => {
                     </td>
                     <td className=" border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                       <div className="flex justify-start space-x-5">
-                        <Edit />
-                        <Delete />
+                        <Edit overdraft={overdraft} />
+                        <Delete overdraft={overdraft} />
                       </div>
                     </td>
                   </tr>
