@@ -93,7 +93,6 @@ const getOverdrafts = createAsyncThunk('/overdrafts', async () => {
     };
     const res = await Axios.get('zoho/overdraft', options);
 
-    console.log(res.data.data);
     return res.data.data;
   } catch (error) {
     throw error.response.data || error.message;
