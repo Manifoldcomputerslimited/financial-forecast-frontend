@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import CurrencyFormat from 'react-currency-format';
 import { useDispatch, useSelector } from 'react-redux';
 import Sidebar from '../components/Sidebar';
 import { getBankAccounts } from '../redux/slices/forecast';
@@ -111,7 +112,21 @@ const OpeningBalance = () => {
                               {bankAccount.currency}
                             </td>
                             <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                              {bankAccount.balance}
+                              {bankAccount.currency != 'USD' ? (
+                                <span className="font-semibold text-sm text-white">
+                                  &#8358;
+                                </span>
+                              ) : (
+                                <span className="font-semibold text-sm text-white">
+                                  &#36;
+                                </span>
+                              )}{' '}
+                              <CurrencyFormat
+                                value={parseFloat(bankAccount.balance)}
+                                displayType={'text'}
+                                thousandSeparator={true}
+                                decimalScale={2}
+                              />
                             </td>
                           </tr>
                         ))}
