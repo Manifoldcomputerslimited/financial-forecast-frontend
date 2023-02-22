@@ -60,18 +60,18 @@ const OpeningBalance = () => {
                         >
                           Account Type
                         </th>
-                        <th
+                        {/* <th
                           scope="col"
                           className="py-3 px-6 text-xs font-medium tracking-wider text-left text-white uppercase dark:text-white"
                         >
                           Account Number
-                        </th>
-                        <th
+                        </th> */}
+                        {/* <th
                           scope="col"
                           className="py-3 px-6 text-xs font-medium tracking-wider text-left text-white uppercase dark:text-white"
                         >
                           Bank Name
-                        </th>
+                        </th> */}
                         <th
                           scope="col"
                           className="py-3 px-6 text-xs font-medium tracking-wider text-left text-white uppercase dark:text-white"
@@ -83,6 +83,12 @@ const OpeningBalance = () => {
                           className="py-3 px-6 text-xs font-medium tracking-wider text-left text-white uppercase dark:text-white"
                         >
                           Balance
+                        </th>
+                        <th
+                          scope="col"
+                          className="py-3 px-6 text-xs font-medium tracking-wider text-left text-white uppercase dark:text-white"
+                        >
+                          Overdraft
                         </th>
                       </tr>
                     </thead>
@@ -102,12 +108,12 @@ const OpeningBalance = () => {
                             <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
                               {bankAccount.accountType}
                             </td>
-                            <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {/* <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
                               {bankAccount.accountNumber}
-                            </td>
-                            <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            </td> */}
+                            {/* <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
                               {bankAccount.bankName}
-                            </td>
+                            </td> */}
                             <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
                               {bankAccount.currency}
                             </td>
@@ -123,6 +129,23 @@ const OpeningBalance = () => {
                               )}{' '}
                               <CurrencyFormat
                                 value={parseFloat(bankAccount.balance)}
+                                displayType={'text'}
+                                thousandSeparator={true}
+                                decimalScale={2}
+                              />
+                            </td>
+                            <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                              {bankAccount.currency != 'USD' ? (
+                                <span className="font-semibold text-sm text-white">
+                                  &#8358;
+                                </span>
+                              ) : (
+                                <span className="font-semibold text-sm text-white">
+                                  &#36;
+                                </span>
+                              )}{' '}
+                              <CurrencyFormat
+                                value={parseFloat(bankAccount.overdraftBalance)}
                                 displayType={'text'}
                                 thousandSeparator={true}
                                 decimalScale={2}
