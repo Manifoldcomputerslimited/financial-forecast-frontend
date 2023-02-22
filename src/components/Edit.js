@@ -7,9 +7,7 @@ import { withAuth } from '../hoc/withAuth';
 import CurrencyInput from 'react-currency-input-field';
 import { updateOverdraft, getOverdrafts } from '../redux/slices/zoho';
 import { getUsers } from '../redux/slices/user';
-import {
-  resynApplication,
-} from '../redux/slices/forecast';
+import { resynApplication } from '../redux/slices/forecast';
 
 const Edit = (props) => {
   const dispatch = useDispatch();
@@ -58,12 +56,12 @@ const Edit = (props) => {
   return (
     <>
       <div className="has-tooltip" onClick={() => setShowEditModal(true)}>
-        <span className="tooltip rounded shadow-lg p-2 bg-gray-100 text-red-700 -mt-8">
+        <span className="tooltip rounded shadow-lg p-2 bg-gray-100 text-green-700 -mt-8">
           edit overdraft
         </span>
         <FontAwesomeIcon
           icon={faPencil}
-          style={{ fontSize: 17, color: 'red' }}
+          style={{ fontSize: 17, color: 'green' }}
         />
       </div>
       {showEditModal ? (
