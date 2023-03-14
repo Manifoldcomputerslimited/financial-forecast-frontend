@@ -38,46 +38,43 @@ const Rate = () => {
             <div className="overflow-x-auto shadow-md sm:rounded-lg">
               <div className="inline-block min-w-full align-middle">
                 <div className="overflow-hidden ">
-                  <table className="min-w-full divide-y divide-gray-200 table-fixed dark:divide-pink-700">
-                    <thead className="bg-gray-100 dark:bg-pink-700 sticky">
+                  <table className="min-w-full divide-y divide-gray-200 table-fixed dark:gray-400">
+                    <thead className="bg-gray-100 dark:bg-gray-400 sticky">
                       <tr>
                         <th
                           scope="col"
-                          className="py-3 px-6 text-xs font-medium tracking-wider text-left text-white uppercase dark:text-white"
+                          className="py-3 px-6 text-xs font-medium tracking-wider text-left text-black uppercase dark:text-black"
                         >
                           ID
                         </th>
                         <th
                           scope="col"
-                          className="py-3 px-6 text-xs font-medium tracking-wider text-left text-white uppercase dark:text-white"
+                          className="py-3 px-6 text-xs font-medium tracking-wider text-left text-black uppercase dark:text-black"
                         >
                           Rate
                         </th>
                         <th
                           scope="col"
-                          className="py-3 px-6 text-xs font-medium tracking-wider text-left text-white uppercase dark:text-white"
+                          className="py-3 px-6 text-xs font-medium tracking-wider text-left text-black uppercase dark:text-black"
                         >
                           Date
                         </th>
-                        {/* <th scope="col" className="p-4">
-                          <span className="sr-only">Edit</span>
-                        </th> */}
                       </tr>
                     </thead>
                     {!isExchangeRateListLoading && (
-                      <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+                      <tbody className="bg-white divide-y divide-gray-300 dark:bg-gray-300 dark:divide-gray-300">
                         {rates.map((rate, i) => (
                           <tr
                             key={rate.id}
-                            className="hover:bg-gray-100 dark:hover:bg-gray-700"
+                            className="hover:bg-gray-100 dark:hover:bg-white-400"
                           >
-                            <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-black">
                               {i + 1}
                             </td>
-                            <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">
+                            <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-black">
                               {rate.rate}
                             </td>
-                            <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-black">
                               {dayjs(rate.createdAt).format('DD-MMM-YYYY')}
                             </td>
                           </tr>
