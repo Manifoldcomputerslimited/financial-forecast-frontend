@@ -48,13 +48,21 @@ const Form = () => {
     setEnableButton(false);
     setAmount('');
 
+    if (e.target.value === 'null') {
+      setAccountId('');
+      setAccountName('');
+      setAccountType('');
+      setBalance('');
+      setSelectedValue('');
+      setBankName('');
+      setCurrency('');
+      setAmount('');
+      return;
+    }
+
     let bankAccount = bankAccounts.filter(function (bankAccount) {
       return bankAccount.accountId == e.target.value;
     });
-
-    if (bankAccount[0].balance < 0) {
-      setEnableButton(true);
-    }
 
     setAccountId(e.target.value);
     setAccountName(bankAccount[0].accountName);
@@ -65,7 +73,13 @@ const Form = () => {
     setCurrency(bankAccount[0].currency);
   };
 
-  const amountHandler = (e) => setAmount(e);
+  const amountHandler = (e) => {
+    setEnableButton(false);
+    if (e != undefined && accountId) {
+      setEnableButton(true);
+    }
+    setAmount(e);
+  };
 
   const submitOverdraft = async (e) => {
     e.preventDefault();
@@ -162,7 +176,7 @@ const Form = () => {
                               value={selectedValue}
                               onChange={selectedValueHandler}
                             >
-                              <option>Select an option</option>
+                              <option value="null">Select an option</option>
 
                               {!isBankAccountsLoading
                                 ? bankAccounts.map((bankAccount) => {
