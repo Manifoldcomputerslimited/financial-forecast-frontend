@@ -39,91 +39,73 @@ const OpeningBalance = () => {
             <div className="overflow-x-auto shadow-md sm:rounded-lg">
               <div className="inline-block min-w-full align-middle">
                 <div className="overflow-hidden ">
-                  <table className="min-w-full divide-y divide-gray-200 table-fixed dark:divide-pink-700">
-                    <thead className="bg-gray-100 dark:bg-pink-700 sticky">
+                  <table className="min-w-full divide-y divide-gray-200 table-fixed dark:gray-400">
+                    <thead className="bg-gray-100 dark:bg-gray-400 sticky">
                       <tr>
                         <th
                           scope="col"
-                          className="py-3 px-6 text-xs font-medium tracking-wider text-left text-white uppercase dark:text-white"
+                          className="py-3 px-6 text-xs font-medium tracking-wider text-left text-black uppercase dark:text-black"
                         >
                           ID
                         </th>
                         <th
                           scope="col"
-                          className="py-3 px-6 text-xs font-medium tracking-wider text-left text-white uppercase dark:text-white"
+                          className="py-3 px-6 text-xs font-medium tracking-wider text-left text-black uppercase dark:text-black"
                         >
                           Account Name
                         </th>
                         <th
                           scope="col"
-                          className="py-3 px-6 text-xs font-medium tracking-wider text-left text-white uppercase dark:text-white"
+                          className="py-3 px-6 text-xs font-medium tracking-wider text-left text-black uppercase dark:text-black"
                         >
                           Account Type
                         </th>
-                        {/* <th
-                          scope="col"
-                          className="py-3 px-6 text-xs font-medium tracking-wider text-left text-white uppercase dark:text-white"
-                        >
-                          Account Number
-                        </th> */}
-                        {/* <th
-                          scope="col"
-                          className="py-3 px-6 text-xs font-medium tracking-wider text-left text-white uppercase dark:text-white"
-                        >
-                          Bank Name
-                        </th> */}
                         <th
                           scope="col"
-                          className="py-3 px-6 text-xs font-medium tracking-wider text-left text-white uppercase dark:text-white"
+                          className="py-3 px-6 text-xs font-medium tracking-wider text-left text-black uppercase dark:text-black"
                         >
                           Currency
                         </th>
                         <th
                           scope="col"
-                          className="py-3 px-6 text-xs font-medium tracking-wider text-left text-white uppercase dark:text-white"
+                          className="py-3 px-6 text-xs font-medium tracking-wider text-left text-black uppercase dark:text-black"
                         >
                           Balance
                         </th>
                         <th
                           scope="col"
-                          className="py-3 px-6 text-xs font-medium tracking-wider text-left text-white uppercase dark:text-white"
+                          className="py-3 px-6 text-xs font-medium tracking-wider text-left text-black uppercase dark:text-black"
                         >
                           Overdraft
                         </th>
                       </tr>
                     </thead>
                     {!isBankAccountsLoading && (
-                      <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+                      <tbody className="bg-white divide-y divide-gray-300 dark:bg-gray-300 dark:divide-gray-300">
                         {bankAccounts.map((bankAccount, i) => (
                           <tr
                             key={bankAccount.id}
-                            className="hover:bg-gray-100 dark:hover:bg-gray-700"
+                            className="hover:bg-gray-100 dark:hover:bg-white-400"
                           >
-                            <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            <td className="py-4 px-6 text-sm font-medium text-black whitespace-nowrap dark:text-black">
                               {i + 1}
                             </td>
-                            <td className="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">
+                            <td className="py-4 px-6 text-sm font-medium text-black whitespace-nowrap dark:text-black">
                               {bankAccount.accountName}
                             </td>
-                            <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            <td className="py-4 px-6 text-sm font-medium text-black whitespace-nowrap dark:text-black">
                               {bankAccount.accountType}
                             </td>
-                            {/* <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                              {bankAccount.accountNumber}
-                            </td> */}
-                            {/* <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                              {bankAccount.bankName}
-                            </td> */}
-                            <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            <td className="py-4 px-6 text-sm font-medium text-black whitespace-nowrap dark:text-black">
                               {bankAccount.currency}
                             </td>
-                            <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            <td className="py-4 px-6 text-sm font-medium text-black whitespace-nowrap dark:text-black">
                               {bankAccount.currency != 'USD' ? (
-                                <span className="font-semibold text-sm text-white">
+                                <span className="font-semibold text-sm text-black">
                                   &#8358;
                                 </span>
                               ) : (
-                                <span className="font-semibold text-sm text-white">
+                                <span className="font-semibold text-sm text-black">
                                   &#36;
                                 </span>
                               )}{' '}
@@ -134,13 +116,13 @@ const OpeningBalance = () => {
                                 decimalScale={2}
                               />
                             </td>
-                            <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            <td className="py-4 px-6 text-sm font-medium text-black whitespace-nowrap dark:text-black">
                               {bankAccount.currency != 'USD' ? (
-                                <span className="font-semibold text-sm text-white">
+                                <span className="font-semibold text-sm text-black">
                                   &#8358;
                                 </span>
                               ) : (
-                                <span className="font-semibold text-sm text-white">
+                                <span className="font-semibold text-sm text-black">
                                   &#36;
                                 </span>
                               )}{' '}

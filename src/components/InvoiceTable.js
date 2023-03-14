@@ -43,16 +43,22 @@ const InvoiceTable = (props) => {
                     Customer Name
                   </th>
                   <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                    Naira Balance
+                  </th>
+                  <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                    Dollar Balance
+                  </th>
+                  <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
                     Balance Due
+                  </th>
+                  <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                    Due Date
                   </th>
                   <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
                     Currency
                   </th>
                   <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
                     Status
-                  </th>
-                  <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                    Due Date
                   </th>
                 </tr>
               </thead>
@@ -74,14 +80,38 @@ const InvoiceTable = (props) => {
                         {invoice.customerName}
                       </td>
                       <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        {invoice.currencyCode == 'NGN' ? (
+                          <>
+                            <span className="font-semibold text-sm">
+                              &#8358;
+                            </span>{' '}
+                            <CurrencyFormat
+                              value={parseFloat(invoice.balance)}
+                              displayType={'text'}
+                              thousandSeparator={true}
+                              decimalScale={2}
+                            />
+                          </>
+                        ) : null}
+                      </td>
+                      <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        {invoice.currencyCode == 'USD' ? (
+                          <>
+                            <span className="font-semibold text-sm">&#36;</span>{' '}
+                            <CurrencyFormat
+                              value={parseFloat(invoice.balance)}
+                              displayType={'text'}
+                              thousandSeparator={true}
+                              decimalScale={2}
+                            />
+                          </>
+                        ) : null}
+                      </td>
+                      <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                         {invoice.currencyCode != 'USD' ? (
-                          <span className="font-semibold text-sm text-red-700">
-                            &#8358;
-                          </span>
+                          <span className="font-semibold text-sm">&#8358;</span>
                         ) : (
-                          <span className="font-semibold text-sm text-red-700">
-                            &#36;
-                          </span>
+                          <span className="font-semibold text-sm">&#36;</span>
                         )}{' '}
                         <CurrencyFormat
                           value={parseFloat(invoice.balance)}
@@ -92,15 +122,15 @@ const InvoiceTable = (props) => {
                       </td>
                       <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                         <i className="fas fa-arrow-up text-emerald-500 mr-4"></i>
+                        {invoice.dueDate}
+                      </td>
+                      <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        <i className="fas fa-arrow-up text-emerald-500 mr-4"></i>
                         {invoice.currencyCode}
                       </td>
                       <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                         <i className="fas fa-arrow-up text-emerald-500 mr-4"></i>
                         {invoice.status}
-                      </td>
-                      <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                        <i className="fas fa-arrow-up text-emerald-500 mr-4"></i>
-                        {invoice.dueDate}
                       </td>
                     </tr>
                     // </div>
