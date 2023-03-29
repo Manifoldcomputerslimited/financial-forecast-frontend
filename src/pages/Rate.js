@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Sidebar from '../components/Sidebar';
 import { getExchangeRates } from '../redux/slices/forecast';
+import { withAuth } from '../hoc/withAuth';
 
 const Rate = () => {
   const dispatch = useDispatch();
@@ -92,4 +93,4 @@ const Rate = () => {
   );
 };
 
-export default Rate;
+export default  withAuth(true)(Rate);
