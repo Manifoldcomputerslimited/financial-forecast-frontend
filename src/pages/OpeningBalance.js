@@ -3,6 +3,7 @@ import CurrencyFormat from 'react-currency-format';
 import { useDispatch, useSelector } from 'react-redux';
 import Sidebar from '../components/Sidebar';
 import { getBankAccounts } from '../redux/slices/forecast';
+import { withAuth } from '../hoc/withAuth';
 
 const OpeningBalance = () => {
   const dispatch = useDispatch();
@@ -148,4 +149,4 @@ const OpeningBalance = () => {
   );
 };
 
-export default OpeningBalance;
+export default withAuth(true)(OpeningBalance);
