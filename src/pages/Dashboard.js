@@ -65,12 +65,8 @@ const Dashboard = (props) => {
   let { forecastNumber, forecastPeriod } = useSelector(
     (state) => state.forecast.forecastInfo
   );
-  let {
-    openingBalance,
-    totalCashInflow,
-    totalCashOutflow,
-    closingBalance,
-  } = useSelector((state) => state.forecast.report);
+  let { openingBalance, totalCashInflow, totalCashOutflow, closingBalance } =
+    useSelector((state) => state.forecast.report);
   let invoices = useSelector((state) => state.forecast.invoices);
   let bills = useSelector((state) => state.forecast.bills);
   let user = useSelector((state) => state.auth.user);
@@ -410,7 +406,7 @@ const Dashboard = (props) => {
                                 process.env.REACT_APP_ZOHO_BASE_URL +
                                 '/' +
                                 process.env.REACT_APP_ORGANIZATION_ID +
-                                '/salesorders/' +
+                                '#/salesorders/' +
                                 saleDetail.saleOrderId
                               }
                               class="text-blue-500 underline"
@@ -800,7 +796,20 @@ const Dashboard = (props) => {
                       <div className="relative px-8 flex-auto">
                         <div className="relative w-12/12">
                           <p className="my-4 text-slate-500 text-lg leading-relaxed">
-                            Purchase detail for {purchaseDetail.purchaseOrderId}
+                            Purchase detail for
+                            <a
+                              target="_blank"
+                              href={
+                                process.env.REACT_APP_ZOHO_BASE_URL +
+                                '/' +
+                                process.env.REACT_APP_ORGANIZATION_ID +
+                                '#/purchaseorders/' +
+                                purchaseDetail.purchaseOrderId
+                              }
+                              class="text-blue-500 underline"
+                            >
+                              {purchaseDetail.purchaseOrderId}
+                            </a>
                           </p>
 
                           <div className="mb-4 md:flex md:justify-between">
@@ -1151,22 +1160,22 @@ const Dashboard = (props) => {
                   setInvoiceDetail={setInvoiceDetail}
                 />
 
-                <BillTable
-                  setShowBillDetailModal={setShowBillDetailModal}
-                  setBillDetail={setBillDetail}
+                <SaleTable
+                  setShowSaleDetailModal={setShowSaleDetailModal}
+                  setSaleDetail={setSaleDetail}
                 />
               </div>
 
               <div className="flex flex-wrap mt-4">
-                {/* <SaleTable
-                  setShowSaleDetailModal={setShowSaleDetailModal}
-                  setSaleDetail={setSaleDetail}
-                /> */}
+                <BillTable
+                  setShowBillDetailModal={setShowBillDetailModal}
+                  setBillDetail={setBillDetail}
+                />
 
-                {/* <PurchaseTable
+                <PurchaseTable
                   setShowPurchaseDetailModal={setShowPurchaseDetailModal}
                   setPurchaseDetail={setPurchaseDetail}
-                /> */}
+                />
               </div>
 
               <footer className="block py-4">
