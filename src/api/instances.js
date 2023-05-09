@@ -59,8 +59,12 @@ instance.interceptors.request.use(async req => {
         if (!user) {
             await deleteZohoToken();
         }
-        const isUserExpired = accessToken ? (dayjs.unix(user.exp).diff(dayjs()) < 1) : null;
-        let isZohoTokenExpired = (dayjs.unix(zohoTokenExpiry).diff(dayjs()) < 1);
+        let isUserExpired = (user.exp - dayjs().unix()) < 1 ? true : false; 
+        let isZohoTokenExpired = dayjs(zohoTokenExpiry).unix() - dayjs().unix() < 1 ? true : false;
+
+        console.log('user expired', isUserExpired);
+        console.log('time to expire', dayjs(zohoTokenExpiry).unix() - dayjs().unix());
+        console.log('zoho expired', isZohoTokenExpired);
 
         if ((!isUserExpired && isUserExpired !== null) && (!isZohoTokenExpired && isZohoTokenExpired !== null)) {
             req.headers['Authorization'] = `Bearer ${accessToken}`
