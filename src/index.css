@@ -3,15 +3,87 @@
 @tailwind utilities;
 
 @layer base {
-    body {
-        font-family: 'Open Sans', sans-serif;
-    }
+  body {
+    color: #383f4d;
+    line-height: 1.5;
+    font-size: 14px;
+    font-family: "Open Sans", sans-serif;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+  /* 
+    =================
+    Table
+    =====================
+    */
+
+  .table_container {
+    max-width: 750px;
+    /* max-height: 500px; */
+    margin: 0 auto;
+    overflow: auto;
+  }
+
+  .table {
+    width: 100%;
+    border-spacing: 0;
+  }
+
+  caption {
+    font-style: italic;
+    font-size: 90%;
+    margin-bottom: 10px;
+  }
+
+  .table th {
+    background: #fff;
+    padding: 8px 10px;
+    border-bottom: 1px solid #1a1a1a;
+    font-weight: bold;
+    text-align: left;
+  }
+
+  .table th.up {
+    background-image: url("./assets/up_arrow.png");
+  }
+  .table th.down {
+    background-image: url("./assets/down_arrow.png");
+  }
+  .table th.default {
+    background-image: url("./assets/default.png");
+  }
+  th.up,
+  th.default,
+  th.down {
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-position: center right;
+  }
+
+  .table td {
+    border-top: 1px solid #ddd;
+    padding: 8px 20px;
+  }
+
+  .table tbody tr:first-child td {
+    border-top: none;
+  }
+
+  .table tbody tr:nth-child(n) td {
+    background: #eff0f0;
+  }
+
+  .table tbody tr:nth-child(2n) td {
+    background: #fff;
+  }
 }
 
 .tooltip {
-    @apply invisible absolute;
+  @apply invisible absolute;
 }
 
 .has-tooltip:hover .tooltip {
-    @apply visible z-50
+  @apply visible z-50;
 }
