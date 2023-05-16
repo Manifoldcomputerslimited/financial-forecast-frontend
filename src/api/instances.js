@@ -61,42 +61,20 @@ instance.interceptors.request.use(async req => {
         }
         let isUserExpired = (user.exp - dayjs().unix()) < 1 ? true : false; 
         let isZohoTokenExpired = dayjs(zohoTokenExpiry).unix() - dayjs().unix() < 1 ? true : false;
-
-        console.log('user expired', isUserExpired);
-        console.log('time to expire', dayjs(zohoTokenExpiry).unix() - dayjs().unix());
-        console.log('zoho expired', isZohoTokenExpired);
-
+      
         if ((!isUserExpired && isUserExpired !== null) && (!isZohoTokenExpired && isZohoTokenExpired !== null)) {
             req.headers['Authorization'] = `Bearer ${accessToken}`
             return req;
         }
 
         if (isUserExpired) {
-            await deleteToken();
-
-            const response = await axios.post(`${process.env.REACT_APP_MANIFOLD_API_URL}/token/refresh`, {
-                refreshToken: refreshToken
-            });
-
-            await setToken(response.data.data.accessToken);
-
-            req.headers.Authorization = `Bearer ${response.data.data.accessToken}`
+            localStorage.clear();
+            window.location.href = "/login";
         }
 
         if (isZohoTokenExpired) {
-            await deleteZohoToken();
-
-            const options = {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${accessToken}`
-                }
-            }
-
-            const response = await axios.get(`${process.env.REACT_APP_MANIFOLD_API_URL}/zoho/token/refresh`, options);
-
-
-            await setZohoToken(response.data.data);
+            localStorage.clear();
+            window.location.href = "/login";
         }
         req.headers['Authorization'] = `Bearer ${accessToken}`
         return req;
