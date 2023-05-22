@@ -12,7 +12,7 @@ const TableHead = ({ columns, handleSorting }) => {
   };
 
   return (
-    <thead>
+    <thead className="bg-gray-100 dark:bg-gray-400 sticky top-0">
       <tr>
         {columns.map(({ label, accessor, sortable }) => {
           const cl = sortable

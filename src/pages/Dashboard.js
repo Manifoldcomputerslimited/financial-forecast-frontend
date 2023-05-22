@@ -1,36 +1,36 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import CurrencyFormat from 'react-currency-format';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import CurrencyInput from 'react-currency-input-field';
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import CurrencyFormat from "react-currency-format";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import CurrencyInput from "react-currency-input-field";
 import {
   Navigate,
   useSearchParams,
   useNavigate,
   NavLink,
-} from 'react-router-dom';
-import { InfinitySpin } from 'react-loader-spinner';
+} from "react-router-dom";
+import { InfinitySpin } from "react-loader-spinner";
 
-import Sidebar from '../components/Sidebar';
-import Navbar from '../components/Navbar';
-import LineChart from '../components/LineChart';
-import BarChart from '../components/BarChart';
-import dayjs from 'dayjs';
-import { zoho } from '../redux/slices/zoho';
-import { logout, getUser } from '../redux/slices/auth';
-import { generateReport } from '../redux/slices/forecast';
+import Sidebar from "../components/Sidebar";
+import Navbar from "../components/Navbar";
+import LineChart from "../components/LineChart";
+import BarChart from "../components/BarChart";
+import dayjs from "dayjs";
+import { zoho } from "../redux/slices/zoho";
+import { logout, getUser } from "../redux/slices/auth";
+import { generateReport } from "../redux/slices/forecast";
 
 import {
   faWallet,
   faGem,
   faReceipt,
   faFileInvoice,
-} from '@fortawesome/free-solid-svg-icons';
-import { withAuth } from '../hoc/withAuth';
-import InvoiceTable from '../components/InvoiceTable';
-import BillTable from '../components/BillTable';
-import SaleTable from '../components/SaleTable';
-import PurchaseTable from '../components/PurchaseTable';
+} from "@fortawesome/free-solid-svg-icons";
+import { withAuth } from "../hoc/withAuth";
+import BillTable from "../components/BillTable";
+import SaleTable from "../components/SaleTable";
+import PurchaseTable from "../components/PurchaseTable";
+import InvoiceTable from "../components/InvoiceTable";
 
 const Dashboard = (props) => {
   let [searchParams, setSearchParams] = useSearchParams(props);
@@ -38,14 +38,15 @@ const Dashboard = (props) => {
   let [zohoGrant, setZohoGrant] = useState(false);
   let [isLoading, setIsLoading] = useState(true);
   let [showInvoiceDetailModal, setShowInvoiceDetailModal] = useState(false);
-  let [invoiceDetail, setInvoiceDetail] = useState('');
+  let [invoiceDetail, setInvoiceDetail] = useState("");
   let [showSaleDetailModal, setShowSaleDetailModal] = useState(false);
-  let [saleDetail, setSaleDetail] = useState('');
+  let [saleDetail, setSaleDetail] = useState("");
   let [showBillDetailModal, setShowBillDetailModal] = useState(false);
-  let [billDetail, setBillDetail] = useState('');
+  let [billDetail, setBillDetail] = useState("");
   let [showPurchaseDetailModal, setShowPurchaseDetailModal] = useState(false);
-  let [purchaseDetail, setPurchaseDetail] = useState('');
-  let [code, setCode] = useState('');
+  let [purchaseDetail, setPurchaseDetail] = useState("");
+
+  let [code, setCode] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const zohoLoading = useSelector((state) => state.zoho.isLoading);
@@ -68,36 +69,133 @@ const Dashboard = (props) => {
   let { openingBalance, totalCashInflow, totalCashOutflow, closingBalance } =
     useSelector((state) => state.forecast.report);
   let invoices = useSelector((state) => state.forecast.invoices);
+  let sales = useSelector((state) => state.forecast.sales);
   let bills = useSelector((state) => state.forecast.bills);
+  let purchases = useSelector((state) => state.forecast.purchases);
   let user = useSelector((state) => state.auth.user);
-  let zohoAuthenticated = localStorage.getItem('zohoAuthenticated')
-    ? localStorage.getItem('zohoAuthenticated')
+  let zohoAuthenticated = localStorage.getItem("zohoAuthenticated")
+    ? localStorage.getItem("zohoAuthenticated")
     : false;
   let { selectedPeriod } = useSelector(
     (state) => state.forecast.forecastDropdown
   );
 
-  useEffect(() => {
+  const invoiceColumns = [
+    { label: "#", accessor: "id", sortable: true, sortbyOrder: "asc" },
+    { label: "Invoice No.", accessor: "invoiceNumber", sortable: true },
+    { label: "Customer Name", accessor: "customerName", sortable: true },
+    { label: "Naira Balance", accessor: "nairaBalance", sortable: false },
+    { label: "Dollar Balance", accessor: "dollarBalance", sortable: false },
+    { label: "Balance Due", accessor: "balance", sortable: true },
+    {
+      label: "Due Date",
+      accessor: "dueDate",
+      sortable: true,
+    },
+    {
+      label: "Currency",
+      accessor: "currencyCode",
+      sortable: true,
+    },
+    {
+      label: "Status",
+      accessor: "status",
+      sortable: true,
+    },
+  ];
 
+  const saleColumns = [
+    { label: "#", accessor: "id", sortable: true, sortbyOrder: "asc" },
+    { label: "Sale ID", accessor: "salesOrderNumber", sortable: true },
+    { label: "Customer Name", accessor: "customerName", sortable: true },
+    { label: "Naira Balance", accessor: "nairaBalance", sortable: false },
+    { label: "Dollar Balance", accessor: "dollarBalance", sortable: false },
+    { label: "Balance Due", accessor: "balance", sortable: true },
+    {
+      label: "Shipment Date",
+      accessor: "shipmentDate",
+      sortable: true,
+    },
+    {
+      label: "Currency",
+      accessor: "currencyCode",
+      sortable: true,
+    },
+    {
+      label: "Status",
+      accessor: "status",
+      sortable: true,
+    },
+  ];
+
+  const billColumns = [
+    { label: "#", accessor: "id", sortable: true, sortbyOrder: "asc" },
+    { label: "Bill ID", accessor: "refrenceNumber", sortable: true },
+    { label: "Vendor Name", accessor: "vendorName", sortable: true },
+    { label: "Naira Balance", accessor: "nairaBalance", sortable: false },
+    { label: "Dollar Balance", accessor: "dollarBalance", sortable: false },
+    { label: "Balance Due", accessor: "balance", sortable: true },
+    {
+      label: "Due Date",
+      accessor: "dueDate",
+      sortable: true,
+    },
+    {
+      label: "Currency",
+      accessor: "currencyCode",
+      sortable: true,
+    },
+    {
+      label: "Status",
+      accessor: "status",
+      sortable: true,
+    },
+  ];
+
+  const purchaseColumns = [
+    { label: "#", accessor: "id", sortable: true, sortbyOrder: "asc" },
+    { label: "Purchase ID", accessor: "purchaseOrderNumber", sortable: true },
+    { label: "Vendor Name", accessor: "vendorName", sortable: true },
+    { label: "Naira Balance", accessor: "nairaBalance", sortable: false },
+    { label: "Dollar Balance", accessor: "dollarBalance", sortable: false },
+    { label: "Balance Due", accessor: "balance", sortable: true },
+    {
+      label: "Delivery Date",
+      accessor: "deliveryDate",
+      sortable: true,
+    },
+    {
+      label: "Currency",
+      accessor: "currencyCode",
+      sortable: true,
+    },
+    {
+      label: "Status",
+      accessor: "status",
+      sortable: true,
+    },
+  ];
+
+  useEffect(() => {
     dispatch(getUser());
-    if (searchParams.get('error') === 'access_denied') {
-      navigate('/login');
+    if (searchParams.get("error") === "access_denied") {
+      navigate("/login");
       dispatch(logout());
       return;
     }
 
-    if (!zohoAuthenticated && searchParams.get('code')) {
+    if (!zohoAuthenticated && searchParams.get("code")) {
       setZohoGrant(true);
-      setCode(searchParams.get('code'));
-      dispatch(zoho({ code: searchParams.get('code') }));
+      setCode(searchParams.get("code"));
+      dispatch(zoho({ code: searchParams.get("code") }));
 
       return;
     }
 
     if (!zohoAuthenticated && isAuthenticated) {
-      dispatch(zoho({ code: '' }));
+      dispatch(zoho({ code: "" }));
     }
-    if (localStorage.getItem('zohoAccessToken')) {
+    if (localStorage.getItem("zohoAccessToken")) {
       if (zohoAuthenticated && isAuthenticated && !isLoading) {
         dispatch(
           generateReport({ id: selectedPeriod, forecastNumber, forecastPeriod })
@@ -107,7 +205,7 @@ const Dashboard = (props) => {
 
     setIsLoading(false);
     setZohoGrant(true);
-  }, [zohoGrant, searchParams, localStorage.getItem('zohoAccessToken')]);
+  }, [zohoGrant, searchParams, localStorage.getItem("zohoAccessToken")]);
 
   return (
     <>
@@ -195,14 +293,14 @@ const Dashboard = (props) => {
                       <div className="relative px-8 flex-auto">
                         <div className="relative w-12/12">
                           <p className="my-4 text-slate-500 text-lg leading-relaxed">
-                            Invoice detail for{' '}
+                            Invoice detail for{" "}
                             <a
                               target="_blank"
                               href={
                                 process.env.REACT_APP_ZOHO_BASE_URL +
-                                '/' +
+                                "/" +
                                 process.env.REACT_APP_ORGANIZATION_ID +
-                                '#/invoices/' +
+                                "#/invoices/" +
                                 invoiceDetail.invoiceId
                               }
                               class="text-blue-500 underline"
@@ -221,7 +319,7 @@ const Dashboard = (props) => {
                                 type="text"
                                 name="email"
                                 value={invoiceDetail.customerName}
-                                style={{ transition: 'all .15s ease' }}
+                                style={{ transition: "all .15s ease" }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                               />
                             </div>
@@ -237,7 +335,7 @@ const Dashboard = (props) => {
                                 type="text"
                                 name="email"
                                 value={invoiceDetail.refrenceNumber}
-                                style={{ transition: 'all .15s ease' }}
+                                style={{ transition: "all .15s ease" }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                               />
                             </div>
@@ -253,7 +351,7 @@ const Dashboard = (props) => {
                                 type="text"
                                 name="email"
                                 value={invoiceDetail.invoiceNumber}
-                                style={{ transition: 'all .15s ease' }}
+                                style={{ transition: "all .15s ease" }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                               />
                             </div>
@@ -266,7 +364,7 @@ const Dashboard = (props) => {
                                 type="text"
                                 name="email"
                                 value={invoiceDetail.status}
-                                style={{ transition: 'all .15s ease' }}
+                                style={{ transition: "all .15s ease" }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                               />
                             </div>
@@ -280,13 +378,13 @@ const Dashboard = (props) => {
                               <CurrencyInput
                                 intlConfig={{
                                   locale:
-                                    invoiceDetail.currencyCode != 'USD'
-                                      ? 'en-NG'
-                                      : 'en-US',
+                                    invoiceDetail.currencyCode != "USD"
+                                      ? "en-NG"
+                                      : "en-US",
                                   currency:
-                                    invoiceDetail.currencyCode != 'USD'
-                                      ? 'NGN'
-                                      : 'USD',
+                                    invoiceDetail.currencyCode != "USD"
+                                      ? "NGN"
+                                      : "USD",
                                 }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                                 id="innvoice-balance"
@@ -323,9 +421,9 @@ const Dashboard = (props) => {
                                 type="text"
                                 name="email"
                                 value={dayjs(invoiceDetail.date).format(
-                                  'DD-MMM-YYYY'
+                                  "DD-MMM-YYYY"
                                 )}
-                                style={{ transition: 'all .15s ease' }}
+                                style={{ transition: "all .15s ease" }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                               />
                             </div>
@@ -338,9 +436,9 @@ const Dashboard = (props) => {
                                 type="text"
                                 name="email"
                                 value={dayjs(invoiceDetail.dueDate).format(
-                                  'DD-MMM-YYYY'
+                                  "DD-MMM-YYYY"
                                 )}
-                                style={{ transition: 'all .15s ease' }}
+                                style={{ transition: "all .15s ease" }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                               />
                             </div>
@@ -405,9 +503,9 @@ const Dashboard = (props) => {
                               target="_blank"
                               href={
                                 process.env.REACT_APP_ZOHO_BASE_URL +
-                                '/' +
+                                "/" +
                                 process.env.REACT_APP_ORGANIZATION_ID +
-                                '#/salesorders/' +
+                                "#/salesorders/" +
                                 saleDetail.saleOrderId
                               }
                               class="text-blue-500 underline"
@@ -426,7 +524,7 @@ const Dashboard = (props) => {
                                 type="text"
                                 name="email"
                                 value={saleDetail.customerName}
-                                style={{ transition: 'all .15s ease' }}
+                                style={{ transition: "all .15s ease" }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                               />
                             </div>
@@ -442,7 +540,7 @@ const Dashboard = (props) => {
                                 type="text"
                                 name="email"
                                 value={saleDetail.refrenceNumber}
-                                style={{ transition: 'all .15s ease' }}
+                                style={{ transition: "all .15s ease" }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                               />
                             </div>
@@ -458,7 +556,7 @@ const Dashboard = (props) => {
                                 type="text"
                                 name="email"
                                 value={saleDetail.salesOrderNumber}
-                                style={{ transition: 'all .15s ease' }}
+                                style={{ transition: "all .15s ease" }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                               />
                             </div>
@@ -471,7 +569,7 @@ const Dashboard = (props) => {
                                 type="text"
                                 name="email"
                                 value={saleDetail.status}
-                                style={{ transition: 'all .15s ease' }}
+                                style={{ transition: "all .15s ease" }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                               />
                             </div>
@@ -487,7 +585,7 @@ const Dashboard = (props) => {
                                 type="text"
                                 name="email"
                                 value={saleDetail.balance}
-                                style={{ transition: 'all .15s ease' }}
+                                style={{ transition: "all .15s ease" }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                               />
                             </div>
@@ -500,7 +598,7 @@ const Dashboard = (props) => {
                                 type="text"
                                 name="email"
                                 value={saleDetail.currencyCode}
-                                style={{ transition: 'all .15s ease' }}
+                                style={{ transition: "all .15s ease" }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                               />
                             </div>
@@ -516,9 +614,9 @@ const Dashboard = (props) => {
                                 type="text"
                                 name="email"
                                 value={dayjs(saleDetail.date).format(
-                                  'DD-MMM-YYYY'
+                                  "DD-MMM-YYYY"
                                 )}
-                                style={{ transition: 'all .15s ease' }}
+                                style={{ transition: "all .15s ease" }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                               />
                             </div>
@@ -531,9 +629,9 @@ const Dashboard = (props) => {
                                 type="text"
                                 name="email"
                                 value={dayjs(saleDetail.shipmentDate).format(
-                                  'DD-MMM-YYYY'
+                                  "DD-MMM-YYYY"
                                 )}
-                                style={{ transition: 'all .15s ease' }}
+                                style={{ transition: "all .15s ease" }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                               />
                             </div>
@@ -598,9 +696,9 @@ const Dashboard = (props) => {
                               target="_blank"
                               href={
                                 process.env.REACT_APP_ZOHO_BASE_URL +
-                                '/' +
+                                "/" +
                                 process.env.REACT_APP_ORGANIZATION_ID +
-                                '#/bills/' +
+                                "#/bills/" +
                                 billDetail.billId
                               }
                               class="text-blue-500 underline"
@@ -619,7 +717,7 @@ const Dashboard = (props) => {
                                 type="text"
                                 name="email"
                                 value={billDetail.vendorName}
-                                style={{ transition: 'all .15s ease' }}
+                                style={{ transition: "all .15s ease" }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                               />
                             </div>
@@ -635,7 +733,7 @@ const Dashboard = (props) => {
                                 type="text"
                                 name="email"
                                 value={billDetail.refrenceNumber}
-                                style={{ transition: 'all .15s ease' }}
+                                style={{ transition: "all .15s ease" }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                               />
                             </div>
@@ -651,7 +749,7 @@ const Dashboard = (props) => {
                                 type="text"
                                 name="email"
                                 value={billDetail.invoiceNumber}
-                                style={{ transition: 'all .15s ease' }}
+                                style={{ transition: "all .15s ease" }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                               />
                             </div>
@@ -664,7 +762,7 @@ const Dashboard = (props) => {
                                 type="text"
                                 name="email"
                                 value={billDetail.status}
-                                style={{ transition: 'all .15s ease' }}
+                                style={{ transition: "all .15s ease" }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                               />
                             </div>
@@ -678,13 +776,13 @@ const Dashboard = (props) => {
                               <CurrencyInput
                                 intlConfig={{
                                   locale:
-                                    billDetail.currencyCode != 'USD'
-                                      ? 'en-NG'
-                                      : 'en-US',
+                                    billDetail.currencyCode != "USD"
+                                      ? "en-NG"
+                                      : "en-US",
                                   currency:
-                                    billDetail.currencyCode != 'USD'
-                                      ? 'NGN'
-                                      : 'USD',
+                                    billDetail.currencyCode != "USD"
+                                      ? "NGN"
+                                      : "USD",
                                 }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                                 id="bill-balance"
@@ -703,7 +801,7 @@ const Dashboard = (props) => {
                                 type="text"
                                 name="email"
                                 value={billDetail.currencyCode}
-                                style={{ transition: 'all .15s ease' }}
+                                style={{ transition: "all .15s ease" }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                               />
                             </div>
@@ -719,9 +817,9 @@ const Dashboard = (props) => {
                                 type="text"
                                 name="email"
                                 value={dayjs(billDetail.date).format(
-                                  'DD-MMM-YYYY'
+                                  "DD-MMM-YYYY"
                                 )}
-                                style={{ transition: 'all .15s ease' }}
+                                style={{ transition: "all .15s ease" }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                               />
                             </div>
@@ -734,9 +832,9 @@ const Dashboard = (props) => {
                                 type="text"
                                 name="email"
                                 value={dayjs(billDetail.dueDate).format(
-                                  'DD-MMM-YYYY'
+                                  "DD-MMM-YYYY"
                                 )}
-                                style={{ transition: 'all .15s ease' }}
+                                style={{ transition: "all .15s ease" }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                               />
                             </div>
@@ -802,9 +900,9 @@ const Dashboard = (props) => {
                               target="_blank"
                               href={
                                 process.env.REACT_APP_ZOHO_BASE_URL +
-                                '/' +
+                                "/" +
                                 process.env.REACT_APP_ORGANIZATION_ID +
-                                '#/purchaseorders/' +
+                                "#/purchaseorders/" +
                                 purchaseDetail.purchaseOrderId
                               }
                               class="text-blue-500 underline"
@@ -823,7 +921,7 @@ const Dashboard = (props) => {
                                 type="text"
                                 name="email"
                                 value={purchaseDetail.vendorName}
-                                style={{ transition: 'all .15s ease' }}
+                                style={{ transition: "all .15s ease" }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                               />
                             </div>
@@ -839,7 +937,7 @@ const Dashboard = (props) => {
                                 type="text"
                                 name="email"
                                 value={purchaseDetail.refrenceNumber}
-                                style={{ transition: 'all .15s ease' }}
+                                style={{ transition: "all .15s ease" }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                               />
                             </div>
@@ -855,7 +953,7 @@ const Dashboard = (props) => {
                                 type="text"
                                 name="email"
                                 value={purchaseDetail.purchaseOrderNumber}
-                                style={{ transition: 'all .15s ease' }}
+                                style={{ transition: "all .15s ease" }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                               />
                             </div>
@@ -868,7 +966,7 @@ const Dashboard = (props) => {
                                 type="text"
                                 name="email"
                                 value={purchaseDetail.status}
-                                style={{ transition: 'all .15s ease' }}
+                                style={{ transition: "all .15s ease" }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                               />
                             </div>
@@ -884,7 +982,7 @@ const Dashboard = (props) => {
                                 type="text"
                                 name="email"
                                 value={purchaseDetail.balance}
-                                style={{ transition: 'all .15s ease' }}
+                                style={{ transition: "all .15s ease" }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                               />
                             </div>
@@ -897,7 +995,7 @@ const Dashboard = (props) => {
                                 type="text"
                                 name="email"
                                 value={purchaseDetail.currencyCode}
-                                style={{ transition: 'all .15s ease' }}
+                                style={{ transition: "all .15s ease" }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                               />
                             </div>
@@ -913,9 +1011,9 @@ const Dashboard = (props) => {
                                 type="text"
                                 name="email"
                                 value={dayjs(purchaseDetail.date).format(
-                                  'DD-MMM-YYYY'
+                                  "DD-MMM-YYYY"
                                 )}
-                                style={{ transition: 'all .15s ease' }}
+                                style={{ transition: "all .15s ease" }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                               />
                             </div>
@@ -928,9 +1026,9 @@ const Dashboard = (props) => {
                                 type="text"
                                 name="email"
                                 value={dayjs(purchaseDetail.dueDate).format(
-                                  'DD-MMM-YYYY'
+                                  "DD-MMM-YYYY"
                                 )}
-                                style={{ transition: 'all .15s ease' }}
+                                style={{ transition: "all .15s ease" }}
                                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-grey-200 focus:bg-white focus:outline-none"
                               />
                             </div>
@@ -966,10 +1064,10 @@ const Dashboard = (props) => {
                               <span className="font-semibold text-md text-blueGray-700">
                                 <span className="font-semibold text-sm text-red-700">
                                   &#8358;
-                                </span>{' '}
+                                </span>{" "}
                                 <CurrencyFormat
                                   value={parseFloat(openingBalance.naira)}
-                                  displayType={'text'}
+                                  displayType={"text"}
                                   thousandSeparator={true}
                                   decimalScale={2}
                                 />
@@ -979,7 +1077,7 @@ const Dashboard = (props) => {
                               <div className="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-red-500">
                                 <FontAwesomeIcon
                                   icon={faWallet}
-                                  style={{ fontSize: 20, color: 'white' }}
+                                  style={{ fontSize: 20, color: "white" }}
                                 />
                                 {/* <FontAwesomeIcon icon={solid("user-secret")} /> */}
                               </div>
@@ -989,10 +1087,10 @@ const Dashboard = (props) => {
                             <span className="font-semibold">
                               <span className="text-sm text-red-700">
                                 &#36;
-                              </span>{' '}
+                              </span>{" "}
                               <CurrencyFormat
                                 value={parseFloat(openingBalance.dollar)}
-                                displayType={'text'}
+                                displayType={"text"}
                                 thousandSeparator={true}
                                 decimalScale={2}
                               />
@@ -1012,10 +1110,10 @@ const Dashboard = (props) => {
                               <span className="font-semibold text-md text-blueGray-700">
                                 <span className="font-semibold text-sm text-red-700">
                                   &#8358;
-                                </span>{' '}
+                                </span>{" "}
                                 <CurrencyFormat
                                   value={parseFloat(totalCashInflow.naira)}
-                                  displayType={'text'}
+                                  displayType={"text"}
                                   thousandSeparator={true}
                                   decimalScale={2}
                                 />
@@ -1025,7 +1123,7 @@ const Dashboard = (props) => {
                               <div className="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-blue-800">
                                 <FontAwesomeIcon
                                   icon={faGem}
-                                  style={{ fontSize: 20, color: 'white' }}
+                                  style={{ fontSize: 20, color: "white" }}
                                 />
                               </div>
                             </div>
@@ -1034,10 +1132,10 @@ const Dashboard = (props) => {
                             <span className="font-semibold mr-2">
                               <span className="text-sm text-red-700">
                                 &#36;
-                              </span>{' '}
+                              </span>{" "}
                               <CurrencyFormat
                                 value={parseFloat(totalCashInflow.dollar)}
-                                displayType={'text'}
+                                displayType={"text"}
                                 thousandSeparator={true}
                                 decimalScale={2}
                               />
@@ -1060,10 +1158,10 @@ const Dashboard = (props) => {
                               <span className="font-semibold text-md text-blueGray-700">
                                 <span className="font-semibold text-sm text-red-700">
                                   &#8358;
-                                </span>{' '}
+                                </span>{" "}
                                 <CurrencyFormat
                                   value={parseFloat(totalCashOutflow.naira)}
-                                  displayType={'text'}
+                                  displayType={"text"}
                                   thousandSeparator={true}
                                   decimalScale={2}
                                 />
@@ -1073,7 +1171,7 @@ const Dashboard = (props) => {
                               <div className="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-green-700">
                                 <FontAwesomeIcon
                                   icon={faReceipt}
-                                  style={{ fontSize: 20, color: 'white' }}
+                                  style={{ fontSize: 20, color: "white" }}
                                 />
                               </div>
                             </div>
@@ -1082,10 +1180,10 @@ const Dashboard = (props) => {
                             <span className="font-semibold mr-2">
                               <span className="text-sm text-red-700">
                                 &#36;
-                              </span>{' '}
+                              </span>{" "}
                               <CurrencyFormat
                                 value={parseFloat(totalCashOutflow.dollar)}
-                                displayType={'text'}
+                                displayType={"text"}
                                 thousandSeparator={true}
                                 decimalScale={2}
                               />
@@ -1108,10 +1206,10 @@ const Dashboard = (props) => {
                               <span className="font-semibold text-md text-blueGray-700">
                                 <span className="font-semibold text-sm text-red-700">
                                   &#8358;
-                                </span>{' '}
+                                </span>{" "}
                                 <CurrencyFormat
                                   value={parseFloat(closingBalance.naira)}
-                                  displayType={'text'}
+                                  displayType={"text"}
                                   thousandSeparator={true}
                                   decimalScale={2}
                                 />
@@ -1121,7 +1219,7 @@ const Dashboard = (props) => {
                               <div className="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-yellow-600">
                                 <FontAwesomeIcon
                                   icon={faFileInvoice}
-                                  style={{ fontSize: 20, color: 'white' }}
+                                  style={{ fontSize: 20, color: "white" }}
                                 />
                               </div>
                             </div>
@@ -1130,10 +1228,10 @@ const Dashboard = (props) => {
                             <span className="font-semibold mr-2">
                               <span className="text-sm text-red-700">
                                 &#36;
-                              </span>{' '}
+                              </span>{" "}
                               <CurrencyFormat
                                 value={parseFloat(closingBalance.dollar)}
-                                displayType={'text'}
+                                displayType={"text"}
                                 thousandSeparator={true}
                                 decimalScale={2}
                               />
@@ -1157,11 +1255,17 @@ const Dashboard = (props) => {
               </div>
               <div className="flex flex-wrap mt-4">
                 <InvoiceTable
+                  caption="Invoice details"
+                  data={invoices}
+                  columns={invoiceColumns}
                   setShowInvoiceDetailModal={setShowInvoiceDetailModal}
                   setInvoiceDetail={setInvoiceDetail}
                 />
 
                 <SaleTable
+                  caption="Sale details"
+                  data={sales}
+                  columns={saleColumns}
                   setShowSaleDetailModal={setShowSaleDetailModal}
                   setSaleDetail={setSaleDetail}
                 />
@@ -1169,11 +1273,17 @@ const Dashboard = (props) => {
 
               <div className="flex flex-wrap mt-4">
                 <BillTable
+                  caption="Bills details"
+                  data={bills}
+                  columns={billColumns}
                   setShowBillDetailModal={setShowBillDetailModal}
                   setBillDetail={setBillDetail}
                 />
 
                 <PurchaseTable
+                  caption="Purchase details"
+                  data={purchases}
+                  columns={purchaseColumns}
                   setShowPurchaseDetailModal={setShowPurchaseDetailModal}
                   setPurchaseDetail={setPurchaseDetail}
                 />
@@ -1185,7 +1295,7 @@ const Dashboard = (props) => {
                   <div className="flex flex-wrap items-center md:justify-between justify-center">
                     <div className="w-full md:w-4/12 px-4">
                       <div className="text-sm text-blueGray-500 font-semibold py-1">
-                        Copyright © {new Date().getFullYear()}{' '}
+                        Copyright © {new Date().getFullYear()}{" "}
                         <a
                           href="#"
                           className="text-blueGray-500 hover:text-blueGray-700 text-sm font-semibold py-1"

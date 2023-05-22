@@ -1,8 +1,8 @@
-import TableBody from "./TableBody";
 import TableHead from "./TableHead";
 import { useSortableTable } from "../useSortableTable";
+import OpeningBalanceTableBody from "./OpeningBalanceTableBody";
 
-const Table = ({ caption, data, columns }) => {
+const OpeningBalanceTable = ({ caption, data, columns }) => {
   const [tableData, handleSorting] = useSortableTable(data, columns);
 
   return (
@@ -10,10 +10,10 @@ const Table = ({ caption, data, columns }) => {
       <table className="table">
         <caption>{caption}</caption>
         <TableHead {...{ columns, handleSorting }} />
-        <TableBody {...{ columns, tableData }} />
+        <OpeningBalanceTableBody {...{ columns, tableData }} />
       </table>
     </>
   );
 };
 
-export default Table;
+export default OpeningBalanceTable;

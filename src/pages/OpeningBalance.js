@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Sidebar from "../components/Sidebar";
 import { getBankAccounts } from "../redux/slices/forecast";
 import { withAuth } from "../hoc/withAuth";
-import Table from "../components/Table";
+import OpeningBalanceTable from "../components/OpeningBalanceTable";
 
 const OpeningBalance = () => {
   const dispatch = useDispatch();
@@ -14,7 +14,7 @@ const OpeningBalance = () => {
   const bankAccounts = useSelector((state) => state.forecast.bankAccounts);
 
   const columns = [
-    { label: "ID", accessor: "id", sortable: true, sortbyOrder: "asc", },
+    { label: "ID", accessor: "id", sortable: true, sortbyOrder: "asc" },
     { label: "Account Name", accessor: "accountName", sortable: true },
     { label: "Account Type", accessor: "accountType", sortable: false },
     { label: "Currency", accessor: "currency", sortable: true },
@@ -59,7 +59,7 @@ const OpeningBalance = () => {
               <div className="inline-block min-w-full align-middle">
                 <div className="overflow-hidden ">
                   {!isBankAccountsLoading && (
-                    <Table
+                    <OpeningBalanceTable
                       caption="Opening bank account with overdrafts"
                       data={bankAccounts}
                       columns={columns}
