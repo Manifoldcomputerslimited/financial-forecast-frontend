@@ -6,7 +6,6 @@ import {
   resynApplication,
 } from '../redux/slices/forecast';
 import DurationDropdown from './DurationDropdown.js';
-import Moment from 'react-moment';
 import moment from 'moment';
 
 const Navbar = (props) => {

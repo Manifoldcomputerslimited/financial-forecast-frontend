@@ -1,31 +1,32 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { Axios } from '../../api/instances';
-import { toast } from 'react-toastify';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { Axios } from "../../api/instances";
+import { toast } from "react-toastify";
+let fileDownload = require("js-file-download");
 
 const initialState = {
   isLoading: false,
   isOverdraftLoading: false,
   isOverdraftUpdateLoading: false,
   error: null,
-  zohoAccessToken: '',
-  zohoRefreshToken: '',
+  zohoAccessToken: "",
+  zohoRefreshToken: "",
   overdrafts: [],
 };
 
-const zoho = createAsyncThunk('zoho', async ({ code }) => {
+const zoho = createAsyncThunk("zoho", async ({ code }) => {
   try {
-    let accessToken = localStorage.getItem('accessToken')
-      ? JSON.parse(localStorage.getItem('accessToken'))
+    let accessToken = localStorage.getItem("accessToken")
+      ? JSON.parse(localStorage.getItem("accessToken"))
       : null;
 
     const res = await Axios.post(
-      '/zoho/token/generate',
+      "/zoho/token/generate",
       {
         code: code,
       },
       {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
         },
       }
@@ -37,37 +38,63 @@ const zoho = createAsyncThunk('zoho', async ({ code }) => {
   }
 });
 
-const zohoRefresh = createAsyncThunk('zoho/refresh', async () => {
-  let accessToken = localStorage.getItem('accessToken')
-    ? JSON.parse(localStorage.getItem('accessToken'))
+const zohoRefresh = createAsyncThunk("zoho/refresh", async () => {
+  let accessToken = localStorage.getItem("accessToken")
+    ? JSON.parse(localStorage.getItem("accessToken"))
     : null;
   let options = {
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
     },
   };
-  const res = await Axios.get('/zoho/token/refresh', options);
+  const res = await Axios.get("/zoho/token/refresh", options);
 
   return res.data.data;
 });
 
+const downloadExchangeRate = createAsyncThunk(
+  "zoho/exchange/rate",
+  async () => {
+    let accessToken = localStorage.getItem("accessToken")
+      ? JSON.parse(localStorage.getItem("accessToken"))
+      : null;
+    let options = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+
+    const res = await Axios.post("/zoho/exchange/rate/download", options, {
+      responseType: "arraybuffer",
+    }).then((response) => {
+      const blob = new Blob([response.data], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+
+      fileDownload(blob, `rate.xlsx`); //
+    });
+    return res;
+  }
+);
+
 const createOverdraft = createAsyncThunk(
-  '/overdraft/create',
+  "/overdraft/create",
   async ({ data }) => {
     try {
-      let accessToken = localStorage.getItem('accessToken')
-        ? JSON.parse(localStorage.getItem('accessToken'))
+      let accessToken = localStorage.getItem("accessToken")
+        ? JSON.parse(localStorage.getItem("accessToken"))
         : null;
 
       const res = await Axios.post(
-        '/zoho/overdraft',
+        "/zoho/overdraft",
         {
           ...data,
         },
         {
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
             Authorization: `Bearer ${accessToken}`,
           },
         }
@@ -80,18 +107,18 @@ const createOverdraft = createAsyncThunk(
   }
 );
 
-const getOverdrafts = createAsyncThunk('/overdrafts', async () => {
+const getOverdrafts = createAsyncThunk("/overdrafts", async () => {
   try {
-    let accessToken = localStorage.getItem('accessToken')
-      ? JSON.parse(localStorage.getItem('accessToken'))
+    let accessToken = localStorage.getItem("accessToken")
+      ? JSON.parse(localStorage.getItem("accessToken"))
       : null;
     let options = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,
       },
     };
-    const res = await Axios.get('zoho/overdraft', options);
+    const res = await Axios.get("zoho/overdraft", options);
 
     return res.data.data;
   } catch (error) {
@@ -100,11 +127,11 @@ const getOverdrafts = createAsyncThunk('/overdrafts', async () => {
 });
 
 const updateOverdraft = createAsyncThunk(
-  '/overdraft/update',
+  "/overdraft/update",
   async ({ data }) => {
     try {
-      let accessToken = localStorage.getItem('accessToken')
-        ? JSON.parse(localStorage.getItem('accessToken'))
+      let accessToken = localStorage.getItem("accessToken")
+        ? JSON.parse(localStorage.getItem("accessToken"))
         : null;
 
       const res = await Axios.put(
@@ -114,7 +141,7 @@ const updateOverdraft = createAsyncThunk(
         },
         {
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
             Authorization: `Bearer ${accessToken}`,
           },
         }
@@ -128,15 +155,15 @@ const updateOverdraft = createAsyncThunk(
 );
 
 const deleteOverdraft = createAsyncThunk(
-  '/deleteOverdraft',
+  "/deleteOverdraft",
   async ({ accountId }) => {
     try {
-      let accessToken = localStorage.getItem('accessToken')
-        ? JSON.parse(localStorage.getItem('accessToken'))
+      let accessToken = localStorage.getItem("accessToken")
+        ? JSON.parse(localStorage.getItem("accessToken"))
         : null;
       let options = {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
         },
       };
@@ -150,7 +177,7 @@ const deleteOverdraft = createAsyncThunk(
 );
 
 const zohoSlice = createSlice({
-  name: 'zoho',
+  name: "zoho",
   initialState,
   extraReducers: (builder) => {
     builder
@@ -159,13 +186,13 @@ const zohoSlice = createSlice({
       })
       .addCase(zoho.fulfilled, (state, action) => {
         state.isLoading = false;
-        localStorage.setItem('zohoAuthenticated', true);
+        localStorage.setItem("zohoAuthenticated", true);
         localStorage.setItem(
-          'zohoAccessToken',
+          "zohoAccessToken",
           JSON.stringify(action.payload.zohoAccessToken)
         );
         localStorage.setItem(
-          'zohoTokenExpiry',
+          "zohoTokenExpiry",
           JSON.stringify(action.payload.zohoTokenExpiry)
         );
       })
@@ -178,9 +205,9 @@ const zohoSlice = createSlice({
       })
       .addCase(zohoRefresh.fulfilled, (state, action) => {
         state.isLoading = false;
-        localStorage.setItem('zohoAuthenticated', true);
+        localStorage.setItem("zohoAuthenticated", true);
         localStorage.setItem(
-          'zohoAccessToken',
+          "zohoAccessToken",
           JSON.stringify(action.payload.zohoAccessToken)
         );
       })
@@ -188,12 +215,15 @@ const zohoSlice = createSlice({
         state.isLoading = false;
         state.error = action.error;
       })
+      .addCase(downloadExchangeRate.pending, (state, action) => {})
+      .addCase(downloadExchangeRate.fulfilled, (state, action) => {})
+      .addCase(downloadExchangeRate.rejected, (state, action) => {})
       .addCase(createOverdraft.pending, (state, action) => {
         state.isOverdraftLoading = true;
       })
       .addCase(createOverdraft.fulfilled, (state, action) => {
         state.isOverdraftLoading = false;
-        toast.success('Successful', { autoClose: 2000 });
+        toast.success("Successful", { autoClose: 2000 });
       })
       .addCase(createOverdraft.rejected, (state, action) => {
         state.isOverdraftLoading = false;
@@ -210,7 +240,7 @@ const zohoSlice = createSlice({
         state.isOverdraftLoading = false;
       })
       .addCase(deleteOverdraft.fulfilled, (state, action) => {
-        toast.success('Deleted successfully', { autoClose: 2000 });
+        toast.success("Deleted successfully", { autoClose: 2000 });
       })
       .addCase(deleteOverdraft.rejected, (state, action) => {
         toast.error(action.error.message, { autoClose: 2000 });
@@ -220,7 +250,7 @@ const zohoSlice = createSlice({
       })
       .addCase(updateOverdraft.fulfilled, (state, action) => {
         state.isOverdraftUpdateLoading = false;
-        toast.success('Overdraft loan updated', { autoClose: 2000 });
+        toast.success("Overdraft loan updated", { autoClose: 2000 });
       })
       .addCase(updateOverdraft.rejected, (state, action) => {
         state.isOverdraftUpdateLoading = false;
@@ -232,6 +262,7 @@ const zohoSlice = createSlice({
 export {
   zoho,
   zohoRefresh,
+  downloadExchangeRate,
   createOverdraft,
   getOverdrafts,
   updateOverdraft,
