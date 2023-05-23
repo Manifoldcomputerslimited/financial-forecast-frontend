@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { Axios } from '../../api/instances';
 import { toast } from 'react-toastify';
 
-var fileDownload = require('js-file-download');
+let fileDownload = require('js-file-download');
 
 const initialState = {
   isGeneratingReport: false,

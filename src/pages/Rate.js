@@ -1,9 +1,11 @@
-import dayjs from 'dayjs';
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import Sidebar from '../components/Sidebar';
-import { getExchangeRates } from '../redux/slices/forecast';
-import { withAuth } from '../hoc/withAuth';
+import moment from 'moment';
+import dayjs from "dayjs";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Sidebar from "../components/Sidebar";
+import { getExchangeRates } from "../redux/slices/forecast";
+import { withAuth } from "../hoc/withAuth";
+import { downloadExchangeRate } from '../redux/slices/zoho';
 
 const Rate = () => {
   const dispatch = useDispatch();
@@ -15,6 +17,12 @@ const Rate = () => {
   useEffect(() => {
     dispatch(getExchangeRates());
   }, [dispatch]);
+
+  const downloadExchangeHandler = (e) => {
+    e.preventDefault();
+    let filename = 'rate' + moment().toISOString();
+    dispatch(downloadExchangeRate());
+  }
 
   return (
     <>
@@ -31,6 +39,19 @@ const Rate = () => {
             >
               Exchange Rates
             </a>
+
+            <ul className="flex-col md:flex-row list-none items-center hidden md:flex">
+              <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
+                <button
+                  onClick={downloadExchangeHandler}
+                  className="bg-red-500 text-white active:bg-red-600 text-xs font-bold px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1"
+                  type="button"
+                  style={{ transition: "all .15s ease" }}
+                >
+                  Download
+                </button>
+              </div>
+            </ul>
           </div>
         </nav>
 
@@ -76,7 +97,7 @@ const Rate = () => {
                               {rate.rate}
                             </td>
                             <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-black">
-                              {dayjs(rate.createdAt).format('DD-MMM-YYYY')}
+                              {dayjs(rate.createdAt).format("DD-MMM-YYYY")}
                             </td>
                           </tr>
                         ))}
@@ -93,4 +114,4 @@ const Rate = () => {
   );
 };
 
-export default  withAuth(true)(Rate);
+export default withAuth(true)(Rate);
