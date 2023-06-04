@@ -1,17 +1,15 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import CurrencyFormat from 'react-currency-format';
+import { useSortableTable } from "../useSortableTable";
+import InvoiceTableBody from "./InvoiceTableBody";
+import TableHead from "./TableHead";
 
-const InvoiceTable = (props) => {
-  let isGeneratingReport = useSelector(
-    (state) => state.forecast.isGeneratingReport
-  );
-  let invoices = useSelector((state) => state.forecast.invoices);
-
-  const updateInvoiceDetail = (invoice) => {
-    props.setShowInvoiceDetailModal(true);
-    props.setInvoiceDetail(invoice);
-  };
+const InvoiceTable = ({
+  setShowInvoiceDetailModal,
+  setInvoiceDetail,
+  caption,
+  data,
+  columns,
+}) => {
+  const [tableData, handleSorting] = useSortableTable(data, columns);
 
   return (
     <>
@@ -28,115 +26,17 @@ const InvoiceTable = (props) => {
           </div>
           <h2 className="text-black text-sm font-semibold px-7">Invoices</h2>
           <div className="table-wrp block max-h-96  overflow-x-auto">
-            {/* Projects table */}
-
-            <table className="items-center w-full bg-transparent border-collapse">
-              <thead className="bg-white border-blueGray-100 sticky top-0">
-                <tr>
-                  <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-bold text-left">
-                    #
-                  </th>
-                  <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap  font-bold text-left">
-                    Invoice No.
-                  </th>
-                  <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap  font-semibold text-left">
-                    Customer Name
-                  </th>
-                  <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                    Naira Balance
-                  </th>
-                  <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                    Dollar Balance
-                  </th>
-                  <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                    Balance Due
-                  </th>
-                  <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                    Due Date
-                  </th>
-                  <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                    Currency
-                  </th>
-                  <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                    Status
-                  </th>
-                </tr>
-              </thead>
-              {!isGeneratingReport && (
-                <tbody className="">
-                  {invoices.map((invoice, i) => (
-                    // <div>
-                    <tr
-                      key={invoice.id}
-                      onClick={() => updateInvoiceDetail(invoice)}
-                    >
-                      <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-                        {i + 1}
-                      </th>
-                      <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-                        {invoice.invoiceNumber}
-                      </th>
-                      <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                        {invoice.customerName}
-                      </td>
-                      <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                        {invoice.currencyCode == 'NGN' ? (
-                          <>
-                            <span className="font-semibold text-sm">
-                              &#8358;
-                            </span>{' '}
-                            <CurrencyFormat
-                              value={parseFloat(invoice.balance)}
-                              displayType={'text'}
-                              thousandSeparator={true}
-                              decimalScale={2}
-                            />
-                          </>
-                        ) : null}
-                      </td>
-                      <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                        {invoice.currencyCode == 'USD' ? (
-                          <>
-                            <span className="font-semibold text-sm">&#36;</span>{' '}
-                            <CurrencyFormat
-                              value={parseFloat(invoice.balance)}
-                              displayType={'text'}
-                              thousandSeparator={true}
-                              decimalScale={2}
-                            />
-                          </>
-                        ) : null}
-                      </td>
-                      <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                        {invoice.currencyCode != 'USD' ? (
-                          <span className="font-semibold text-sm">&#8358;</span>
-                        ) : (
-                          <span className="font-semibold text-sm">&#36;</span>
-                        )}{' '}
-                        <CurrencyFormat
-                          value={parseFloat(invoice.balance)}
-                          displayType={'text'}
-                          thousandSeparator={true}
-                          decimalScale={2}
-                        />
-                      </td>
-                      <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                        <i className="fas fa-arrow-up text-emerald-500 mr-4"></i>
-                        {invoice.dueDate}
-                      </td>
-                      <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                        <i className="fas fa-arrow-up text-emerald-500 mr-4"></i>
-                        {invoice.currencyCode}
-                      </td>
-                      <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                        <i className="fas fa-arrow-up text-emerald-500 mr-4"></i>
-                        {invoice.status}
-                      </td>
-                    </tr>
-                    // </div>
-                  ))}
-                </tbody>
-              )}
+            <table className="table">
+              <caption>{caption}</caption>
+              <TableHead {...{ columns, handleSorting }} />
+              <InvoiceTableBody
+                {...{
+                  setShowInvoiceDetailModal,
+                  setInvoiceDetail,
+                  columns,
+                  tableData,
+                }}
+              />
             </table>
           </div>
         </div>
@@ -144,4 +44,5 @@ const InvoiceTable = (props) => {
     </>
   );
 };
+
 export default InvoiceTable;

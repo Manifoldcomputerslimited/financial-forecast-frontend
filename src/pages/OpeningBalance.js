@@ -1,9 +1,10 @@
-import { useEffect } from 'react';
-import CurrencyFormat from 'react-currency-format';
-import { useDispatch, useSelector } from 'react-redux';
-import Sidebar from '../components/Sidebar';
-import { getBankAccounts } from '../redux/slices/forecast';
-import { withAuth } from '../hoc/withAuth';
+import { useEffect } from "react";
+import CurrencyFormat from "react-currency-format";
+import { useDispatch, useSelector } from "react-redux";
+import Sidebar from "../components/Sidebar";
+import { getBankAccounts } from "../redux/slices/forecast";
+import { withAuth } from "../hoc/withAuth";
+import OpeningBalanceTable from "../components/OpeningBalanceTable";
 
 const OpeningBalance = () => {
   const dispatch = useDispatch();
@@ -11,6 +12,23 @@ const OpeningBalance = () => {
     (state) => state.forecast.isBankAccountsLoading
   );
   const bankAccounts = useSelector((state) => state.forecast.bankAccounts);
+
+  const columns = [
+    { label: "ID", accessor: "id", sortable: true, sortbyOrder: "asc" },
+    { label: "Account Name", accessor: "accountName", sortable: true },
+    { label: "Account Type", accessor: "accountType", sortable: false },
+    { label: "Currency", accessor: "currency", sortable: true },
+    {
+      label: "Balance",
+      accessor: "balance",
+      sortable: true,
+    },
+    {
+      label: "Overdraft",
+      accessor: "overdraftBalance",
+      sortable: true,
+    },
+  ];
 
   useEffect(() => {
     dispatch(getBankAccounts());
@@ -40,7 +58,15 @@ const OpeningBalance = () => {
             <div className="overflow-x-auto shadow-md sm:rounded-lg">
               <div className="inline-block min-w-full align-middle">
                 <div className="overflow-hidden ">
-                  <table className="min-w-full divide-y divide-gray-200 table-fixed dark:gray-400">
+                  {!isBankAccountsLoading && (
+                    <OpeningBalanceTable
+                      caption="Opening bank account with overdrafts"
+                      data={bankAccounts}
+                      columns={columns}
+                    />
+                  )}
+
+                  {/* <table className="min-w-full divide-y divide-gray-200 table-fixed dark:gray-400">
                     <thead className="bg-gray-100 dark:bg-gray-400 sticky">
                       <tr>
                         <th
@@ -138,7 +164,7 @@ const OpeningBalance = () => {
                         ))}
                       </tbody>
                     )}
-                  </table>
+                  </table> */}
                 </div>
               </div>
             </div>
