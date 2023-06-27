@@ -20,12 +20,12 @@ const SaleTable = ({
             <div className="flex flex-wrap items-center">
               <div className="relative w-full px-4 max-w-full flex-grow flex-1">
                 <h3 className="font-semibold text-base text-red-700">
-                  Sale details
+                 
                 </h3>
               </div>
             </div>
           </div>
-          <h2 className="text-black text-sm font-semibold px-7">Sales</h2>
+          <h2 className="text-black text-sm font-semibold px-7">Sales order</h2>
           <div className="table-wrp block max-h-96  overflow-x-auto">
             <table className="table">
               <caption>{caption}</caption>
