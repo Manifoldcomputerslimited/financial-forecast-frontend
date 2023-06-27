@@ -1263,7 +1263,7 @@ const Dashboard = (props) => {
                 />
 
                 <SaleTable
-                  caption="Sale details"
+                  caption="Sale order details"
                   data={sales}
                   columns={saleColumns}
                   setShowSaleDetailModal={setShowSaleDetailModal}
@@ -1281,7 +1281,7 @@ const Dashboard = (props) => {
                 />
 
                 <PurchaseTable
-                  caption="Purchase details"
+                  caption="Purchase order details"
                   data={purchases}
                   columns={purchaseColumns}
                   setShowPurchaseDetailModal={setShowPurchaseDetailModal}
