@@ -8,6 +8,42 @@ const OpeningBalanceTableBody = ({ tableData, columns }) => {
           <tr key={data.id}>
             {columns.map(({ accessor }) => {
               const tData = data[accessor] ? data[accessor] : "——";
+              if (accessor == "nairaBalance") {
+                return (
+                  <td className="py-4 px-6 text-sm font-medium text-black whitespace-nowrap dark:text-black">
+                    {data.currency != "USD" ? (
+                      <>
+                        <span className="font-semibold text-sm">&#8358;</span>{" "}
+                        <CurrencyFormat
+                          value={parseFloat(data.balance)}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          decimalScale={2}
+                        />
+                      </>
+                    ) : null}
+                  </td>
+                );
+              }
+
+              if (accessor == "dollarBalance") {
+                return (
+                  <td className="py-4 px-6 text-sm font-medium text-black whitespace-nowrap dark:text-black">
+                    {data.currency != "NGN" ? (
+                      <>
+                        <span className="font-semibold text-sm">&#36;</span>{" "}
+                        <CurrencyFormat
+                          value={parseFloat(data.balance)}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          decimalScale={2}
+                        />
+                      </>
+                    ) : null}
+                  </td>
+                );
+              }
+              
               if (accessor == "balance") {
                 return (
                   <td className="py-4 px-6 text-sm font-medium text-black whitespace-nowrap dark:text-black">

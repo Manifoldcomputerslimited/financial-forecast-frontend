@@ -18,6 +18,8 @@ const OpeningBalance = () => {
     { label: "Account Name", accessor: "accountName", sortable: true },
     { label: "Account Type", accessor: "accountType", sortable: false },
     { label: "Currency", accessor: "currency", sortable: true },
+    { label: "Naira Balance", accessor: "nairaBalance", sortable: false },
+    { label: "Dollar Balance", accessor: "dollarBalance", sortable: false },
     {
       label: "Balance",
       accessor: "balance",
@@ -65,106 +67,6 @@ const OpeningBalance = () => {
                       columns={columns}
                     />
                   )}
-
-                  {/* <table className="min-w-full divide-y divide-gray-200 table-fixed dark:gray-400">
-                    <thead className="bg-gray-100 dark:bg-gray-400 sticky">
-                      <tr>
-                        <th
-                          scope="col"
-                          className="py-3 px-6 text-xs font-medium tracking-wider text-left text-black uppercase dark:text-black"
-                        >
-                          ID
-                        </th>
-                        <th
-                          scope="col"
-                          className="py-3 px-6 text-xs font-medium tracking-wider text-left text-black uppercase dark:text-black"
-                        >
-                          Account Name
-                        </th>
-                        <th
-                          scope="col"
-                          className="py-3 px-6 text-xs font-medium tracking-wider text-left text-black uppercase dark:text-black"
-                        >
-                          Account Type
-                        </th>
-                        <th
-                          scope="col"
-                          className="py-3 px-6 text-xs font-medium tracking-wider text-left text-black uppercase dark:text-black"
-                        >
-                          Currency
-                        </th>
-                        <th
-                          scope="col"
-                          className="py-3 px-6 text-xs font-medium tracking-wider text-left text-black uppercase dark:text-black"
-                        >
-                          Balance
-                        </th>
-                        <th
-                          scope="col"
-                          className="py-3 px-6 text-xs font-medium tracking-wider text-left text-black uppercase dark:text-black"
-                        >
-                          Overdraft
-                        </th>
-                      </tr>
-                    </thead>
-                    {!isBankAccountsLoading && (
-                      <tbody className="bg-white divide-y divide-gray-300 dark:bg-gray-300 dark:divide-gray-300">
-                        {bankAccounts.map((bankAccount, i) => (
-                          <tr
-                            key={bankAccount.id}
-                            className="hover:bg-gray-100 dark:hover:bg-white-400"
-                          >
-                            <td className="py-4 px-6 text-sm font-medium text-black whitespace-nowrap dark:text-black">
-                              {i + 1}
-                            </td>
-                            <td className="py-4 px-6 text-sm font-medium text-black whitespace-nowrap dark:text-black">
-                              {bankAccount.accountName}
-                            </td>
-                            <td className="py-4 px-6 text-sm font-medium text-black whitespace-nowrap dark:text-black">
-                              {bankAccount.accountType}
-                            </td>
-                            <td className="py-4 px-6 text-sm font-medium text-black whitespace-nowrap dark:text-black">
-                              {bankAccount.currency}
-                            </td>
-                            <td className="py-4 px-6 text-sm font-medium text-black whitespace-nowrap dark:text-black">
-                              {bankAccount.currency != 'USD' ? (
-                                <span className="font-semibold text-sm text-black">
-                                  &#8358;
-                                </span>
-                              ) : (
-                                <span className="font-semibold text-sm text-black">
-                                  &#36;
-                                </span>
-                              )}{' '}
-                              <CurrencyFormat
-                                value={parseFloat(bankAccount.balance)}
-                                displayType={'text'}
-                                thousandSeparator={true}
-                                decimalScale={2}
-                              />
-                            </td>
-                            <td className="py-4 px-6 text-sm font-medium text-black whitespace-nowrap dark:text-black">
-                              {bankAccount.currency != 'USD' ? (
-                                <span className="font-semibold text-sm text-black">
-                                  &#8358;
-                                </span>
-                              ) : (
-                                <span className="font-semibold text-sm text-black">
-                                  &#36;
-                                </span>
-                              )}{' '}
-                              <CurrencyFormat
-                                value={parseFloat(bankAccount.overdraftBalance)}
-                                displayType={'text'}
-                                thousandSeparator={true}
-                                decimalScale={2}
-                              />
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    )}
-                  </table> */}
                 </div>
               </div>
             </div>
