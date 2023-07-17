@@ -1,10 +1,11 @@
 import { useEffect } from "react";
-import CurrencyFormat from "react-currency-format";
 import { useDispatch, useSelector } from "react-redux";
 import Sidebar from "../components/Sidebar";
 import { getBankAccounts } from "../redux/slices/forecast";
 import { withAuth } from "../hoc/withAuth";
 import OpeningBalanceTable from "../components/OpeningBalanceTable";
+import { downloadOpeningBalance } from '../redux/slices/zoho';
+import moment from 'moment';
 
 const OpeningBalance = () => {
   const dispatch = useDispatch();
@@ -36,6 +37,13 @@ const OpeningBalance = () => {
     dispatch(getBankAccounts());
   }, [dispatch]);
 
+  const downloadOpeningBalanceHandler = (e) => {
+    e.preventDefault();
+    let filename = 'rate' + moment().toISOString();
+    dispatch(downloadOpeningBalance());
+  }
+
+
   return (
     <>
       <Sidebar />
@@ -52,6 +60,19 @@ const OpeningBalance = () => {
             >
               Opening Balance
             </a>
+
+            <ul className="flex-col md:flex-row list-none items-center hidden md:flex">
+              <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
+                <button
+                  onClick={downloadOpeningBalanceHandler}
+                  className="bg-red-500 text-white active:bg-red-600 text-xs font-bold px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1"
+                  type="button"
+                  style={{ transition: "all .15s ease" }}
+                >
+                  Download
+                </button>
+              </div>
+            </ul>
           </div>
         </nav>
 
