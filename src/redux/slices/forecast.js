@@ -47,6 +47,12 @@ const initialState = {
         forecastNumber: 6,
         label: '6 Months',
       },
+      {
+        id: 4,
+        forecastPeriod: 'month',
+        forecastNumber: 12,
+        label: '12 Months',
+      },
     ],
     selectedPeriod: 2,
   },

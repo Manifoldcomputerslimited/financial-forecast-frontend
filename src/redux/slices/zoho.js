@@ -79,6 +79,33 @@ const downloadExchangeRate = createAsyncThunk(
   }
 );
 
+
+const downloadOpeningBalance = createAsyncThunk(
+  "zoho/opening/balance",
+  async () => {
+    let accessToken = localStorage.getItem("accessToken")
+      ? JSON.parse(localStorage.getItem("accessToken"))
+      : null;
+    let options = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+
+    const res = await Axios.post("zoho/bank/opening-balance/download", options, {
+      responseType: "arraybuffer",
+    }).then((response) => {
+      const blob = new Blob([response.data], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+
+      fileDownload(blob, `opening-balance.xlsx`); //
+    });
+    return res;
+  }
+);
+
 const createOverdraft = createAsyncThunk(
   "/overdraft/create",
   async ({ data }) => {
@@ -263,6 +290,7 @@ export {
   zoho,
   zohoRefresh,
   downloadExchangeRate,
+  downloadOpeningBalance,
   createOverdraft,
   getOverdrafts,
   updateOverdraft,
