@@ -11,6 +11,11 @@ const initialState = {
   zohoAccessToken: "",
   zohoRefreshToken: "",
   overdrafts: [],
+  charts: {
+    months: [],
+    forecastNairaInflow: [],
+    forecastNairaOutflow: []
+  }
 };
 
 const zoho = createAsyncThunk("zoho", async ({ code }) => {
@@ -79,7 +84,6 @@ const downloadExchangeRate = createAsyncThunk(
   }
 );
 
-
 const downloadOpeningBalance = createAsyncThunk(
   "zoho/opening/balance",
   async () => {
@@ -93,9 +97,13 @@ const downloadOpeningBalance = createAsyncThunk(
       },
     };
 
-    const res = await Axios.post("zoho/bank/opening-balance/download", options, {
-      responseType: "arraybuffer",
-    }).then((response) => {
+    const res = await Axios.post(
+      "zoho/bank/opening-balance/download",
+      options,
+      {
+        responseType: "arraybuffer",
+      }
+    ).then((response) => {
       const blob = new Blob([response.data], {
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       });
@@ -147,6 +155,34 @@ const getOverdrafts = createAsyncThunk("/overdrafts", async () => {
     };
     const res = await Axios.get("zoho/overdraft", options);
 
+    return res.data.data;
+  } catch (error) {
+    throw error.response.data || error.message;
+  }
+});
+
+const getCharts = createAsyncThunk("/charts", async ({ forecastNumber, forecastPeriod }) => {
+  try {
+    console.log('calling you');
+    let accessToken = localStorage.getItem("accessToken")
+      ? JSON.parse(localStorage.getItem("accessToken"))
+      : null;
+    let options = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+    const res = await Axios.post(
+      "/zoho/chart",
+      {
+        forecastNumber,
+        forecastPeriod,
+      },
+      options
+    );
+
+    console.log("first the request", res.data.data);
     return res.data.data;
   } catch (error) {
     throw error.response.data || error.message;
@@ -266,6 +302,17 @@ const zohoSlice = createSlice({
       .addCase(getOverdrafts.rejected, (state, action) => {
         state.isOverdraftLoading = false;
       })
+      .addCase(getCharts.pending, (state, action) => {
+        state.isChartLoading = true;
+      })
+      .addCase(getCharts.fulfilled, (state, action) => {
+        state.isChartLoading = false;
+        state.charts = action.payload;
+        console.log('chating', state.charts);
+      })
+      .addCase(getCharts.rejected, (state, action) => {
+        state.isChartLoading = false;
+      })
       .addCase(deleteOverdraft.fulfilled, (state, action) => {
         toast.success("Deleted successfully", { autoClose: 2000 });
       })
@@ -295,6 +342,7 @@ export {
   getOverdrafts,
   updateOverdraft,
   deleteOverdraft,
+  getCharts
 };
 
 export default zohoSlice.reducer;
