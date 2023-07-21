@@ -1,26 +1,33 @@
 import React from "react";
 import Chart from "chart.js";
+import { useDispatch, useSelector } from "react-redux";
+import { getCharts } from "../redux/slices/zoho";
 
 const BarChart = () => {
-  React.useEffect(() => {
+  const dispatch = useDispatch();
+  const charts = useSelector((state) => state.zoho.charts);
+  let isChartLoading = useSelector((state) => state.zoho.isChartLoading);
+  let { forecastNumber, forecastPeriod } = useSelector(
+    (state) => state.forecast.forecastInfo
+  );
+
+  React.useEffect( () => {
+
+     dispatch(getCharts({forecastNumber, forecastPeriod}));
+     if(isChartLoading == undefined) {
+      isChartLoading = false;
+     }
+
     let config = {
       type: "bar",
       data: {
-        labels: [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July",
-        ],
+        labels: isChartLoading ? [] : charts.months,
         datasets: [
           {
             label: 'Inflow',
             backgroundColor: "#ed64a6",
             borderColor: "#ed64a6",
-            data: [30, 78, 56, 34, 100, 45, 13],
+            data: isChartLoading ? [] : charts.forecastDollarInflow,
             fill: false,
             barThickness: 8,
           },
@@ -29,7 +36,7 @@ const BarChart = () => {
             fill: false,
             backgroundColor: "#4c51bf",
             borderColor: "#4c51bf",
-            data: [27, 68, 86, 74, 10, 4, 87],
+            data: isChartLoading ? [] : charts.forecastDollarOutflow,
             barThickness: 8,
           },
         ],
@@ -97,7 +104,7 @@ const BarChart = () => {
     };
     let ctx = document.getElementById("bar-chart").getContext("2d");
     window.myBar = new Chart(ctx, config);
-  }, []);
+  }, [dispatch]);
   return (
     <>
       <div className="w-full xl:w-4/12 px-4">
