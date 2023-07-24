@@ -1,11 +1,21 @@
 import React from "react";
 import Chart from "chart.js";
+import { useDispatch, useSelector } from "react-redux";
+import { getCharts } from "../redux/slices/zoho";
 import { createPopper } from "@popperjs/core";
 
 const LineChart = () => {
+  const dispatch = useDispatch();
+  const charts = useSelector((state) => state.zoho.charts);
+  let isChartLoading = useSelector((state) => state.zoho.isChartLoading);
+  let { forecastNumber, forecastPeriod } = useSelector(
+    (state) => state.forecast.forecastInfo
+  );
+
   const [dropdownPopoverShow, setDropdownPopoverShow] = React.useState(false);
   const btnDropdownRef = React.createRef();
   const popoverDropdownRef = React.createRef();
+  
   const openDropdownPopover = () => {
     createPopper(btnDropdownRef.current, popoverDropdownRef.current, {
       placement: "bottom-start",
@@ -17,32 +27,30 @@ const LineChart = () => {
   };
 
   React.useEffect(() => {
+    dispatch(getCharts({forecastNumber, forecastPeriod}));
+    if(isChartLoading == undefined) {
+     isChartLoading = false;
+    }
+
+
     var config = {
       type: "line",
       data: {
-        labels: [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July",
-        ],
+          labels: isChartLoading ? [] : charts.months,
         datasets: [
           {
-            label: 'Outflow',
+            label: 'Inflow',
             backgroundColor: "#4c51bf",
             borderColor: "#4c51bf",
-            data: [65, 78, 66, 44, 56, 67, 75],
+            data: isChartLoading ? [] : charts.forecastNairaInflow,
             fill: false,
           },
           {
-            label: 'Inflow',
+            label: 'Outflow',
             fill: false,
             backgroundColor: "#ed64a6",
             borderColor: "#ed64a6",
-            data: [40, 68, 86, 74, 56, 60, 87],
+            data: isChartLoading ? [] : charts.forecastNairaOutflow,
           },
         ],
       },
